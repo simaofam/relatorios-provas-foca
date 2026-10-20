@@ -84,6 +84,9 @@ td.n,th.n{text-align:right}
 .chip.p2{background:var(--prata);color:#1c242c}
 .chip.p3{background:var(--bronze);color:#fff}
 .chip.est{background:#FBE3E0;color:var(--verm)}
+.chip.recorde{background:var(--amarelo);color:var(--azul-esc);border:1px solid #E0C200}
+.so-imp{display:none}
+.tab-rec td{vertical-align:top}
 .chip.tac{background:#E4EEF9;color:var(--azul-esc);border:1px solid #B9D0EA}
 .chip.tac.sup{background:#FFF1E4;color:#8A4300;border-color:#F3C08F}
 .nota-tac{margin:10px 0 0}
@@ -132,7 +135,8 @@ td.n,th.n{text-align:right}
   body{background:#fff;font-size:11px}
   .topo,.rodape,.acoes,.filtros,.nao-imp{display:none!important}
   .conteudo{padding:0;max-width:none}
-  .chip.tac,.chip.tac.sup{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .so-imp{display:block}
+  .chip.recorde,.chip.tac,.chip.tac.sup{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .imp-cab{display:flex;align-items:center;gap:10px;border-bottom:3px solid var(--azul);padding-bottom:6px;margin-bottom:10px}
   .imp-cab img{width:40px;height:40px}
   .imp-cab .it{font-family:var(--cond);font-weight:800;font-size:16px;color:var(--azul);text-transform:uppercase}

@@ -3,7 +3,7 @@
    Regras de RP: ver CONTEXTO_RELATORIOS.md, secção 2. */
 'use strict';
 
-const ESTADO = { epoca: '', comps: [], linhas: [], nadadores: [], tac: null, calendario: [], calRaw: null };
+const ESTADO = { epoca: '', comps: [], linhas: [], nadadores: [], tac: null, calendario: [], calRaw: null, rec: null, recAtual: {} };
 const app = document.getElementById('app');
 
 /* ---------- Utilitários ---------- */
@@ -46,6 +46,7 @@ async function carregar() {
   comps.sort((a, b) => a.inicio.localeCompare(b.inicio));
   ESTADO.comps = comps;
   try { const t = await fetch('data/tac.json', { cache: 'no-store' }); if (t.ok) ESTADO.tac = await t.json(); } catch (e) { ESTADO.tac = null; }
+  try { const r2 = await fetch('data/recordes.json', { cache: 'no-store' }); if (r2.ok) ESTADO.rec = await r2.json(); } catch (e) { ESTADO.rec = null; }
   let cal = null;
   try { const k = await fetch('data/calendario.json', { cache: 'no-store' }); if (k.ok) cal = await k.json(); } catch (e) { cal = null; }
   ESTADO.calRaw = cal;
@@ -79,6 +80,7 @@ function calcular() {
   }
   ESTADO.linhas = linhas;
   ESTADO.nadadores = [...new Set(linhas.map(l => l.nadador))].sort((a, b) => a.localeCompare(b, 'pt'));
+  calcularRecordes();
 }
 
 /* RP atual por prova e piscina: o mais rápido entre inscrições e resultados */
@@ -149,7 +151,8 @@ function resumo(ls) {
     rp: rp.length, prim: rp.filter(l => l.prim).length, melh: rp.filter(l => !l.prim).length,
     taxa: ls.length ? rp.length / ls.length * 100 : null, media,
     p1: ls.filter(l => l.lugar === 1).length, p2: ls.filter(l => l.lugar === 2).length, p3: ls.filter(l => l.lugar === 3).length,
-    dsq: ls.filter(l => l.estado !== 'OK').length
+    dsq: ls.filter(l => l.estado !== 'OK').length,
+    rec: ls.reduce((n, l) => n + (l.recs ? l.recs.length : 0), 0), recProvas: ls.filter(l => l.recs && l.recs.length).length
   };
 }
 function agrupar(ls, chave) {
@@ -167,6 +170,7 @@ function kpis(s) {
     <div class="kpi"><div class="v">${pct0(s.taxa)}</div><div class="l">Provas com RP</div></div>
     <div class="kpi"><div class="v">${s.media == null ? '—' : s.media.toFixed(1).replace('.', ',') + '%'}</div><div class="l">Média face ao RP</div></div>
     <div class="kpi"><div class="v">${s.p1 + s.p2 + s.p3}</div><div class="l">Pódios</div><div class="d">${s.p1} × 1.º · ${s.p2} × 2.º · ${s.p3} × 3.º</div></div>
+    ${ESTADO.rec ? `<div class="kpi"><div class="v">${s.rec}</div><div class="l">Recordes do clube</div><div class="d">${s.recProvas} prova${s.recProvas === 1 ? '' : 's'}</div></div>` : ''}
   </div>`;
 }
 function tabRelacao(ls, chave, rot) {
@@ -194,7 +198,7 @@ function tabDetalhe(ls, comComp) {
     <td class="t">${fmt(l.refS)}<div class="ref-lbl">${esc(l.tipo || '')}</div></td>
     <td class="t ${l.ePR ? 'rp' : ''}">${l.res != null ? fmt(l.res) : esc(l.estado)}</td>
     <td class="n t">${pct(l.p)}</td>
-    <td>${celSituacao(l)}${l.obs ? `<div class="ref-lbl">${esc(l.obs)}</div>` : ''}</td>
+    <td>${celSituacao(l)} ${chipRec(l)}${l.obs ? `<div class="ref-lbl">${esc(l.obs)}</div>` : ''}</td>
     <td class="n">${chipLugar(l.lugar)}</td>
     <td>${chipsTac(l)}</td></tr>`).join('');
   return `<div class="tab-wrap"><table><thead><tr>${comComp ? '<th>Competição</th>' : '<th>Nadador</th><th>Escalão</th>'}<th>Prova</th><th>Inscrição</th><th>Referência</th><th>Resultado</th><th class="n">% do RP</th><th>Situação</th><th class="n">Lugar</th><th>TAC</th></tr></thead><tbody>${linhas || '<tr><td colspan="10" class="vazio">Sem provas.</td></tr>'}</tbody></table></div>`;
@@ -303,6 +307,7 @@ function relatorioConjunto(t, titulo, sub) {
   <section class="sec quebra"><h2>RP por nadador</h2>${tabRelacao(ls, 'nadador', 'Nadador')}</section>
   <section class="sec"><h2>Maiores melhorias</h2><div class="tab-wrap"><table><thead><tr><th class="n">#</th><th>Nadador</th><th>Escalão</th><th>Prova</th><th>Referência</th><th>Resultado</th><th class="n">Melhoria</th><th>Local</th></tr></thead><tbody>${topH || '<tr><td colspan="8" class="vazio">Sem melhorias.</td></tr>'}</tbody></table></div></section>
   <section class="sec"><h2>Pódios por categoria</h2><div class="tab-wrap"><table><thead><tr><th>Categoria</th><th class="n">1.º</th><th class="n">2.º</th><th class="n">3.º</th><th class="n">Total</th></tr></thead><tbody>${podH}</tbody></table></div></section>
+  ${ESTADO.rec ? `<section class="sec"><h2>Recordes do clube batidos</h2>${tabRecordesBatidos(ls)}</section>` : ''}
   ${ESTADO.tac ? `<section class="sec quebra"><h2>TAC obtidos</h2>${tabTacObtidos(ls)}</section>` : ''}
   ${impRod('provas.annp.pt')}`;
 }
@@ -333,6 +338,7 @@ function vistaComp(id) {
   <section class="sec quebra"><h2>Detalhe</h2>
     <div class="filtros"><input type="search" id="f-txt" placeholder="Filtrar por nadador ou prova"><label><input type="checkbox" id="f-rp"> Só RP</label></div>
     <div id="det">${tabDetalhe(ord)}</div></section>
+  ${ESTADO.rec ? `<section class="sec"><h2>Recordes do clube</h2>${tabRecordesBatidos(ls)}</section>` : ''}
   ${ESTADO.tac ? `<section class="sec"><h2>TAC obtidos</h2>${tabTacObtidos(ls)}</section>` : ''}
   <section class="sec"><h2>Pontos a confirmar</h2>${pontosConfirmar(ls)}</section>
   ${impRod(c.url)}`;
@@ -366,6 +372,7 @@ function fichaHTML(nome, t = '') {
     </div>
     <section class="sec"><h2>Recordes pessoais atuais <span class="ref-lbl">(toda a época)</span></h2><div class="tab-wrap"><table><thead><tr><th>Prova</th><th class="n">Piscina</th><th>Tempo</th><th>Onde</th><th>Quando</th></tr></thead><tbody>${rps}</tbody></table></div></section>
     ${ESTADO.tac ? `<section class="sec"><h2>TAC e campeonatos${t ? ` <span class="ref-lbl">(${esc(nomeTipo(t))})</span>` : ''}</h2>${secTacAtleta(nome, t)}</section>` : ''}
+    ${ls.some(l => l.recs && l.recs.length) ? `<section class="sec"><h2>Recordes do clube</h2>${tabRecordesBatidos(ls)}</section>` : ''}
     <section class="sec"><h2>Evolução por prova</h2><div class="tab-wrap"><table><thead><tr><th>Prova</th><th>Tempos na época</th></tr></thead><tbody>${evo}</tbody></table></div></section>
     <section class="sec"><h2>Todas as provas</h2>${tabDetalhe(ls, true)}</section>
     ${impRod('provas.annp.pt')}
@@ -418,8 +425,8 @@ function folha(wb, nome, cab, linhas) {
 }
 const relLinhas = (ls, chave) => { const g = agrupar(ls, chave); return Object.keys(g).sort(chave === 'escalao' ? porEscalao : (a, b) => a.localeCompare(b, 'pt')).map(k => { const s = resumo(g[k]); return [k, s.provas, s.rp, s.melh, s.prim, s.taxa == null ? null : Math.round(s.taxa) / 100, s.p1, s.p2, s.p3]; }); };
 const relCab = r => [r, 'Provas', 'RP', 'Melhorias', '1.º tempo', 'Provas/RP', '1.º', '2.º', '3.º'];
-const detLinhas = ls => ls.map(l => [l.c.local, l.nadador, l.ano || '', l.escalao, l.categoria, l.prova, l.insc ? fmt(seg(l.insc)) : 'NT', l.inscPiscina ? l.inscPiscina + 'm' : '', l.refS != null ? fmt(l.refS) : '', l.tipo || '', l.res != null ? fmt(l.res) : l.estado, l.p != null ? Math.round(l.p * 100) / 100 : null, l.ePR ? (l.prim ? 'RP · 1.º tempo' : 'RP') : '', l.melh != null ? Math.round(l.melh * 100) / 100 : null, l.lugar, textoTac(l), l.obs || '']);
-const detCab = ['Competição', 'Nadador', 'Ano', 'Escalão', 'Categoria', 'Prova', 'Inscrição', 'Piscina insc.', 'Referência', 'Tipo de referência', 'Resultado', '% do RP', 'Situação', 'Melhoria %', 'Lugar', 'TAC', 'Observações'];
+const detLinhas = ls => ls.map(l => [l.c.local, l.nadador, l.ano || '', l.escalao, l.categoria, l.prova, l.insc ? fmt(seg(l.insc)) : 'NT', l.inscPiscina ? l.inscPiscina + 'm' : '', l.refS != null ? fmt(l.refS) : '', l.tipo || '', l.res != null ? fmt(l.res) : l.estado, l.p != null ? Math.round(l.p * 100) / 100 : null, l.ePR ? (l.prim ? 'RP · 1.º tempo' : 'RP') : '', l.melh != null ? Math.round(l.melh * 100) / 100 : null, l.lugar, textoTac(l), textoRec(l), l.obs || '']);
+const detCab = ['Competição', 'Nadador', 'Ano', 'Escalão', 'Categoria', 'Prova', 'Inscrição', 'Piscina insc.', 'Referência', 'Tipo de referência', 'Resultado', '% do RP', 'Situação', 'Melhoria %', 'Lugar', 'TAC', 'Recorde do clube', 'Observações'];
 function pctCol(ws, idx) { ws.getColumn(idx).numFmt = '0%'; }
 async function gravar(wb, nome) {
   const buf = await wb.xlsx.writeBuffer();
@@ -696,6 +703,108 @@ async function apagarComp(id) {
   catch (e) { vistaGerir(); msgG('g-msg', e.message, true); }
 }
 
+/* ---------- Recordes do clube ---------- */
+const PROVAS_REC = { 25: ['50m Livres', '100m Livres', '200m Livres', '400m Livres', '800m Livres', '1500m Livres', '50m Costas', '100m Costas', '200m Costas', '50m Bruços', '100m Bruços', '200m Bruços', '50m Mariposa', '100m Mariposa', '200m Mariposa', '100m Estilos', '200m Estilos', '400m Estilos'] };
+PROVAS_REC[50] = PROVAS_REC[25].filter(p => p !== '100m Estilos');
+const anoRefEpoca = data => { const [a, m] = data.split('-').map(Number); return m >= 9 ? a + 1 : a; };   // época começa a 1 de setembro
+const escalaoRec = idade => idade >= 19 ? 'Seniores' : idade >= 17 ? 'Juniores' : idade >= 15 ? 'Juvenis' : idade >= 13 ? 'Infantis' : null;
+function catsRecorde(idade) {
+  const cs = ['Absolutos'], e = escalaoRec(idade);
+  if (e) cs.push(e);
+  if (idade >= 13 && idade <= 18) cs.push(`${idade} anos`);
+  return cs;
+}
+const chaveRec = (cat, gen, pisc, prova) => `${cat}|${gen}|${pisc}|${prova}`;
+/* Parte dos recordes do ficheiro e aplica, por ordem cronológica, os resultados das competições carregadas.
+   Um resultado mais rápido (estritamente) passa logo a ser o recorde do clube. */
+function calcularRecordes() {
+  ESTADO.recAtual = {};
+  if (!ESTADO.rec) return;
+  for (const r of ESTADO.rec.recordes) ESTADO.recAtual[chaveRec(r.cat, r.gen, r.pisc, r.prova)] = { ...r, t: seg(r.tempo), novo: false };
+  const ls = [...ESTADO.linhas].filter(l => l.res != null && l.ano).sort((a, b) => a.c.inicio.localeCompare(b.c.inicio) || a.nprova - b.nprova);
+  for (const l of ls) {
+    const idade = anoRefEpoca(l.c.inicio) - l.ano;
+    for (const cat of catsRecorde(idade)) {
+      const k = chaveRec(cat, l.genero, l.piscina, l.prova), atual = ESTADO.recAtual[k];
+      if (!PROVAS_REC[l.piscina]?.includes(l.prova)) continue;
+      if (!atual || l.res < atual.t) {
+        ESTADO.recAtual[k] = { cat, gen: l.genero, pisc: l.piscina, prova: l.prova, tempo: fmt(l.res), t: l.res, nadador: l.nadador, ano: l.ano, idade, data: l.c.inicio, comp: l.c.nome, local: l.c.local, novo: true, anterior: atual || null, compId: l.comp };
+        (l.recs ||= []).push({ cat, anterior: atual || null });
+      }
+    }
+  }
+}
+const ordemCatRec = c => (ESTADO.rec?.categorias || []).indexOf(c);
+const chipRec = l => l.recs && l.recs.length ? `<span class="chip recorde" title="${esc(l.recs.map(r => r.cat).join(', '))}">Recorde do clube</span>` : '';
+const textoRec = l => (l.recs || []).sort((a, b) => ordemCatRec(a.cat) - ordemCatRec(b.cat)).map(r => r.cat).join(', ');
+function tabRecordesBatidos(ls) {
+  const xs = ls.filter(l => l.recs && l.recs.length).sort((a, b) => a.c.inicio.localeCompare(b.c.inicio) || a.nprova - b.nprova);
+  if (!xs.length) return '<p class="vazio">Nenhum recorde do clube batido.</p>';
+  const corpo = xs.flatMap(l => l.recs.sort((a, b) => ordemCatRec(a.cat) - ordemCatRec(b.cat)).map(r => `<tr><td><span class="chip recorde">${esc(r.cat)}</span></td><td>${esc(l.prova)} <span class="ref-lbl">${l.piscina}m · ${l.genero === 'F' ? 'Fem.' : 'Masc.'}</span></td><td><a href="#atleta/${slug(l.nadador)}">${esc(l.nadador)}</a></td><td class="t rp">${fmt(l.res)}</td>
+    <td>${r.anterior ? `<span class="t">${esc(r.anterior.tempo)}</span> <span class="ref-lbl">${esc(r.anterior.nadador)} · ${r.anterior.data ? dataPT(r.anterior.data) : ''}</span>` : '<span class="ref-lbl">sem registo</span>'}</td><td>${esc(l.c.local)} <span class="ref-lbl">${dataPT(l.c.inicio)}</span></td></tr>`)).join('');
+  return `<div class="tab-wrap"><table><thead><tr><th>Categoria</th><th>Prova</th><th>Nadador</th><th>Novo recorde</th><th>Recorde anterior</th><th>Competição</th></tr></thead><tbody>${corpo}</tbody></table></div>`;
+}
+
+const recF = { gen: 'M', cat: 'Absolutos', pisc: '25', vista: 'consulta' };
+function linhaRec(r) {
+  if (!r) return '<td class="nrp">—</td><td></td><td></td><td></td><td></td><td></td>';
+  return `<td class="t"><strong>${esc(r.tempo)}</strong>${r.novo ? ' <span class="chip recorde">Novo</span>' : ''}</td><td>${esc(r.nadador)}</td><td class="n">${r.ano}</td><td class="n">${r.idade}</td><td>${dataPT(r.data)}</td><td>${r.compId ? `<a href="#comp/${r.compId}">${esc(r.comp)}</a>` : esc(r.comp)} <span class="ref-lbl">${esc(r.local)}</span>${r.novo && r.anterior ? `<div class="ref-lbl">Anterior: ${esc(r.anterior.tempo)} · ${esc(r.anterior.nadador)}</div>` : ''}</td>`;
+}
+function celResumo(r) {
+  if (!r) return '<td class="nrp">—</td>';
+  return `<td><span class="t"><strong>${esc(r.tempo)}</strong></span>${r.novo ? ' <span class="chip recorde">Novo</span>' : ''}<div class="ref-lbl">${esc(r.nadador)} · ${r.data.slice(0, 4)}</div></td>`;
+}
+function vistaRecordes() {
+  if (!ESTADO.rec) { app.innerHTML = '<p class="aviso erro">Falta o ficheiro data/recordes.json.</p>'; return; }
+  const R = ESTADO.rec, A = ESTADO.recAtual;
+  const opt = (v, t, sel) => `<option value="${esc(v)}" ${String(v) === String(sel) ? 'selected' : ''}>${esc(t)}</option>`;
+  const nomeCat = c => c === 'Seniores' ? 'Seniores (≥ 19 anos)' : c === 'Juniores' ? 'Juniores (17–18 anos)' : c === 'Juvenis' ? 'Juvenis (15–16 anos)' : c === 'Infantis' ? 'Infantis (13–14 anos)' : c === 'Absolutos' ? 'Absolutos (todas as idades)' : c;
+  const novos = Object.values(A).filter(r => r.novo).length;
+  const resumo = recF.vista === 'resumo';
+  let corpo, cab, subt;
+  if (resumo) {
+    const provas = PROVAS_REC[25];
+    cab = '<tr><th>Prova</th><th>Masculinos · PC (25m)</th><th>Masculinos · PL (50m)</th><th>Femininos · PC (25m)</th><th>Femininos · PL (50m)</th></tr>';
+    corpo = provas.map(p => `<tr><td><strong>${esc(p)}</strong></td>${[['M', 25], ['M', 50], ['F', 25], ['F', 50]].map(([g, pc]) => PROVAS_REC[pc].includes(p) ? celResumo(A[chaveRec(recF.cat, g, pc, p)]) : '<td class="nrp">n/a</td>').join('')}</tr>`).join('');
+    subt = `${nomeCat(recF.cat)} · masculinos e femininos · piscina curta e longa`;
+  } else {
+    cab = '<tr><th>Prova</th><th>Tempo</th><th>Nadador(a)</th><th class="n">Nasc.</th><th class="n">Idade</th><th>Data</th><th>Competição</th></tr>';
+    corpo = PROVAS_REC[recF.pisc].map(p => `<tr><td><strong>${esc(p)}</strong></td>${linhaRec(A[chaveRec(recF.cat, recF.gen, +recF.pisc, p)])}</tr>`).join('');
+    subt = `${recF.gen === 'M' ? 'Masculinos' : 'Femininos'} · ${nomeCat(recF.cat)} · ${recF.pisc === '25' ? 'Piscina curta (25m)' : 'Piscina longa (50m)'}`;
+  }
+  app.innerHTML = `
+  ${impCab('Recordes do Clube', subt)}
+  <div class="cab"><div><h1>Recordes do clube</h1><div class="meta">${esc(R.fonte)} · versão de ${dataPT(R.versao)}${novos ? ` · <strong>${novos} recorde${novos > 1 ? 's' : ''} novo${novos > 1 ? 's' : ''} esta época</strong>` : ''}</div></div>
+    <div class="acoes"><button class="btn" onclick="window.print()">PDF (A4)</button><button class="btn amar" onclick="excelRecordes()">Excel</button></div></div>
+  <section class="sec">
+    <div class="filtros">
+      <label>Vista <select id="rf-vista">${opt('consulta', 'Consulta', recF.vista)}${opt('resumo', 'Resumo por categoria (M/F · PC/PL)', recF.vista)}</select></label>
+      ${resumo ? '' : `<label>Género <select id="rf-gen">${opt('M', 'Masculinos', recF.gen)}${opt('F', 'Femininos', recF.gen)}</select></label>`}
+      <label>Categoria <select id="rf-cat"><optgroup label="Absolutos e escalões">${R.categorias.filter(c => !c.endsWith('anos')).map(c => opt(c, nomeCat(c), recF.cat)).join('')}</optgroup><optgroup label="Por idade">${R.categorias.filter(c => c.endsWith('anos')).map(c => opt(c, c, recF.cat)).join('')}</optgroup></select></label>
+      ${resumo ? '' : `<label>Piscina <select id="rf-pisc">${opt('25', 'Curta (25m)', recF.pisc)}${opt('50', 'Longa (50m)', recF.pisc)}</select></label>`}
+    </div>
+    <h3 class="so-imp">${esc(subt)}</h3>
+    <div class="tab-wrap"><table class="tab-rec">${`<thead>${cab}</thead><tbody>${corpo}</tbody>`}</table></div>
+    <p class="ref-lbl nota-tac">Idade desportiva = ano de referência da época − ano de nascimento (a época começa a 1 de setembro). Escalões: Infantis 13–14, Juvenis 15–16, Juniores 17–18, Seniores ≥ 19; Absolutos = todas as idades. "Novo" = recorde batido numa competição desta época carregada no site (assumido de imediato). Nomes dos recordes antigos com a grafia da fonte (sem acentos).</p>
+  </section>
+  ${impRod(R.fonte)}`;
+  const at = () => { const v = id => document.getElementById(id); recF.vista = v('rf-vista').value; recF.cat = v('rf-cat').value; if (v('rf-gen')) recF.gen = v('rf-gen').value; if (v('rf-pisc')) recF.pisc = v('rf-pisc').value; vistaRecordes(); };
+  ['rf-vista', 'rf-gen', 'rf-cat', 'rf-pisc'].forEach(id => { const el = document.getElementById(id); if (el) el.onchange = at; });
+}
+async function excelRecordes() {
+  try {
+    const X = await carregarExcel(), wb = new X.Workbook(), A = ESTADO.recAtual;
+    const cab = ['Categoria', 'Género', 'Piscina', 'Prova', 'Tempo', 'Nadador', 'Nasc.', 'Idade', 'Data', 'Competição', 'Local', 'Novo esta época', 'Recorde anterior'];
+    const ls = [];
+    for (const cat of ESTADO.rec.categorias) for (const g of ['M', 'F']) for (const pc of [25, 50]) for (const p of PROVAS_REC[pc]) {
+      const r = A[chaveRec(cat, g, pc, p)];
+      ls.push([cat, g === 'M' ? 'Masculino' : 'Feminino', pc + 'm', p, r ? r.tempo : '—', r?.nadador || '', r?.ano || '', r?.idade || '', r ? dataPT(r.data) : '', r?.comp || '', r?.local || '', r?.novo ? 'Sim' : '', r?.novo && r.anterior ? `${r.anterior.tempo} (${r.anterior.nadador})` : '']);
+    }
+    folha(wb, 'Recordes', cab, ls);
+    await gravar(wb, 'recordes-clube-FOCA.xlsx');
+  } catch (e) { alert(e.message); }
+}
+
 /* ---------- Navegação ---------- */
 function rota() {
   const [v, arg] = location.hash.replace(/^#/, '').split('/');
@@ -706,6 +815,7 @@ function rota() {
   else if (v === 'fichas') vistaFichas(a);
   else if (v === 'tac') vistaTac();
   else if (v === 'gerir') vistaGerir();
+  else if (v === 'recordes') vistaRecordes();
   else vistaEpoca();
   window.scrollTo(0, 0);
 }
