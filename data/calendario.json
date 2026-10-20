@@ -1,0 +1,26 @@
+{
+ "epoca": "2026/27",
+ "_tipos": "torneio = Torneios/Provas · zonal = Torneios Zonais Juvenis · territorial = Campeonatos Territoriais · nacional = Campeonatos Nacionais / Open de Portugal · meeting = Meetings Internacionais · internacional = Provas Internacionais",
+ "_nota": "Gerido na página 'Gerir calendário' do site. Piscina por defeito: 25m até dezembro, 50m de janeiro a agosto. Quando a competição tiver resultados, o nome, as datas, o local e a piscina do ficheiro de resultados são os definitivos; o tipo é o do calendário.",
+ "competicoes": [
+  {"id": "2026-10-penafiel-torneio", "nome": "Provas de Preparação", "inicio": "2026-10-17", "fim": "2026-10-18", "local": "Penafiel", "piscina": 25, "tipo": "torneio", "resultados": "2026-10-penafiel"},
+  {"id": "2026-11-felgueiras-territorial", "nome": "Campeonato Territorial JJS", "inicio": "2026-11-13", "fim": "2026-11-15", "local": "Felgueiras", "piscina": 25, "tipo": "territorial"},
+  {"id": "2026-11-mealhada-nacional", "nome": "Campeonato Nacional 2.ª Divisão Masculinos", "inicio": "2026-11-28", "fim": "2026-11-29", "local": "Mealhada", "piscina": 25, "tipo": "nacional"},
+  {"id": "2026-12-braganca-zonal", "nome": "Torneio Zonal Juvenis", "inicio": "2026-12-04", "fim": "2026-12-06", "local": "Bragança", "piscina": 25, "tipo": "zonal"},
+  {"id": "2026-12-tomar-nacional", "nome": "Campeonato Nacional PC Juniores e Seniores", "inicio": "2026-12-10", "fim": "2026-12-13", "local": "Tomar", "piscina": 25, "tipo": "nacional"},
+  {"id": "2026-12-albufeira-nacional", "nome": "Campeonato Nacional 1.ª Divisão Femininos", "inicio": "2026-12-19", "fim": "2026-12-20", "local": "Albufeira", "piscina": 25, "tipo": "nacional"},
+  {"id": "2027-02-povoa-meeting", "nome": "Meeting Póvoa", "inicio": "2027-02-06", "fim": "2027-02-07", "local": "Póvoa", "piscina": 50, "tipo": "meeting"},
+  {"id": "2027-02-jamor-meeting", "nome": "Meeting Lisboa", "inicio": "2027-02-13", "fim": "2027-02-14", "local": "Jamor", "piscina": 50, "tipo": "meeting", "obs": "Confirmar presença"},
+  {"id": "2027-03-povoa-territorial", "nome": "Campeonato Territorial JJS", "inicio": "2027-03-05", "fim": "2027-03-07", "local": "Póvoa", "piscina": 50, "tipo": "territorial"},
+  {"id": "2027-04-jamor-nacional", "nome": "Campeonato Nacional Juvenis", "inicio": "2027-04-02", "fim": "2027-04-04", "local": "Jamor", "piscina": 50, "tipo": "nacional"},
+  {"id": "2027-04-coimbra-nacional", "nome": "Campeonato Nacional Juniores, Sub21 e Seniores", "inicio": "2027-04-08", "fim": "2027-04-11", "local": "Coimbra", "piscina": 50, "tipo": "nacional"},
+  {"id": "2027-04-felgueiras-meeting", "nome": "Meeting Internacional Felgueiras", "inicio": "2027-04-17", "fim": "2027-04-18", "local": "Felgueiras", "piscina": 50, "tipo": "meeting"},
+  {"id": "2027-05-canet-internacional", "nome": "Mare Nostrum", "inicio": "2027-05-12", "fim": "2027-05-13", "local": "Canet", "piscina": 50, "tipo": "internacional"},
+  {"id": "2027-05-barcelona-internacional", "nome": "Mare Nostrum", "inicio": "2027-05-15", "fim": "2027-05-16", "local": "Barcelona", "piscina": 50, "tipo": "internacional"},
+  {"id": "2027-05-coimbra-meeting", "nome": "Meeting Coimbra", "inicio": "2027-05-29", "fim": "2027-05-30", "local": "Coimbra", "piscina": 50, "tipo": "meeting"},
+  {"id": "2027-06-campanha-meeting", "nome": "Meeting Porto", "inicio": "2027-06-05", "fim": "2027-06-06", "local": "Campanhã", "piscina": 50, "tipo": "meeting"},
+  {"id": "2027-07-budapeste-internacional", "nome": "Campeonato do Mundo de Natação", "inicio": "2027-07-10", "fim": "2027-07-18", "local": "Budapeste", "piscina": 50, "tipo": "internacional"},
+  {"id": "2027-07-coimbra-nacional", "nome": "Campeonato Nacional Juvenis, Juniores e Seniores", "inicio": "2027-07-29", "fim": "2027-08-01", "local": "Coimbra", "piscina": 50, "tipo": "nacional"},
+  {"id": "2027-08-coreia-internacional", "nome": "Campeonato do Mundo Universitário", "inicio": "2027-08-04", "fim": "2027-08-10", "local": "Coreia", "piscina": 50, "tipo": "internacional"}
+ ]
+}
