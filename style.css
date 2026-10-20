@@ -39,6 +39,23 @@ a{color:var(--azul)}
 .btn.amar{background:var(--amarelo);color:var(--azul-esc)}
 select,input[type=search]{font-family:var(--sans);font-size:15px;padding:8px 10px;border:1px solid var(--linha);border-radius:6px;background:#fff;color:var(--tinta);max-width:100%}
 
+/* Filtro por tipo de competição */
+.tipos{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 16px}
+.tipo{font-family:var(--cond);font-weight:700;font-size:15px;text-transform:uppercase;letter-spacing:.4px;border:2px solid var(--azul);background:#fff;color:var(--azul);border-radius:999px;padding:5px 12px;cursor:pointer}
+.tipo span{display:inline-block;min-width:20px;margin-left:4px;padding:0 6px;border-radius:999px;background:#E4EEF9;font-size:13px}
+.tipo:hover{border-color:var(--laranja)}
+.tipo.ativo{background:var(--azul);color:#fff}
+.tipo.ativo span{background:var(--amarelo);color:var(--azul-esc)}
+tr.futura td{color:var(--cinza)}
+.btn.mini{font-size:13px;padding:4px 10px}
+.btn.sec.mini{padding:3px 9px;border-width:1.5px}
+.btn.perigo{color:var(--verm);border-color:var(--verm)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.form-cal{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.form-cal label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--cinza)}
+.form-cal .largo{grid-column:1/-1}
+.form-cal input,.form-cal select{font-family:var(--sans);font-size:15px;padding:8px 10px;border:1px solid var(--linha);border-radius:6px;background:#fff;color:var(--tinta)}
+
 /* Indicadores (estilo placar) */
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:0 0 18px}
 .kpi{background:var(--azul-esc);color:#fff;border-radius:8px;padding:12px 14px;border-bottom:4px solid var(--amarelo)}
