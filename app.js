@@ -3,7 +3,7 @@
    Regras de RP: ver CONTEXTO_RELATORIOS.md, secção 2. */
 'use strict';
 
-const ESTADO = { epoca: '', comps: [], linhas: [], nadadores: [], tac: null, calendario: [], calRaw: null, rec: null, recAtual: {} };
+const ESTADO = { epoca: '', comps: [], linhas: [], nadadores: [], tac: null, calendario: [], calRaw: null, rec: null, recAtual: {}, rps: null, rpBase: {} };
 const app = document.getElementById('app');
 
 /* ---------- Utilitários ---------- */
@@ -46,6 +46,8 @@ async function carregar() {
   comps.sort((a, b) => a.inicio.localeCompare(b.inicio));
   ESTADO.comps = comps;
   try { const t = await fetch('data/tac.json', { cache: 'no-store' }); if (t.ok) ESTADO.tac = await t.json(); } catch (e) { ESTADO.tac = null; }
+  try { const r3 = await fetch('data/rps.json', { cache: 'no-store' }); if (r3.ok) ESTADO.rps = await r3.json(); } catch (e) { ESTADO.rps = null; }
+  prepararRPs();
   try { const r2 = await fetch('data/recordes.json', { cache: 'no-store' }); if (r2.ok) ESTADO.rec = await r2.json(); } catch (e) { ESTADO.rec = null; }
   let cal = null;
   try { const k = await fetch('data/calendario.json', { cache: 'no-store' }); if (k.ok) cal = await k.json(); } catch (e) { cal = null; }
@@ -55,18 +57,38 @@ async function carregar() {
 }
 
 /* ---------- Cálculo de RP (cronológico) ---------- */
+/* RP de base (data/rps.json): a partir de validoDesde substituem a inscrição/conversão */
+function prepararRPs() {
+  ESTADO.rpBase = {};
+  for (const a of ESTADO.rps?.nadadores || []) {
+    const rp = {};
+    for (const t of a.rp) rp[`${t.prova}|${t.pisc}`] = seg(t.tempo);
+    ESTADO.rpBase[a.nadador] = { ano: a.ano, genero: a.genero, nascimento: a.nascimento, rp };
+  }
+}
+const lblTabela = () => `RP (tabela ${ESTADO.rps?.dataTabela ? dataPT(ESTADO.rps.dataTabela) : ''})`;
 function calcular() {
   const melhor = {};          // nadador|prova|piscina → {t, local, data}
   const linhas = [];
+  const desde = ESTADO.rps?.validoDesde || null;
+  let semeado = false;
   for (const c of ESTADO.comps) {
+    if (desde && !semeado && c.inicio >= desde) {          // entra a tabela de RP
+      semeado = true;
+      for (const [nome, b] of Object.entries(ESTADO.rpBase)) for (const [kp, t] of Object.entries(b.rp)) {
+        const [prova, pisc] = kp.split('|'), k = `${nome}|${prova}|${pisc}`;
+        if (!melhor[k] || t < melhor[k].t) melhor[k] = { t, local: lblTabela(), data: ESTADO.rps.dataTabela, tabela: true };
+      }
+    }
+    const usaTabela = semeado;
     const rs = [...c.resultados].sort((a, b) => a.nprova - b.nprova);
     for (const r of rs) {
       const k = `${r.nadador}|${r.prova}|${c.piscina}`;
       const res = r.estado === 'OK' ? seg(r.resultado) : null;
-      let ref = seg(r.ref), tipo = null;
-      if (ref != null) tipo = r.inscPiscina === c.piscina ? `Inscrição (${r.inscPiscina}m)` : 'Tempo convertido';
+      let ref = usaTabela ? null : seg(r.ref), tipo = null;
+      if (ref != null) tipo = r.refOrigem === 'rp' ? lblTabela() : r.inscPiscina === c.piscina ? `Inscrição (${r.inscPiscina}m)` : 'Tempo convertido';
       const ant = melhor[k];
-      if (ant && (ref == null || ant.t < ref)) { ref = ant.t; tipo = `Resultado anterior · ${ant.local}`; }
+      if (ant && (ref == null || ant.t < ref)) { ref = ant.t; tipo = ant.tabela ? ant.local : `Resultado anterior · ${ant.local}`; }
       let ePR = false, prim = false, p = null, melh = null;
       if (res != null) {
         if (ref == null) { ePR = true; prim = true; tipo = 'RP · 1.º tempo'; }
@@ -79,7 +101,7 @@ function calcular() {
     }
   }
   ESTADO.linhas = linhas;
-  ESTADO.nadadores = [...new Set(linhas.map(l => l.nadador))].sort((a, b) => a.localeCompare(b, 'pt'));
+  ESTADO.nadadores = [...new Set([...linhas.map(l => l.nadador), ...Object.keys(ESTADO.rpBase)])].sort((a, b) => a.localeCompare(b, 'pt'));
   calcularRecordes();
 }
 
@@ -91,9 +113,12 @@ function rpAtuais(nome) {
     const k = prova + '|' + pisc;
     if (!m[k] || t < m[k].t) m[k] = { prova, pisc, t, onde, quando, origem };
   };
+  const base = ESTADO.rpBase[nome];
+  if (base) for (const [kp, t] of Object.entries(base.rp)) { const [prova, pisc] = kp.split('|'); pôr(prova, +pisc, t, lblTabela(), null, 'Tabela'); }
   for (const l of ESTADO.linhas.filter(x => x.nadador === nome)) {
-    pôr(l.prova, l.inscPiscina, seg(l.insc), 'Inscrição', l.c.inicio, 'Tempo de inscrição');
-    pôr(l.prova, l.piscina, l.res, l.c.local, l.c.inicio, 'Resultado');
+    if (!base) pôr(l.prova, l.inscPiscina, seg(l.insc), 'Tempo de inscrição', null, 'Inscrição');
+    const m0 = m[l.prova + '|' + l.piscina];
+    if (l.res != null && (!m0 || l.res < m0.t || (m0.origem === 'Tabela' && Math.abs(l.res - m0.t) < 0.005))) m[l.prova + '|' + l.piscina] = { prova: l.prova, pisc: l.piscina, t: l.res, onde: l.c.local, quando: l.c.inicio, origem: 'Resultado', compId: l.comp, linha: l };
   }
   return Object.values(m).sort((a, b) => porProva(a.prova, b.prova) || a.pisc - b.pisc);
 }
@@ -126,18 +151,25 @@ function chipsTac(l) {
     .map(x => `<span class="chip tac${x.sup ? ' sup' : ''}" title="${esc(x.col.nome)} · TAC ${fmt(x.tac)}">${esc(rotTac(x))}</span>`).join(' ');
 }
 const textoTac = l => (l.tac || []).map(x => `${x.col.campeonato} (${x.col.nome}${x.sup ? ', escalão seguinte' : ''})`).join('; ');
-const anoDe = nome => (ESTADO.linhas.find(l => l.nadador === nome && l.ano) || {}).ano || null;
+const anoDe = nome => (ESTADO.linhas.find(l => l.nadador === nome && l.ano) || {}).ano || ESTADO.rpBase[nome]?.ano || null;
+const generoDe = nome => (ESTADO.linhas.find(l => l.nadador === nome) || {}).genero || ESTADO.rpBase[nome]?.genero || null;
+const escalaoDe = nome => { const ls = ESTADO.linhas.filter(l => l.nadador === nome); return ls.length ? ls[ls.length - 1].escalao : ''; };
 
 /* Situação TAC de um atleta: melhor tempo por prova e piscina contra as colunas aplicáveis */
 function tacAtleta(nome, t = '') {
   const todas = ESTADO.linhas.filter(l => l.nadador === nome);
   const ls = linhasTipo(t, todas).filter(l => l.res != null);
-  if (!ls.length || !ESTADO.tac) return null;
-  const ult = todas[todas.length - 1], ano = anoDe(nome), ci = catDe(ano, ult.escalao);
+  if (!ESTADO.tac) return null;
+  const genero = generoDe(nome), ano = anoDe(nome), escalao = escalaoDe(nome), ci = catDe(ano, escalao);
   const melhores = {};
   for (const l of ls) { const k = l.prova + '|' + l.piscina; if (!melhores[k] || l.res < melhores[k].res) melhores[k] = l; }
+  if (!t && ESTADO.rpBase[nome]) for (const [kp, tt] of Object.entries(ESTADO.rpBase[nome].rp)) {   // RP da tabela (dentro da validade dos TAC)
+    const [prova, pisc] = kp.split('|');
+    if (!melhores[kp] || tt < melhores[kp].res) melhores[kp] = { prova, piscina: +pisc, genero, res: tt, c: { local: lblTabela(), inicio: ESTADO.rps.dataTabela }, tabela: true };
+  }
   const provas = Object.values(melhores).sort((a, b) => porProva(a.prova, b.prova) || a.piscina - b.piscina);
-  return { escalao: ult.escalao, genero: ult.genero, ano, cat: catsTAC()[ci] || null, provas, cols: colunasCat(ci) };
+  if (!provas.length) return null;
+  return { escalao, genero, ano, cat: catsTAC()[ci] || null, provas, cols: colunasCat(ci) };
 }
 
 /* ---------- Agregados ---------- */
@@ -352,13 +384,14 @@ function vistaComp(id) {
 
 function fichaHTML(nome, t = '') {
   const todas = ESTADO.linhas.filter(l => l.nadador === nome);
-  if (!todas.length) return '<p class="aviso">Atleta não encontrado.</p>';
-  const ult = todas[todas.length - 1];
+  if (!todas.length && !ESTADO.rpBase[nome]) return '<p class="aviso">Atleta não encontrado.</p>';
+  const ult = { escalao: escalaoDe(nome) || 'Sem competições', genero: generoDe(nome) };
   const ls = linhasTipo(t, todas);
-  if (!ls.length) return `<div class="ficha"><div class="cab"><div><h1>${esc(nome)}</h1><div class="meta">${esc(ult.escalao)} · ${esc(nomeTipo(t))}</div></div></div><p class="aviso">Sem provas em ${esc(nomeTipo(t))}.</p></div>`;
+  const rps = rpAtuais(nome).map(r => `<tr><td>${esc(r.prova)}</td><td class="n">${r.pisc}m</td><td class="t"><strong>${fmt(r.t)}</strong></td><td>${r.compId ? `<a href="#comp/${r.compId}">${esc(r.onde)}</a>` : esc(r.onde)}</td><td>${r.quando ? dataPT(r.quando) : '—'}</td></tr>`).join('');
+  const secRps = `<section class="sec"><h2>Recordes pessoais atuais <span class="ref-lbl">(tabela de RP + competições)</span></h2><div class="tab-wrap"><table><thead><tr><th>Prova</th><th class="n">Piscina</th><th>Tempo</th><th>Origem</th><th>Data</th></tr></thead><tbody>${rps || '<tr><td colspan="5" class="vazio">Sem RP registados.</td></tr>'}</tbody></table></div></section>`;
+  if (!ls.length) return `<div class="ficha">${impCab('Ficha individual · ' + nome, `Época ${ESTADO.epoca}`)}<div class="cab"><div><h1>${esc(nome)}</h1><div class="meta">${anoDe(nome) ? 'Ano ' + anoDe(nome) + ' · ' : ''}${ult.genero === 'F' ? 'Feminino' : 'Masculino'} · ${esc(nomeTipo(t))}</div></div></div><p class="aviso">${todas.length ? `Sem provas em ${esc(nomeTipo(t))}.` : 'Ainda sem competições carregadas nesta época.'}</p>${secRps}${ESTADO.tac && !t ? `<section class="sec"><h2>TAC e campeonatos</h2>${secTacAtleta(nome)}</section>` : ''}${impRod('')}</div>`;
   const s = resumo(ls);
   const comps = [...new Set(ls.map(l => l.comp))].length;
-  const rps = rpAtuais(nome).map(r => `<tr><td>${esc(r.prova)}</td><td class="n">${r.pisc}m</td><td class="t"><strong>${fmt(r.t)}</strong></td><td>${esc(r.origem === 'Resultado' ? r.onde : 'Tempo de inscrição')}</td><td>${r.origem === 'Resultado' ? dataPT(r.quando) : '—'}</td></tr>`).join('');
   const provas = agrupar(ls, 'prova');
   const evo = Object.keys(provas).sort(porProva).map(p => `<tr><td>${esc(p)}</td><td>${provas[p].map(l => `<span class="t ${l.ePR ? 'rp' : ''}">${l.res != null ? fmt(l.res) : esc(l.estado)}</span> <span class="ref-lbl">${esc(l.c.local)} ${l.piscina}m</span>`).join(' → ')}</td></tr>`).join('');
   return `<div class="ficha">
@@ -370,7 +403,7 @@ function fichaHTML(nome, t = '') {
       <div class="kpi"><div class="v">${s.rp}</div><div class="l">RP conseguidos</div><div class="d">${s.melh} melhorias + ${s.prim} 1.º tempo</div></div>
       <div class="kpi"><div class="v">${s.p1 + s.p2 + s.p3}</div><div class="l">Pódios</div><div class="d">${s.p1} × 1.º · ${s.p2} × 2.º · ${s.p3} × 3.º</div></div>
     </div>
-    <section class="sec"><h2>Recordes pessoais atuais <span class="ref-lbl">(toda a época)</span></h2><div class="tab-wrap"><table><thead><tr><th>Prova</th><th class="n">Piscina</th><th>Tempo</th><th>Onde</th><th>Quando</th></tr></thead><tbody>${rps}</tbody></table></div></section>
+    ${secRps}
     ${ESTADO.tac ? `<section class="sec"><h2>TAC e campeonatos${t ? ` <span class="ref-lbl">(${esc(nomeTipo(t))})</span>` : ''}</h2>${secTacAtleta(nome, t)}</section>` : ''}
     ${ls.some(l => l.recs && l.recs.length) ? `<section class="sec"><h2>Recordes do clube</h2>${tabRecordesBatidos(ls)}</section>` : ''}
     <section class="sec"><h2>Evolução por prova</h2><div class="tab-wrap"><table><thead><tr><th>Prova</th><th>Tempos na época</th></tr></thead><tbody>${evo}</tbody></table></div></section>
@@ -384,7 +417,7 @@ function vistaAtleta(nome) {
   const contar = t => new Set(linhasTipo(t, nome ? ESTADO.linhas.filter(l => l.nadador === nome) : ESTADO.linhas).map(l => l.comp)).size;
   app.innerHTML = `${chipsTipo(contar)}<div class="cab nao-imp"><div><h1>Atletas</h1><div class="meta">Ficha individual · ${esc(nomeTipo(filtroTipo))}</div></div>
     <div class="acoes"><select id="sel-at"><option value="">Escolher atleta…</option>${opts}</select>${nome ? '<button class="btn" onclick="window.print()">PDF (A4)</button>' : ''}</div></div>
-    ${nome ? fichaHTML(nome, filtroTipo) : `<div class="cartoes">${ESTADO.nadadores.map(n => { const s = resumo(linhasTipo(filtroTipo, ESTADO.linhas.filter(l => l.nadador === n))); return `<a class="cartao" href="#atleta/${slug(n)}"><div class="ct">${esc(n)}</div><div class="cm">${s.provas} provas · <strong class="rp">${s.rp} RP</strong> · ${s.p1 + s.p2 + s.p3} pódios</div></a>`; }).join('')}</div>`}`;
+    ${nome ? fichaHTML(nome, filtroTipo) : `<div class="cartoes">${ESTADO.nadadores.map(n => { const s = resumo(linhasTipo(filtroTipo, ESTADO.linhas.filter(l => l.nadador === n))); return `<a class="cartao" href="#atleta/${slug(n)}"><div class="ct">${esc(n)}</div><div class="cm">${anoDe(n) || ''} · ${s.provas ? `${s.provas} provas · <strong class="rp">${s.rp} RP</strong> · ${s.p1 + s.p2 + s.p3} pódios` : 'sem provas'}</div></a>`; }).join('')}</div>`}`;
   document.getElementById('sel-at').onchange = e => { location.hash = e.target.value ? '#atleta/' + slug(e.target.value) : '#atleta'; };
 }
 
@@ -465,7 +498,7 @@ async function excelConjunto(t) {
 
 /* ---------- TAC: blocos e vistas ---------- */
 const ordemProva = (a, b) => (a.startsWith('4x') - b.startsWith('4x')) || porProva(a, b) || a.localeCompare(b, 'pt');
-const notaTac = () => `<p class="ref-lbl nota-tac">Só contam resultados de competições (não tempos de inscrição). Resultados em 25m comparam com a tabela de piscina curta e em 50m com a de piscina longa. ${(ESTADO.tac?.notas || []).map(esc).join(' ')} "↑" = TAC de um escalão seguinte. Não é verificado o período de qualificação de cada campeonato.</p>`;
+const notaTac = () => `<p class="ref-lbl nota-tac">Contam os resultados das competições e os RP da tabela (todos dentro do período de validade dos TAC); não contam tempos de inscrição. Resultados em 25m comparam com a tabela de piscina curta e em 50m com a de piscina longa. ${(ESTADO.tac?.notas || []).map(esc).join(' ')} "↑" = TAC de um escalão seguinte. Não é verificado o período de qualificação de cada campeonato.</p>`;
 
 function tabTacObtidos(ls) {
   const xs = ls.filter(l => l.tac && l.tac.length).sort((a, b) => a.nadador.localeCompare(b.nadador, 'pt') || ordemProva(a.prova, b.prova));
@@ -486,7 +519,7 @@ function obtidosAtleta(s, cols) {
   }
   return obt;
 }
-const itemObt = o => `<li>${esc(o.l.prova)} <span class="ref-lbl">${o.l.piscina}m · ${esc(o.c.col.nome)}</span> — <span class="t rp">${fmt(o.l.res)}</span> <span class="t ref-lbl">(TAC ${fmt(o.tac)}) · ${esc(o.l.c.local)}, ${dataPT(o.l.c.inicio)}</span></li>`;
+const itemObt = o => `<li>${esc(o.l.prova)} <span class="ref-lbl">${o.l.piscina}m · ${esc(o.c.col.nome)}</span> — <span class="t rp">${fmt(o.l.res)}</span> <span class="t ref-lbl">(TAC ${fmt(o.tac)}) · ${esc(o.l.c.local)}${o.l.tabela ? '' : ', ' + dataPT(o.l.c.inicio)}</span></li>`;
 
 function secTacAtleta(nome, t = '') {
   const s = tacAtleta(nome, t);
@@ -805,6 +838,68 @@ async function excelRecordes() {
   } catch (e) { alert(e.message); }
 }
 
+/* ---------- Melhores marcas (RP por nadador, com TAC) ---------- */
+const mmF = { nome: '', pisc: 'ambas' };
+function tacDeTempo(nome, prova, pisc, t) {     // TAC conseguidos (próprios e ↑) ou o mais próximo em falta
+  if (!ESTADO.tac) return { ok: [], falta: null };
+  const tab = tacTabela(pisc, generoDe(nome), prova);
+  const cols = colunasCat(catDe(anoDe(nome), escalaoDe(nome)));
+  if (!tab || !cols.length) return { ok: [], falta: null, semTabela: !tab };
+  const ok = cols.filter(c => tab[c.id] && t <= seg(tab[c.id])).map(c => ({ ...c, tac: seg(tab[c.id]) }));
+  let falta = null;
+  if (!ok.some(c => !c.sup)) {
+    const prop = cols.filter(c => !c.sup && tab[c.id]).map(c => ({ ...c, tac: seg(tab[c.id]) })).sort((a, b) => b.tac - a.tac)[0];
+    if (prop) falta = { ...prop, d: t / prop.tac * 100 - 100 };
+  }
+  return { ok, falta };
+}
+function celTacMM(x) {
+  const vistos = new Set();
+  const chips = x.ok.filter(c => { const k = rotTac(c); if (vistos.has(k)) return false; vistos.add(k); return true; })
+    .map(c => `<span class="chip tac${c.sup ? ' sup' : ''}" title="${esc(c.col.nome)} · TAC ${fmt(c.tac)}">${esc(rotTac(c))}</span>`).join(' ');
+  const falta = x.falta ? `<span class="ref-lbl">Sem TAC · falta ${pct(x.falta.d)} para ${esc(x.falta.col.campeonato)} (${fmt(x.falta.tac)})</span>` : '';
+  return chips ? chips + (falta ? '<br>' + falta : '') : (falta || '<span class="nrp">—</span>');
+}
+function linhasMM(nome) {
+  return rpAtuais(nome).filter(r => mmF.pisc === 'ambas' || String(r.pisc) === mmF.pisc).map(r => ({ ...r, tacX: tacDeTempo(nome, r.prova, r.pisc, r.t) }));
+}
+function vistaMelhores(nomeRota) {
+  if (nomeRota) mmF.nome = nomeRota;
+  const nome = mmF.nome;
+  const opt = (v, t, sel) => `<option value="${esc(v)}" ${String(v) === String(sel) ? 'selected' : ''}>${esc(t)}</option>`;
+  const cab = `<div class="cab nao-imp"><div><h1>Melhores marcas</h1><div class="meta">RP de cada nadador (tabela de ${ESTADO.rps?.dataTabela ? dataPT(ESTADO.rps.dataTabela) : '—'} + competições carregadas) com indicação de TAC</div></div>
+    <div class="acoes">${nome ? '<button class="btn" onclick="window.print()">PDF (A4)</button>' : ''}<button class="btn amar" onclick="excelMelhores()">Excel${nome ? '' : ' (todos)'}</button></div></div>
+    <section class="sec nao-imp"><div class="filtros">
+      <label>Nadador <select id="mm-nome"><option value="">Escolher nadador…</option>${ESTADO.nadadores.map(n => opt(n, n, nome)).join('')}</select></label>
+      <label>Piscina <select id="mm-pisc">${opt('25', 'Curta (25m)', mmF.pisc)}${opt('50', 'Longa (50m)', mmF.pisc)}${opt('ambas', 'Curta e longa', mmF.pisc)}</select></label>
+    </div></section>`;
+  let corpo = '';
+  if (!nome) corpo = '<p class="aviso">Escolhe um nadador.</p>';
+  else {
+    const ls = linhasMM(nome), ano = anoDe(nome), cat = catsTAC()[catDe(ano, escalaoDe(nome))];
+    const nTac = new Set(ls.filter(r => r.tacX.ok.some(c => !c.sup)).map(r => r.prova + r.pisc)).size;
+    const linhas = ls.map(r => `<tr><td><strong>${esc(r.prova)}</strong></td><td class="n">${r.pisc}m</td><td class="t"><strong>${fmt(r.t)}</strong></td><td>${r.compId ? `<a href="#comp/${r.compId}">${esc(r.onde)}</a>` : esc(r.onde)}${r.quando ? ` <span class="ref-lbl">${dataPT(r.quando)}</span>` : ''}</td><td>${celTacMM(r.tacX)}</td></tr>`).join('');
+    corpo = `${impCab('Melhores marcas · ' + nome, `${cat ? cat.nome : ''}${ano ? ' · ' + ano : ''} · ${mmF.pisc === 'ambas' ? 'Piscina curta e longa' : mmF.pisc === '25' ? 'Piscina curta' : 'Piscina longa'}`)}
+      <div class="cab"><div><h2 class="nome-mm">${esc(nome)}</h2><div class="meta">${ano ? 'Ano ' + ano + ' · ' : ''}${generoDe(nome) === 'F' ? 'Feminino' : 'Masculino'}${cat ? ' · categoria de acesso: <strong>' + esc(cat.nome) + '</strong>' : ''} · ${ls.length} marcas · TAC em ${nTac} prova${nTac === 1 ? '' : 's'}</div></div>
+        <div class="acoes nao-imp"><a class="btn sec mini" href="#atleta/${slug(nome)}">Ficha do atleta</a></div></div>
+      <section class="sec"><div class="tab-wrap"><table><thead><tr><th>Prova</th><th class="n">Piscina</th><th>Tempo</th><th>Origem</th><th>TAC</th></tr></thead><tbody>${linhas || '<tr><td colspan="5" class="vazio">Sem marcas nesta piscina.</td></tr>'}</tbody></table></div>${notaTac()}</section>
+      ${impRod(ESTADO.rps?.fonte || '')}`;
+  }
+  app.innerHTML = cab + corpo;
+  document.getElementById('mm-nome').onchange = e => { location.hash = e.target.value ? '#marcas/' + slug(e.target.value) : '#marcas'; mmF.nome = e.target.value; if (!e.target.value) vistaMelhores(); };
+  document.getElementById('mm-pisc').onchange = e => { mmF.pisc = e.target.value; vistaMelhores(); };
+}
+async function excelMelhores() {
+  try {
+    const X = await carregarExcel(), wb = new X.Workbook();
+    const nomes = mmF.nome ? [mmF.nome] : ESTADO.nadadores;
+    const txtTac = x => { const v = new Set(); return x.ok.filter(c => { const k = rotTac(c); if (v.has(k)) return false; v.add(k); return true; }).map(c => rotTac(c)).join('; '); };
+    const ls = nomes.flatMap(n => linhasMM(n).map(r => [n, anoDe(n) || '', generoDe(n) === 'F' ? 'F' : 'M', r.prova, r.pisc + 'm', fmt(r.t), r.onde, r.quando ? dataPT(r.quando) : '', txtTac(r.tacX), r.tacX.falta ? `${pct(r.tacX.falta.d)} para ${r.tacX.falta.col.campeonato}` : '']));
+    folha(wb, 'Melhores marcas', ['Nadador', 'Ano', 'Género', 'Prova', 'Piscina', 'Tempo', 'Origem', 'Data', 'TAC', 'Falta para TAC'], ls);
+    await gravar(wb, mmF.nome ? `melhores-marcas-${slugTxt(mmF.nome)}.xlsx` : 'melhores-marcas-todos.xlsx');
+  } catch (e) { alert(e.message); }
+}
+
 /* ---------- Navegação ---------- */
 function rota() {
   const [v, arg] = location.hash.replace(/^#/, '').split('/');
@@ -816,6 +911,7 @@ function rota() {
   else if (v === 'tac') vistaTac();
   else if (v === 'gerir') vistaGerir();
   else if (v === 'recordes') vistaRecordes();
+  else if (v === 'marcas') vistaMelhores(a);
   else vistaEpoca();
   window.scrollTo(0, 0);
 }

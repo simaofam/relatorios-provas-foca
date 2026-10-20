@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Relatórios de Provas · FOCA Quinta da Lixa</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topo">
+  <div class="topo-in">
+    <a class="marca" href="#epoca">
+      <img src="logo.png" alt="Logotipo FOCA - Clube de Natação de Felgueiras">
+      <div>
+        <div class="marca-t">Relatórios de Provas</div>
+        <div class="marca-s">FOCA Quinta da Lixa - CNF · Época <span id="epoca-lbl">2026/27</span></div>
+      </div>
+    </a>
+    <nav class="menu" id="menu">
+      <a href="#epoca" data-v="epoca">Época</a>
+      <a href="#comp" data-v="comp">Competições</a>
+      <a href="#atleta" data-v="atleta">Atletas</a>
+      <a href="#marcas" data-v="marcas">Melhores marcas</a>
+      <a href="#tac" data-v="tac">TAC</a>
+      <a href="#recordes" data-v="recordes">Recordes</a>
+    </nav>
+  </div>
+  <div class="ondas" aria-hidden="true"></div>
+</header>
+
+<main id="app" class="conteudo">
+  <p class="aviso">A carregar dados…</p>
+</main>
+
+<footer class="rodape">
+  <span>FOCA Quinta da Lixa - CNF · Clube de Natação de Felgueiras</span>
+  <span id="gerado"></span>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
