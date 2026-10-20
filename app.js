@@ -168,7 +168,7 @@ function pontosConfirmar(ls) {
   }
   return xs.length ? `<ul class="lista-pc">${xs.map(x => `<li>${x}</li>`).join('')}</ul>` : '<p class="vazio">Nada a confirmar.</p>';
 }
-const impCab = (titulo, sub) => `<div class="imp-cab"><img src="assets/logo.png" alt=""><div><div class="it">${esc(titulo)}</div><div class="is">${esc(sub)}</div></div></div>`;
+const impCab = (titulo, sub) => `<div class="imp-cab"><img src="logo.png" alt=""><div><div class="it">${esc(titulo)}</div><div class="is">${esc(sub)}</div></div></div>`;
 const impRod = fonte => `<div class="imp-rod">FOCA Quinta da Lixa - CNF · Gerado em ${hoje()}${fonte ? ` · Fonte: ${esc(fonte)}` : ''}</div>`;
 
 /* ---------- Vistas ---------- */
