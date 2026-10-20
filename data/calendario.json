@@ -19,7 +19,7 @@
   {"id": "2027-05-barcelona-internacional", "nome": "Mare Nostrum", "inicio": "2027-05-15", "fim": "2027-05-16", "local": "Barcelona", "piscina": 50, "tipo": "internacional"},
   {"id": "2027-05-coimbra-meeting", "nome": "Meeting Coimbra", "inicio": "2027-05-29", "fim": "2027-05-30", "local": "Coimbra", "piscina": 50, "tipo": "meeting"},
   {"id": "2027-06-campanha-meeting", "nome": "Meeting Porto", "inicio": "2027-06-05", "fim": "2027-06-06", "local": "Campanhã", "piscina": 50, "tipo": "meeting"},
-  {"id": "2027-07-famalicao-territorial", "nome": "Campeonato Territorial JJS", "inicio": "2027-07-02", "fim": "2027-07-04", "local": "Famalicão", "piscina": 50, "tipo": "territorial", "obs": "sem resultados"},
+  {"id": "2027-07-famalicao-territorial", "nome": "Campeonato Territorial JJS", "inicio": "2027-07-02", "fim": "2027-07-04", "local": "Famalicão", "piscina": 50, "tipo": "territorial"},
   {"id": "2027-07-budapeste-internacional", "nome": "Campeonato do Mundo de Natação", "inicio": "2027-07-10", "fim": "2027-07-18", "local": "Budapeste", "piscina": 50, "tipo": "internacional"},
   {"id": "2027-07-coimbra-nacional", "nome": "Campeonato Nacional Juvenis, Juniores e Seniores", "inicio": "2027-07-29", "fim": "2027-08-01", "local": "Coimbra", "piscina": 50, "tipo": "nacional"},
   {"id": "2027-08-coreia-internacional", "nome": "Campeonato do Mundo Universitário", "inicio": "2027-08-04", "fim": "2027-08-10", "local": "Coreia", "piscina": 50, "tipo": "internacional"}
