@@ -1473,8 +1473,34 @@
    }
   }
  },
- "_categorias": "Categorias de acesso, da mais nova para a mais velha. A categoria de cada nadador vem do ano de nascimento (Start List); se faltar, usa-se o escalão. TAC das categorias seguintes também são assinalados.",
+ "_categorias": "Categorias de acesso, da mais nova para a mais velha. A categoria de cada nadador vem do ano de nascimento (Start List); se faltar, usa-se o escalão. TAC das categorias seguintes também são assinalados. 'grupo': inf = Infantis (separador próprio); sem grupo = Equipa Absoluta.",
  "categorias": [
+  {
+   "id": "infB",
+   "nome": "Infantis B",
+   "anos": [
+    2014
+   ],
+   "escalao": "Infantis B",
+   "grupo": "inf",
+   "colunas": [
+    "infB",
+    "infB_zon"
+   ]
+  },
+  {
+   "id": "infA",
+   "nome": "Infantis A",
+   "anos": [
+    2013
+   ],
+   "escalao": "Infantis A",
+   "grupo": "inf",
+   "colunas": [
+    "infA",
+    "infA_zon"
+   ]
+  },
   {
    "id": "juvB",
    "nome": "Juvenis B",

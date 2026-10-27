@@ -3,7 +3,7 @@
    Regras de RP: ver CONTEXTO_RELATORIOS.md, secção 2. */
 'use strict';
 
-const ESTADO = { epoca: '', comps: [], linhas: [], nadadores: [], tac: null, calendario: [], calRaw: null, rec: null, recAtual: {}, rps: null, rpBase: {} };
+const ESTADO = { epoca: '', comps: [], linhas: [], nadadores: [], tac: null, calendario: [], calRaw: null, rec: null, recAtual: {}, rps: null, rpBase: {}, grupo: 'abs', compsTodas: [], linhasTodas: [], nadadoresTodos: [], calTodo: [] };
 const app = document.getElementById('app');
 
 /* ---------- Utilitários ---------- */
@@ -44,7 +44,7 @@ async function carregar() {
     return x.json();
   }));
   comps.sort((a, b) => a.inicio.localeCompare(b.inicio));
-  ESTADO.comps = comps;
+  ESTADO.comps = comps; ESTADO.compsTodas = comps;
   try { const t = await fetch('data/tac.json', { cache: 'no-store' }); if (t.ok) ESTADO.tac = await t.json(); } catch (e) { ESTADO.tac = null; }
   try { const r3 = await fetch('data/rps.json', { cache: 'no-store' }); if (r3.ok) ESTADO.rps = await r3.json(); } catch (e) { ESTADO.rps = null; }
   prepararRPs();
@@ -52,8 +52,51 @@ async function carregar() {
   let cal = null;
   try { const k = await fetch('data/calendario.json', { cache: 'no-store' }); if (k.ok) cal = await k.json(); } catch (e) { cal = null; }
   ESTADO.calRaw = cal;
-  ESTADO.calendario = juntarCalendario(cal);
+  ESTADO.calTodo = juntarCalendario(cal); ESTADO.calendario = ESTADO.calTodo;
+  try { const g = localStorage.getItem('foca-grupo'); if (g === 'inf' || g === 'abs') ESTADO.grupo = g; } catch (e) { /* sem armazenamento */ }
   calcular();
+}
+
+/* ---------- Grupos: Equipa Absoluta e Infantis ---------- */
+const GRUPOS = [
+  { id: 'abs', nome: 'Equipa Absoluta', sub: 'Juvenis · Juniores · Seniores', menu: ['epoca', 'comp', 'atleta', 'marcas', 'estafetas', 'tac', 'recordes'] },
+  { id: 'inf', nome: 'Infantis', sub: 'Infantis A · Infantis B', menu: ['epoca', 'comp', 'atleta', 'tac'] }
+];
+const MENU_NOMES = { epoca: 'Época', comp: 'Competições', atleta: 'Atletas', marcas: 'Melhores marcas', estafetas: 'Estafetas', tac: 'TAC', recordes: 'Recordes' };
+const grupoAtual = () => GRUPOS.find(g => g.id === ESTADO.grupo) || GRUPOS[0];
+function grupoDe(ano, escalao) {                 // pelo ano de nascimento (categorias do tac.json); se faltar, pelo escalão
+  const i = catDe(ano, escalao), c = catsTAC()[i];
+  if (c) return c.grupo || 'abs';
+  return /infant/i.test(escalao || '') ? 'inf' : 'abs';
+}
+const grupoNadador = nome => { const l = ESTADO.linhasTodas.find(x => x.nadador === nome); return l ? l.grupo : grupoDe(ESTADO.rpBase[nome]?.ano, ''); };
+function aplicarGrupo() {
+  const g = ESTADO.grupo;
+  ESTADO.linhas = ESTADO.linhasTodas.filter(l => l.grupo === g);
+  const ids = new Set(ESTADO.linhas.map(l => l.comp));
+  ESTADO.comps = ESTADO.compsTodas.filter(c => ids.has(c.id));
+  ESTADO.nadadores = ESTADO.nadadoresTodos.filter(n => grupoNadador(n) === g);
+  ESTADO.calendario = ESTADO.calTodo.filter(e => e.comp ? ids.has(e.comp.id) : (e.grupo || 'abs') === g);
+  if (filtroTipo && !tipos().some(t => t.id === filtroTipo)) filtroTipo = '';
+}
+function setGrupo(g) {
+  ESTADO.grupo = g;
+  try { localStorage.setItem('foca-grupo', g); } catch (e) { /* sem armazenamento */ }
+  aplicarGrupo(); desenharMenu(); desenharLateral();
+  const v = location.hash.replace(/^#/, '').split('/')[0] || 'epoca';
+  if (!grupoAtual().menu.includes(v) && !['fichas', 'gerir'].includes(v)) location.hash = '#epoca'; else rota();
+}
+function desenharMenu() {
+  const m = document.getElementById('menu');
+  if (m) m.innerHTML = grupoAtual().menu.map(v => `<a href="#${v}" data-v="${v}">${MENU_NOMES[v]}</a>`).join('');
+}
+function desenharLateral() {
+  const el = document.getElementById('lateral');
+  if (!el) return;
+  el.innerHTML = `<div class="lat-t">Grupo</div>${GRUPOS.map(g => {
+    const n = ESTADO.nadadoresTodos.filter(x => grupoNadador(x) === g.id).length;
+    return `<button class="grp ${g.id === ESTADO.grupo ? 'ativo' : ''}" onclick="setGrupo('${g.id}')"><span class="grp-n">${esc(g.nome)}</span><span class="grp-s">${esc(g.sub)} · ${n} nadadores</span></button>`;
+  }).join('')}`;
 }
 
 /* ---------- Cálculo de RP (cronológico) ---------- */
@@ -72,7 +115,7 @@ function calcular() {
   const linhas = [];
   const desde = ESTADO.rps?.validoDesde || null;
   let semeado = false;
-  for (const c of ESTADO.comps) {
+  for (const c of ESTADO.compsTodas) {
     if (desde && !semeado && c.inicio >= desde) {          // entra a tabela de RP
       semeado = true;
       for (const [nome, b] of Object.entries(ESTADO.rpBase)) for (const [kp, t] of Object.entries(b.rp)) {
@@ -85,24 +128,28 @@ function calcular() {
     for (const r of rs) {
       const k = `${r.nadador}|${r.prova}|${c.piscina}`;
       const res = r.estado === 'OK' ? seg(r.resultado) : null;
-      let ref = usaTabela ? null : seg(r.ref), tipo = null;
+      let ref = usaTabela && ESTADO.rpBase[r.nadador] ? null : seg(r.ref), tipo = null;   // sem tabela de RP (ex.: Infantis): inscrição/conversão
       if (ref != null) tipo = r.refOrigem === 'rp' ? lblTabela() : r.inscPiscina === c.piscina ? `Inscrição (${r.inscPiscina}m)` : 'Tempo convertido';
       const ant = melhor[k];
       if (ant && (ref == null || ant.t < ref)) { ref = ant.t; tipo = ant.tabela ? ant.local : `Resultado anterior · ${ant.local}`; }
-      let ePR = false, prim = false, p = null, melh = null;
+      let ePR = false, prim = false, p = null, melh = null, nt = false;
+      const grupo = grupoDe(r.ano, r.escalao);
       if (res != null) {
-        if (ref == null) { ePR = true; prim = true; tipo = 'RP · 1.º tempo'; }
+        if (ref == null && grupo === 'inf') { nt = true; tipo = 'NT · sem RP (não contabilizado)'; }
+        else if (ref == null) { ePR = true; prim = true; tipo = 'RP · 1.º tempo'; }
         else { p = res / ref * 100; ePR = res < ref; if (ePR) melh = 100 - p; }
         if (!ant || res < ant.t) melhor[k] = { t: res, local: c.local, data: c.inicio };
       }
-      const l = { ...r, comp: c.id, c, piscina: c.piscina, res, refS: ref, tipo, ePR, prim, p, melh };
+      const l = { ...r, comp: c.id, c, piscina: c.piscina, res, refS: ref, tipo, ePR, prim, p, melh, nt, grupo };
       l.tac = tacObtidos(l);
       linhas.push(l);
     }
   }
-  ESTADO.linhas = linhas;
-  ESTADO.nadadores = [...new Set([...linhas.map(l => l.nadador), ...Object.keys(ESTADO.rpBase)])].sort((a, b) => a.localeCompare(b, 'pt'));
+  ESTADO.linhas = linhas; ESTADO.linhasTodas = linhas;
+  ESTADO.nadadoresTodos = [...new Set([...linhas.map(l => l.nadador), ...Object.keys(ESTADO.rpBase)])].sort((a, b) => a.localeCompare(b, 'pt'));
+  ESTADO.nadadores = ESTADO.nadadoresTodos;
   calcularRecordes();
+  aplicarGrupo();
 }
 
 /* RP atual por prova e piscina: o mais rápido entre inscrições e resultados */
@@ -181,7 +228,8 @@ function resumo(ls) {
   return {
     nad: new Set(ls.map(l => l.nadador)).size, provas: ls.length,
     rp: rp.length, prim: rp.filter(l => l.prim).length, melh: rp.filter(l => !l.prim).length,
-    taxa: ls.length ? rp.length / ls.length * 100 : null, media,
+    nt: ls.filter(l => l.nt).length,
+    taxa: ls.length - ls.filter(l => l.nt).length > 0 ? rp.length / (ls.length - ls.filter(l => l.nt).length) * 100 : null, media,
     p1: ls.filter(l => l.lugar === 1).length, p2: ls.filter(l => l.lugar === 2).length, p3: ls.filter(l => l.lugar === 3).length,
     dsq: ls.filter(l => l.estado !== 'OK').length,
     rec: ls.reduce((n, l) => n + (l.recs ? l.recs.length : 0), 0), recProvas: ls.filter(l => l.recs && l.recs.length).length
@@ -198,8 +246,8 @@ function kpis(s) {
   return `<div class="kpis">
     <div class="kpi"><div class="v">${s.nad}</div><div class="l">Nadadores</div></div>
     <div class="kpi"><div class="v">${s.provas}</div><div class="l">Provas nadadas</div>${s.dsq ? `<div class="d">${s.dsq} DSQ/NC/DNS</div>` : ''}</div>
-    <div class="kpi"><div class="v">${s.rp}</div><div class="l">RP</div><div class="d">${s.melh} melhorias + ${s.prim} 1.º tempo</div></div>
-    <div class="kpi"><div class="v">${pct0(s.taxa)}</div><div class="l">Provas com RP</div></div>
+    <div class="kpi"><div class="v">${s.rp}</div><div class="l">RP</div><div class="d">${s.melh} melhorias${ESTADO.grupo === 'inf' ? '' : ` + ${s.prim} 1.º tempo`}</div></div>
+    <div class="kpi"><div class="v">${pct0(s.taxa)}</div><div class="l">Provas com RP</div>${s.nt ? `<div class="d">${s.nt} prova${s.nt === 1 ? '' : 's'} com NT não contabilizada${s.nt === 1 ? '' : 's'}</div>` : ''}</div>
     <div class="kpi"><div class="v">${s.media == null ? '—' : s.media.toFixed(1).replace('.', ',') + '%'}</div><div class="l">Média face ao RP</div></div>
     <div class="kpi"><div class="v">${s.p1 + s.p2 + s.p3}</div><div class="l">Pódios</div><div class="d">${s.p1} × 1.º · ${s.p2} × 2.º · ${s.p3} × 3.º</div></div>
     ${ESTADO.rec ? `<div class="kpi"><div class="v">${s.rec}</div><div class="l">Recordes do clube</div><div class="d">${s.recProvas} prova${s.recProvas === 1 ? '' : 's'}</div></div>` : ''}
@@ -212,12 +260,13 @@ function tabRelacao(ls, chave, rot) {
     const s = resumo(g[k]);
     const nome = chave === 'nadador' ? `<a href="#atleta/${slug(k)}">${esc(k)}</a>` : esc(k);
     const extra = chave === 'nadador' ? `<td>${esc(g[k][g[k].length - 1].escalao)}${g[k][0].ano ? ` <span class="ref-lbl">${g[k][0].ano}</span>` : ''}</td>` : `<td class="n">${s.nad}</td>`;
-    return `<tr><td>${nome}</td>${extra}<td class="n">${s.provas}</td><td class="n">${s.rp}</td><td class="n">${s.melh}</td><td class="n">${s.prim}</td><td class="n">${pct0(s.taxa)}</td><td class="n">${s.p1 + s.p2 + s.p3}</td></tr>`;
+    return `<tr><td>${nome}</td>${extra}<td class="n">${s.provas}</td><td class="n">${s.rp}</td><td class="n">${s.melh}</td><td class="n">${ESTADO.grupo === 'inf' ? s.nt : s.prim}</td><td class="n">${pct0(s.taxa)}</td><td class="n">${s.p1 + s.p2 + s.p3}</td></tr>`;
   }).join('');
-  return `<div class="tab-wrap"><table><thead><tr><th>${rot}</th>${chave === 'nadador' ? '<th>Escalão</th>' : '<th class="n">Nadadores</th>'}<th class="n">Provas</th><th class="n">RP</th><th class="n">Melhorias</th><th class="n">1.º tempo</th><th class="n">Provas/RP</th><th class="n">Pódios</th></tr></thead><tbody>${linhas}</tbody></table></div>`;
+  return `<div class="tab-wrap"><table><thead><tr><th>${rot}</th>${chave === 'nadador' ? '<th>Escalão</th>' : '<th class="n">Nadadores</th>'}<th class="n">Provas</th><th class="n">RP</th><th class="n">Melhorias</th><th class="n">${ESTADO.grupo === 'inf' ? 'NT (não contab.)' : '1.º tempo'}</th><th class="n">Provas/RP</th><th class="n">Pódios</th></tr></thead><tbody>${linhas}</tbody></table></div>`;
 }
 function celSituacao(l) {
   if (l.estado !== 'OK') return `<span class="chip est">${esc(l.estado)}</span>`;
+  if (l.nt) return '<span class="chip tac">NT · não contabilizado</span>';
   if (l.prim) return '<span class="chip rp">RP · 1.º tempo</span>';
   if (l.ePR) return `<span class="chip rp">RP · −${pct(l.melh)}</span>`;
   return '<span class="nrp">—</span>';
@@ -258,7 +307,7 @@ const impCab = (titulo, sub) => `<div class="imp-cab"><img src="logo.png" alt=""
 const impRod = fonte => `<div class="imp-rod">FOCA Quinta da Lixa - CNF · Gerado em ${hoje()}${fonte ? ` · Fonte: ${esc(fonte)}` : ''}</div>`;
 
 /* ---------- Tipos de competição e calendário ---------- */
-const TIPOS = [
+const TIPOS_ABS = [
   { id: 'torneio', nome: 'Torneios/Provas' },
   { id: 'zonal', nome: 'Torneios Zonais Juvenis' },
   { id: 'territorial', nome: 'Campeonatos Territoriais' },
@@ -266,14 +315,22 @@ const TIPOS = [
   { id: 'meeting', nome: 'Meetings Internacionais' },
   { id: 'internacional', nome: 'Provas Internacionais' }
 ];
-const nomeTipo = id => (TIPOS.find(t => t.id === id) || {}).nome || 'Todas as competições';
+const TIPOS_INF = [
+  { id: 'torneio', nome: 'Torneios' },
+  { id: 'territorial', nome: 'Campeonatos Territoriais' },
+  { id: 'meeting', nome: 'Meetings' },
+  { id: 'nacional', nome: 'Campeonatos Nacionais' }
+];
+const tipos = () => ESTADO.grupo === 'inf' ? TIPOS_INF : TIPOS_ABS;
+const TIPOS = TIPOS_ABS;
+const nomeTipo = id => (tipos().find(t => t.id === id) || TIPOS_ABS.find(t => t.id === id) || {}).nome || 'Todas as competições';
 let filtroTipo = '';
-try { filtroTipo = localStorage.getItem('foca-tipo') || ''; if (filtroTipo && !TIPOS.some(t => t.id === filtroTipo)) filtroTipo = ''; } catch (e) { filtroTipo = ''; }
+try { filtroTipo = localStorage.getItem('foca-tipo') || ''; if (filtroTipo && !TIPOS_ABS.some(t => t.id === filtroTipo)) filtroTipo = ''; } catch (e) { filtroTipo = ''; }
 function setTipo(t) { filtroTipo = t; try { localStorage.setItem('foca-tipo', t); } catch (e) { /* sem armazenamento */ } rota(); }
 const compsTipo = t => ESTADO.comps.filter(c => !t || c.tipo === t);
 const linhasTipo = (t, ls = ESTADO.linhas) => ls.filter(l => !t || l.c.tipo === t);
 function chipsTipo(contar) {
-  return `<div class="tipos nao-imp">${[{ id: '', nome: 'Todas' }, ...TIPOS].map(t => {
+  return `<div class="tipos nao-imp">${[{ id: '', nome: 'Todas' }, ...tipos()].map(t => {
     const n = contar(t.id);
     return `<button class="tipo ${t.id === filtroTipo ? 'ativo' : ''}" onclick="setTipo('${t.id}')">${esc(t.nome)} <span>${n}</span></button>`;
   }).join('')}</div>`;
@@ -287,16 +344,16 @@ function juntarCalendario(cal) {
   const usados = new Set();
   const ents = (cal?.competicoes || []).map(e => ({ ...e }));
   for (const e of ents) {
-    let c = e.resultados ? ESTADO.comps.find(x => x.id === e.resultados) : null;
-    if (!c) c = ESTADO.comps.find(x => !usados.has(x.id) && normal(x.local) === normal(e.local) && diasEntre(x.inicio, e.inicio) <= 7);
+    let c = e.resultados ? ESTADO.compsTodas.find(x => x.id === e.resultados) : null;
+    if (!c) c = ESTADO.compsTodas.find(x => !usados.has(x.id) && normal(x.local) === normal(e.local) && diasEntre(x.inicio, e.inicio) <= 7);
     if (c && !usados.has(c.id)) { usados.add(c.id); e.comp = c; if (e.tipo) c.tipo = e.tipo; }   // o tipo do calendário prevalece
   }
-  for (const c of ESTADO.comps) if (!usados.has(c.id)) ents.push({ comp: c });
-  for (const c of ESTADO.comps) if (!c.tipo) c.tipo = 'torneio';
+  for (const c of ESTADO.compsTodas) if (!usados.has(c.id)) ents.push({ comp: c });
+  for (const c of ESTADO.compsTodas) if (!c.tipo) c.tipo = 'torneio';
   return ents.map(e => {
     const c = e.comp;
-    return c ? { id: e.id, obs: e.obs, comp: c, nome: c.nome, inicio: c.inicio, fim: c.fim || c.inicio, local: c.local, piscina: c.piscina, tipo: c.tipo, url: c.url }
-      : { id: e.id, obs: e.obs, comp: null, nome: e.nome, inicio: e.inicio, fim: e.fim || e.inicio, local: e.local, piscina: e.piscina, tipo: e.tipo || 'torneio', url: e.url };
+    return c ? { id: e.id, obs: e.obs, grupo: e.grupo, comp: c, nome: c.nome, inicio: c.inicio, fim: c.fim || c.inicio, local: c.local, piscina: c.piscina, tipo: c.tipo, url: c.url }
+      : { id: e.id, obs: e.obs, grupo: e.grupo || 'abs', comp: null, nome: e.nome, inicio: e.inicio, fim: e.fim || e.inicio, local: e.local, piscina: e.piscina, tipo: e.tipo || 'torneio', url: e.url };
   }).sort((a, b) => a.inicio.localeCompare(b.inicio));
 }
 function tabCalendario(t) {
@@ -307,7 +364,7 @@ function tabCalendario(t) {
     const dt = e.inicio === e.fim ? dataPT(e.inicio) : `${dataPT(e.inicio)} a ${dataPT(e.fim)}`;
     if (e.comp) {
       const x = resumo(ESTADO.linhas.filter(l => l.comp === e.comp.id));
-      return `<tr><td>${dt}</td><td><a href="#comp/${e.comp.id}">${esc(e.nome)}</a></td><td>${esc(e.local)}</td><td class="n">${e.piscina}m</td><td>${esc(nomeTipo(e.tipo))}</td><td class="n">${x.nad}</td><td class="n">${x.provas}</td><td class="n">${x.rp} <span class="ref-lbl">(${x.melh}+${x.prim})</span></td><td class="n">${pct0(x.taxa)}</td><td class="n">${x.p1 + x.p2 + x.p3}</td><td><span class="chip rp">Realizada</span></td></tr>`;
+      return `<tr><td>${dt}</td><td><a href="#comp/${e.comp.id}">${esc(e.nome)}</a></td><td>${esc(e.local)}</td><td class="n">${e.piscina}m</td><td>${esc(nomeTipo(e.tipo))}</td><td class="n">${x.nad}</td><td class="n">${x.provas}</td><td class="n">${x.rp} <span class="ref-lbl">${ESTADO.grupo === 'inf' ? (x.nt ? `(${x.nt} NT)` : '') : `(${x.melh}+${x.prim})`}</span></td><td class="n">${pct0(x.taxa)}</td><td class="n">${x.p1 + x.p2 + x.p3}</td><td><span class="chip rp">Realizada</span></td></tr>`;
     }
     const est = e.fim < hojeISO ? '<span class="chip est">Falta carregar resultados</span>' : '<span class="chip tac">Por realizar</span>';
     return `<tr class="futura"><td>${dt}</td><td>${e.url ? `<a href="${esc(e.url)}" target="_blank" rel="noopener">${esc(e.nome)}</a>` : esc(e.nome)}${e.obs ? `<div class="ref-lbl">${esc(e.obs)}</div>` : ''}</td><td>${esc(e.local || '')}</td><td class="n">${e.piscina ? e.piscina + 'm' : '—'}</td><td>${esc(nomeTipo(e.tipo))}</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td>${est}</td></tr>`;
@@ -346,12 +403,12 @@ function relatorioConjunto(t, titulo, sub) {
 
 /* ---------- Vistas ---------- */
 function vistaEpoca() {
-  app.innerHTML = relatorioConjunto('', 'Época ' + ESTADO.epoca, 'Relatório da época · Direção · FOCA Quinta da Lixa - CNF');
+  app.innerHTML = relatorioConjunto('', 'Época ' + ESTADO.epoca + (ESTADO.grupo === 'inf' ? ' · Infantis' : ''), `Relatório da época · ${grupoAtual().nome} · Direção · FOCA Quinta da Lixa - CNF`);
 }
 
 function vistaListaComps() {
   const contar = t => ESTADO.calendario.filter(e => !t || e.tipo === t).length;
-  app.innerHTML = `${chipsTipo(contar)}<div class="nao-imp" style="text-align:right;margin:-8px 0 8px"><a class="btn sec mini" href="#gerir">Gerir calendário</a></div>${relatorioConjunto(filtroTipo, filtroTipo ? nomeTipo(filtroTipo) : 'Competições', 'Época ' + ESTADO.epoca + (filtroTipo ? ' · ' + nomeTipo(filtroTipo) : ' · todas as competições'))}`;
+  app.innerHTML = `${chipsTipo(contar)}<div class="nao-imp" style="text-align:right;margin:-8px 0 8px"><a class="btn sec mini" href="#gerir">Gerir calendário</a></div>${relatorioConjunto(filtroTipo, filtroTipo ? nomeTipo(filtroTipo) : 'Competições', grupoAtual().nome + ' · Época ' + ESTADO.epoca + (filtroTipo ? ' · ' + nomeTipo(filtroTipo) : ' · todas as competições'))}`;
 }
 
 function vistaComp(id) {
@@ -555,10 +612,12 @@ function secTacAtleta(nome, t = '') {
 }
 
 const tacF = { gen: 'M', cat: 'juvB', pisc: 'ambas', estaf: false };
+const catsGrupo = () => catsTAC().filter(c => (c.grupo || 'abs') === ESTADO.grupo);
 function tacVisao() {
+  if (tacF.cat && !catsGrupo().some(c => c.id === tacF.cat)) tacF.cat = catsGrupo()[0]?.id || '';
   const T = ESTADO.tac;
   const c = catsTAC().find(x => x.id === tacF.cat);
-  const cols = c ? c.colunas.map(id => ({ id, col: colTAC(id) })) : T.colunas.map(x => ({ id: x.id, col: x }));
+  const cols = c ? c.colunas.map(id => ({ id, col: colTAC(id) })) : [...new Set(catsGrupo().flatMap(k => k.colunas))].map(id => ({ id, col: colTAC(id) }));
   const piscs = tacF.pisc === 'ambas' ? ['25', '50'] : [tacF.pisc];
   const provas = [...new Set(piscs.flatMap(p => Object.keys(T.tempos[p]?.[tacF.gen] || {})))]
     .filter(p => tacF.gen === 'X' || tacF.estaf || !p.startsWith('4x'))
@@ -585,7 +644,7 @@ function vistaTac() {
   <section class="sec">
     <div class="filtros">
       <label>Género <select id="tf-gen">${opt('M', 'Masculinos', tacF.gen)}${opt('F', 'Femininos', tacF.gen)}${opt('X', 'Mistos (estafetas)', tacF.gen)}</select></label>
-      <label>Categoria <select id="tf-cat">${catsTAC().map(c => opt(c.id, `${c.nome} (${anosTxt(c)})`, tacF.cat)).join('')}${opt('', 'Todas as colunas', tacF.cat)}</select></label>
+      <label>Categoria <select id="tf-cat">${catsGrupo().map(c => opt(c.id, `${c.nome} (${anosTxt(c)})`, tacF.cat)).join('')}${opt('', 'Todas as colunas', tacF.cat)}</select></label>
       <label>Piscina <select id="tf-pisc">${opt('25', 'Curta (25m)', tacF.pisc)}${opt('50', 'Longa (50m)', tacF.pisc)}${opt('ambas', 'Curta e longa', tacF.pisc)}</select></label>
       ${tacF.gen === 'X' ? '' : `<label><input type="checkbox" id="tf-est" ${tacF.estaf ? 'checked' : ''}> Estafetas</label>`}
     </div>
@@ -648,7 +707,8 @@ async function gravarCalendario(alterar, mensagem) {
   cal.competicoes = alterar(cal.competicoes || []).sort((a, b) => a.inicio.localeCompare(b.inicio));
   await ghPedido('PUT', `contents/${GH.ficheiro}`, { message: mensagem, content: b64(textoCalendario(cal)), sha, branch: GH.ramo });
   ESTADO.calRaw = cal;
-  ESTADO.calendario = juntarCalendario(cal);
+  ESTADO.calTodo = juntarCalendario(cal);
+  aplicarGrupo();
 }
 const slugTxt = s => normal(s).replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const piscinaPadrao = ini => ini && ini.slice(5, 7) >= '09' ? 25 : 50;   // set–dez: 25m; jan–ago: 50m
@@ -658,11 +718,11 @@ function vistaGerir() {
   const raw = ESTADO.calRaw?.competicoes || [];
   const temChave = !!chaveGH.ler();
   const e = gEdit ? raw.find(x => x.id === gEdit) : null;
-  const ligada = id => ESTADO.calendario.find(x => x.id === id && x.comp);
+  const ligada = id => ESTADO.calTodo.find(x => x.id === id && x.comp);
   const opt = (v, t, sel) => `<option value="${esc(v)}" ${String(v) === String(sel ?? '') ? 'selected' : ''}>${esc(t)}</option>`;
   const linhas = raw.map(x => {
     const lg = ligada(x.id);
-    return `<tr><td>${dataPT(x.inicio)}${x.fim && x.fim !== x.inicio ? ' a ' + dataPT(x.fim) : ''}</td><td>${esc(x.nome)}${x.obs ? `<div class="ref-lbl">${esc(x.obs)}</div>` : ''}</td><td>${esc(x.local || '')}</td><td class="n">${x.piscina ? x.piscina + 'm' : '—'}</td><td>${esc(nomeTipo(x.tipo))}</td>
+    return `<tr><td>${dataPT(x.inicio)}${x.fim && x.fim !== x.inicio ? ' a ' + dataPT(x.fim) : ''}</td><td>${esc(x.nome)}${x.obs ? `<div class="ref-lbl">${esc(x.obs)}</div>` : ''}</td><td>${esc(x.local || '')}</td><td class="n">${x.piscina ? x.piscina + 'm' : '—'}</td><td>${esc(nomeTipo(x.tipo))}${x.grupo === 'inf' ? ' <span class="chip tac">Infantis</span>' : ''}</td>
       <td>${lg ? '<span class="chip rp">Com resultados</span>' : '<span class="chip tac">Sem resultados</span>'}</td>
       <td class="n" style="white-space:nowrap"><button class="btn sec mini" onclick="gEdit='${esc(x.id)}';vistaGerir()">Editar</button> <button class="btn sec mini perigo" onclick="apagarComp('${esc(x.id)}')">Apagar</button></td></tr>`;
   }).join('');
@@ -684,7 +744,8 @@ function vistaGerir() {
       <label>Fim<input type="date" id="g-fim" value="${esc(e?.fim || '')}"></label>
       <label>Local<input id="g-local" value="${esc(e?.local || '')}"></label>
       <label>Piscina<select id="g-pisc">${opt('', 'Automática (25m set–dez, 50m jan–ago)', e ? e.piscina : '')}${opt(25, '25m', e?.piscina)}${opt(50, '50m', e?.piscina)}</select></label>
-      <label>Tipo<select id="g-tipo">${TIPOS.map(t => opt(t.id, t.nome, e?.tipo || 'torneio')).join('')}</select></label>
+      <label>Grupo<select id="g-grupo">${GRUPOS.map(g => opt(g.id, g.nome, e?.grupo || ESTADO.grupo)).join('')}</select></label>
+      <label>Tipo<select id="g-tipo">${tipos().map(t => opt(t.id, t.nome, e?.tipo || 'torneio')).join('')}</select></label>
       <label class="largo">Notas<input id="g-obs" value="${esc(e?.obs || '')}" placeholder="Ex.: Confirmar presença"></label>
     </div>
     <div class="acoes" style="margin-top:10px"><button class="btn" onclick="guardarComp()" ${temChave ? '' : 'disabled'}>${e ? 'Guardar alterações' : 'Acrescentar ao calendário'}</button>${e ? ' <button class="btn sec" onclick="gEdit=null;vistaGerir()">Cancelar</button>' : ''}</div>
@@ -712,7 +773,7 @@ async function guardarComp() {
   if (!nome || !ini || !local) return msgG('g-msg', 'Preenche pelo menos o nome, a data de início e o local.', true);
   if (fim < ini) return msgG('g-msg', 'A data de fim é anterior à de início.', true);
   const pisc = v('g-pisc') ? +v('g-pisc') : piscinaPadrao(ini);
-  const dados = { nome, inicio: ini, fim, local, piscina: pisc, tipo: v('g-tipo') };
+  const dados = { nome, inicio: ini, fim, local, piscina: pisc, tipo: v('g-tipo'), grupo: v('g-grupo') };
   const obs = v('g-obs');
   msgG('g-msg', 'A gravar…');
   try {
@@ -754,7 +815,7 @@ function calcularRecordes() {
   ESTADO.recAtual = {};
   if (!ESTADO.rec) return;
   for (const r of ESTADO.rec.recordes) ESTADO.recAtual[chaveRec(r.cat, r.gen, r.pisc, r.prova)] = { ...r, t: seg(r.tempo), novo: false };
-  const ls = [...ESTADO.linhas].filter(l => l.res != null && l.ano).sort((a, b) => a.c.inicio.localeCompare(b.c.inicio) || a.nprova - b.nprova);
+  const ls = [...ESTADO.linhasTodas].filter(l => l.res != null && l.ano).sort((a, b) => a.c.inicio.localeCompare(b.c.inicio) || a.nprova - b.nprova);
   for (const l of ls) {
     const idade = anoRefEpoca(l.c.inicio) - l.ano;
     for (const cat of catsRecorde(idade)) {
@@ -1026,8 +1087,10 @@ function vistaEstafetas() {
 
 /* ---------- Navegação ---------- */
 function rota() {
-  const [v, arg] = location.hash.replace(/^#/, '').split('/');
+  let [v, arg] = location.hash.replace(/^#/, '').split('/');
   const a = arg ? decodeURIComponent(arg) : '';
+  if (v && !grupoAtual().menu.includes(v) && !['fichas', 'gerir'].includes(v)) v = 'epoca';
+  desenharLateral();
   document.querySelectorAll('#menu a').forEach(x => x.classList.toggle('ativo', x.dataset.v === (v === 'fichas' || v === 'gerir' ? 'comp' : (v || 'epoca'))));
   if (v === 'comp') a ? vistaComp(a) : vistaListaComps();
   else if (v === 'atleta') vistaAtleta(a);
@@ -1044,6 +1107,7 @@ function rota() {
 (async () => {
   try {
     await carregar();
+    desenharMenu();
     document.getElementById('epoca-lbl').textContent = ESTADO.epoca;
     document.getElementById('gerado').textContent = 'Atualizado em ' + hoje();
     window.addEventListener('hashchange', rota);

@@ -24,7 +24,24 @@ a{color:var(--azul)}
 .menu a.ativo{background:var(--amarelo);color:var(--azul-esc)}
 .ondas{height:6px;background:repeating-linear-gradient(90deg,var(--amarelo) 0 40px,var(--laranja) 40px 48px)}
 
-.conteudo{max-width:1180px;margin:0 auto;padding:20px 16px 40px}
+.corpo{max-width:1420px;margin:0 auto;display:grid;grid-template-columns:210px minmax(0,1fr);gap:8px;align-items:start}
+.conteudo{max-width:1180px;width:100%;margin:0 auto;padding:20px 16px 40px;min-width:0}
+.lateral{position:sticky;top:12px;padding:20px 0 0 16px;display:flex;flex-direction:column;gap:8px}
+.lat-t{font-family:var(--cond);font-weight:700;font-size:13px;letter-spacing:.8px;text-transform:uppercase;color:var(--cinza);margin-bottom:2px}
+.grp{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;border:2px solid var(--linha);background:#fff;border-radius:8px;padding:10px 12px;cursor:pointer;color:var(--azul-esc);font-family:var(--sans)}
+.grp:hover{border-color:var(--azul)}
+.grp .grp-n{font-family:var(--cond);font-weight:800;font-size:19px;text-transform:uppercase;letter-spacing:.3px;line-height:1.05}
+.grp .grp-s{font-size:12px;color:var(--cinza)}
+.grp.ativo{background:var(--azul);border-color:var(--azul);color:#fff;box-shadow:inset 4px 0 0 var(--amarelo)}
+.grp.ativo .grp-s{color:#DCE8F5}
+@media (max-width:900px){
+  .corpo{grid-template-columns:1fr;gap:0}
+  .lateral{position:static;flex-direction:row;padding:12px 16px 0;gap:6px}
+  .lat-t{display:none}
+  .grp{flex:1;padding:8px 10px}
+  .grp .grp-n{font-size:16px}
+  .grp .grp-s{display:none}
+}
 .aviso{padding:20px;background:#fff;border:1px solid var(--linha);border-radius:8px}
 .erro{border-color:var(--verm);color:var(--verm)}
 
@@ -150,6 +167,8 @@ td.n,th.n{text-align:right}
   body{background:#fff;font-size:11px}
   .topo,.rodape,.acoes,.filtros,.nao-imp{display:none!important}
   .conteudo{padding:0;max-width:none}
+  .corpo{display:block;max-width:none}
+  .lateral{display:none!important}
   .so-imp{display:block}
   .chip.recorde,.chip.tac,.chip.tac.sup{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .imp-cab{display:flex;align-items:center;gap:10px;border-bottom:3px solid var(--azul);padding-bottom:6px;margin-bottom:10px}
