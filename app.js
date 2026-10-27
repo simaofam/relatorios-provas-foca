@@ -220,7 +220,10 @@ function tacAtleta(nome, t = '') {
 }
 
 /* ---------- Agregados ---------- */
-function resumo(ls) {
+const AUSENTE = ['DNS', 'WDR'];                 // não nadou: não conta como prova nadada
+const ausente = l => AUSENTE.includes(l.estado);
+function resumo(lsTodas) {
+  const ls = lsTodas.filter(l => !ausente(l));
   const ok = ls.filter(l => l.res != null);
   const rp = ls.filter(l => l.ePR);
   const comRef = ok.filter(l => l.p != null);
@@ -231,7 +234,7 @@ function resumo(ls) {
     nt: ls.filter(l => l.nt).length,
     taxa: ls.length - ls.filter(l => l.nt).length > 0 ? rp.length / (ls.length - ls.filter(l => l.nt).length) * 100 : null, media,
     p1: ls.filter(l => l.lugar === 1).length, p2: ls.filter(l => l.lugar === 2).length, p3: ls.filter(l => l.lugar === 3).length,
-    dsq: ls.filter(l => l.estado !== 'OK').length,
+    dsq: ls.filter(l => l.estado !== 'OK').length, ausentes: lsTodas.length - ls.length,
     rec: ls.reduce((n, l) => n + (l.recs ? l.recs.length : 0), 0), recProvas: ls.filter(l => l.recs && l.recs.length).length
   };
 }
@@ -245,7 +248,7 @@ function agrupar(ls, chave) {
 function kpis(s) {
   return `<div class="kpis">
     <div class="kpi"><div class="v">${s.nad}</div><div class="l">Nadadores</div></div>
-    <div class="kpi"><div class="v">${s.provas}</div><div class="l">Provas nadadas</div>${s.dsq ? `<div class="d">${s.dsq} DSQ/NC/DNS</div>` : ''}</div>
+    <div class="kpi"><div class="v">${s.provas}</div><div class="l">Provas nadadas</div>${s.dsq || s.ausentes ? `<div class="d">${[s.dsq ? s.dsq + ' DSQ' : '', s.ausentes ? s.ausentes + ' DNS/WDR não contadas' : ''].filter(Boolean).join(' · ')}</div>` : ''}</div>
     <div class="kpi"><div class="v">${s.rp}</div><div class="l">RP</div><div class="d">${s.melh} melhorias${ESTADO.grupo === 'inf' ? '' : ` + ${s.prim} 1.º tempo`}</div></div>
     <div class="kpi"><div class="v">${pct0(s.taxa)}</div><div class="l">Provas com RP</div>${s.nt ? `<div class="d">${s.nt} prova${s.nt === 1 ? '' : 's'} com NT não contabilizada${s.nt === 1 ? '' : 's'}</div>` : ''}</div>
     <div class="kpi"><div class="v">${s.media == null ? '—' : s.media.toFixed(1).replace('.', ',') + '%'}</div><div class="l">Média face ao RP</div></div>
@@ -265,7 +268,7 @@ function tabRelacao(ls, chave, rot) {
   return `<div class="tab-wrap"><table><thead><tr><th>${rot}</th>${chave === 'nadador' ? '<th>Escalão</th>' : '<th class="n">Nadadores</th>'}<th class="n">Provas</th><th class="n">RP</th><th class="n">Melhorias</th><th class="n">${ESTADO.grupo === 'inf' ? 'NT (não contab.)' : '1.º tempo'}</th><th class="n">Provas/RP</th><th class="n">Pódios</th></tr></thead><tbody>${linhas}</tbody></table></div>`;
 }
 function celSituacao(l) {
-  if (l.estado !== 'OK') return `<span class="chip est">${esc(l.estado)}</span>`;
+  if (l.estado !== 'OK') return `<span class="chip est" title="${esc(l.motivo || '')}">${esc(l.estado)}</span>${l.motivo ? `<div class="ref-lbl">${esc(l.motivo)}</div>` : ''}`;
   if (l.nt) return '<span class="chip tac">NT · não contabilizado</span>';
   if (l.prim) return '<span class="chip rp">RP · 1.º tempo</span>';
   if (l.ePR) return `<span class="chip rp">RP · −${pct(l.melh)}</span>`;
@@ -294,12 +297,17 @@ function classificacoes(c, ls) {
       <div class="tab-wrap"><table><thead><tr><th class="n">Lugar</th><th>Nadador</th><th>Prova</th><th>Tempo</th></tr></thead><tbody>${corpo || '<tr><td colspan="4" class="vazio">Sem nadadores do clube.</td></tr>'}</tbody></table></div></div>`;
   }).join('')}</div>`).join('');
 }
+function tabDesclass(ls) {
+  const xs = ls.filter(l => l.estado === 'DSQ').sort((a, b) => a.c.inicio.localeCompare(b.c.inicio) || a.nprova - b.nprova);
+  if (!xs.length) return '<p class="vazio">Sem desclassificações.</p>';
+  return `<div class="tab-wrap"><table><thead><tr><th>Nadador</th><th>Escalão</th><th>Prova</th><th>Competição</th><th>Motivo</th></tr></thead><tbody>${xs.map(l => `<tr><td><a href="#atleta/${slug(l.nadador)}">${esc(l.nadador)}</a></td><td>${esc(l.escalao)}</td><td>${esc(l.prova)}</td><td>${esc(l.c.local)} <span class="ref-lbl">${dataPT(l.c.inicio)}</span></td><td>${esc(l.motivo || 'Motivo não indicado na fonte')}</td></tr>`).join('')}</tbody></table></div>`;
+}
 function pontosConfirmar(ls) {
   const xs = [];
   for (const l of ls) {
     if (l.obs) xs.push(`${esc(l.nadador)} · ${esc(l.prova)}: ${esc(l.obs)}`);
-    if (l.melh != null && l.melh > 8) xs.push(`${esc(l.nadador)} · ${esc(l.prova)}: melhoria de ${pct(l.melh)} (acima de 8%) — confirmar tempo e inscrição.`);
-    if (l.estado !== 'OK') xs.push(`${esc(l.nadador)} · ${esc(l.prova)}: ${esc(l.estado)}.`);
+    if (l.melh != null && l.melh > 8 && !l.confirmado) xs.push(`${esc(l.nadador)} · ${esc(l.prova)}: melhoria de ${pct(l.melh)} (acima de 8%) — confirmar tempo e inscrição.`);
+    if (l.estado !== 'OK') xs.push(`${esc(l.nadador)} · ${esc(l.prova)}: ${esc(l.estado)}${l.motivo ? ' — ' + esc(l.motivo) : ''}${ausente(l) ? ' (não conta como prova nadada)' : ''}.`);
   }
   return xs.length ? `<ul class="lista-pc">${xs.map(x => `<li>${x}</li>`).join('')}</ul>` : '<p class="vazio">Nada a confirmar.</p>';
 }
@@ -398,6 +406,7 @@ function relatorioConjunto(t, titulo, sub) {
   <section class="sec"><h2>Pódios por categoria</h2><div class="tab-wrap"><table><thead><tr><th>Categoria</th><th class="n">1.º</th><th class="n">2.º</th><th class="n">3.º</th><th class="n">Total</th></tr></thead><tbody>${podH}</tbody></table></div></section>
   ${ESTADO.rec ? `<section class="sec"><h2>Recordes do clube batidos</h2>${tabRecordesBatidos(ls)}</section>` : ''}
   ${ESTADO.tac ? `<section class="sec quebra"><h2>TAC obtidos</h2>${tabTacObtidos(ls)}</section>` : ''}
+  ${ls.some(l => l.estado === 'DSQ') ? `<section class="sec"><h2>Desclassificações</h2>${tabDesclass(ls)}</section>` : ''}
   ${impRod('provas.annp.pt')}`;
 }
 
@@ -429,6 +438,7 @@ function vistaComp(id) {
     <div id="det">${tabDetalhe(ord)}</div></section>
   ${ESTADO.rec ? `<section class="sec"><h2>Recordes do clube</h2>${tabRecordesBatidos(ls)}</section>` : ''}
   ${ESTADO.tac ? `<section class="sec"><h2>TAC obtidos</h2>${tabTacObtidos(ls)}</section>` : ''}
+  <section class="sec"><h2>Desclassificações</h2>${tabDesclass(ls)}</section>
   <section class="sec"><h2>Pontos a confirmar</h2>${pontosConfirmar(ls)}</section>
   ${impRod(c.url)}`;
   const aplicar = () => {
@@ -463,6 +473,7 @@ function fichaHTML(nome, t = '') {
     ${secRps}
     ${ESTADO.tac ? `<section class="sec"><h2>TAC e campeonatos${t ? ` <span class="ref-lbl">(${esc(nomeTipo(t))})</span>` : ''}</h2>${secTacAtleta(nome, t)}</section>` : ''}
     ${ls.some(l => l.recs && l.recs.length) ? `<section class="sec"><h2>Recordes do clube</h2>${tabRecordesBatidos(ls)}</section>` : ''}
+    ${ls.some(l => l.estado === 'DSQ') ? `<section class="sec"><h2>Desclassificações</h2>${tabDesclass(ls)}</section>` : ''}
     <section class="sec"><h2>Evolução por prova</h2><div class="tab-wrap"><table><thead><tr><th>Prova</th><th>Tempos na época</th></tr></thead><tbody>${evo}</tbody></table></div></section>
     <section class="sec"><h2>Todas as provas</h2>${tabDetalhe(ls, true)}</section>
     ${impRod('provas.annp.pt')}
@@ -515,7 +526,7 @@ function folha(wb, nome, cab, linhas) {
 }
 const relLinhas = (ls, chave) => { const g = agrupar(ls, chave); return Object.keys(g).sort(chave === 'escalao' ? porEscalao : (a, b) => a.localeCompare(b, 'pt')).map(k => { const s = resumo(g[k]); return [k, s.provas, s.rp, s.melh, s.prim, s.taxa == null ? null : Math.round(s.taxa) / 100, s.p1, s.p2, s.p3]; }); };
 const relCab = r => [r, 'Provas', 'RP', 'Melhorias', '1.º tempo', 'Provas/RP', '1.º', '2.º', '3.º'];
-const detLinhas = ls => ls.map(l => [l.c.local, l.nadador, l.ano || '', l.escalao, l.categoria, l.prova, l.insc ? fmt(seg(l.insc)) : 'NT', l.inscPiscina ? l.inscPiscina + 'm' : '', l.refS != null ? fmt(l.refS) : '', l.tipo || '', l.res != null ? fmt(l.res) : l.estado, l.p != null ? Math.round(l.p * 100) / 100 : null, l.ePR ? (l.prim ? 'RP · 1.º tempo' : 'RP') : '', l.melh != null ? Math.round(l.melh * 100) / 100 : null, l.lugar, textoTac(l), textoRec(l), l.obs || '']);
+const detLinhas = ls => ls.map(l => [l.c.local, l.nadador, l.ano || '', l.escalao, l.categoria, l.prova, l.insc ? fmt(seg(l.insc)) : 'NT', l.inscPiscina ? l.inscPiscina + 'm' : '', l.refS != null ? fmt(l.refS) : '', l.tipo || '', l.res != null ? fmt(l.res) : l.estado, l.p != null ? Math.round(l.p * 100) / 100 : null, l.ePR ? (l.prim ? 'RP · 1.º tempo' : 'RP') : '', l.melh != null ? Math.round(l.melh * 100) / 100 : null, l.lugar, textoTac(l), textoRec(l), [l.motivo, l.obs].filter(Boolean).join(' · ')]);
 const detCab = ['Competição', 'Nadador', 'Ano', 'Escalão', 'Categoria', 'Prova', 'Inscrição', 'Piscina insc.', 'Referência', 'Tipo de referência', 'Resultado', '% do RP', 'Situação', 'Melhoria %', 'Lugar', 'TAC', 'Recorde do clube', 'Observações'];
 function pctCol(ws, idx) { ws.getColumn(idx).numFmt = '0%'; }
 async function gravar(wb, nome) {
@@ -533,6 +544,7 @@ async function excelComp(id) {
     pctCol(folha(wb, 'Por nadador', relCab('Nadador'), relLinhas(ls, 'nadador')), 6);
     folha(wb, 'Classificações', ['Categoria', 'Lugar', 'Nadador', 'Prova', 'Tempo'], [...ls].sort((a, b) => porEscalao(a.categoria, b.categoria) || (a.lugar ?? 999) - (b.lugar ?? 999)).map(l => [l.categoria, l.lugar, l.nadador, l.prova, l.res != null ? fmt(l.res) : l.estado]));
     folha(wb, 'Detalhe', detCab, detLinhas([...ls].sort((a, b) => a.nadador.localeCompare(b.nadador, 'pt') || a.nprova - b.nprova)));
+    if (ls.some(l => l.estado === 'DSQ')) folha(wb, 'Desclassificações', ['Nadador', 'Escalão', 'Prova', 'Motivo'], ls.filter(l => l.estado === 'DSQ').map(l => [l.nadador, l.escalao, l.prova, l.motivo || '']));
     await gravar(wb, `${c.id}-relatorio.xlsx`);
   } catch (e) { alert(e.message); }
 }
