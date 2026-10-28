@@ -103,6 +103,13 @@ td.n,th.n{text-align:right}
 .chip.est{background:#FBE3E0;color:var(--verm)}
 .chip.recorde{background:var(--amarelo);color:var(--azul-esc);border:1px solid #E0C200}
 .so-imp{display:none}
+.tab-cn td{vertical-align:top}
+.tab-cn tr.est td{background:#F3F7FC}
+.tab-cn tr.fixo td:first-child{box-shadow:inset 4px 0 0 var(--amarelo)}
+.cn-sel{max-width:290px;font-size:13px;padding:5px 6px}
+.cn-t{width:92px;font-family:var(--mono);font-size:13px;padding:5px 6px;border:1px solid var(--linha);border-radius:6px}
+tr.nosso td{background:#FFF6C7!important;font-weight:700}
+.desc-prop{margin:0 0 14px;font-size:14px}
 .cartoes.eqs{grid-template-columns:repeat(auto-fit,minmax(min(100%,520px),1fr));margin-bottom:16px}
 .cartao.eq td{white-space:nowrap}
 .cartao.eq td strong{white-space:normal}

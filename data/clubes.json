@@ -1,0 +1,4412 @@
+{
+ "epoca": "2026/27",
+ "_pontos": "1.º = N.º de clubes + 1; 2.º = N − 1; 3.º = N − 2; … até ao último, que recebe 1 ponto. DSQ/desistência = 0. Máx. 12 nadadores; cada nadador até 3 provas individuais + estafetas; 1 nadador e 1 estafeta por clube em cada prova.",
+ "divisoes": [
+  {
+   "id": "1div",
+   "nome": "1.ª Divisão",
+   "genero": "F",
+   "clubes": 16,
+   "local": "ANALGARVE – Albufeira",
+   "datas": "19–20/12/2026",
+   "piscina": 25,
+   "maxAtletas": 12,
+   "maxIndiv": 3,
+   "provas": [
+    {
+     "prova": "400m Livres",
+     "sessao": 1,
+     "estafeta": false
+    },
+    {
+     "prova": "50m Mariposa",
+     "sessao": 1,
+     "estafeta": false
+    },
+    {
+     "prova": "100m Costas",
+     "sessao": 1,
+     "estafeta": false
+    },
+    {
+     "prova": "200m Estilos",
+     "sessao": 1,
+     "estafeta": false
+    },
+    {
+     "prova": "4x100m Livres",
+     "sessao": 1,
+     "estafeta": true
+    },
+    {
+     "prova": "200m Mariposa",
+     "sessao": 2,
+     "estafeta": false
+    },
+    {
+     "prova": "100m Bruços",
+     "sessao": 2,
+     "estafeta": false
+    },
+    {
+     "prova": "200m Livres",
+     "sessao": 2,
+     "estafeta": false
+    },
+    {
+     "prova": "4x100m Estilos",
+     "sessao": 2,
+     "estafeta": true
+    },
+    {
+     "prova": "800m Livres",
+     "sessao": 3,
+     "estafeta": false
+    },
+    {
+     "prova": "50m Livres",
+     "sessao": 3,
+     "estafeta": false
+    },
+    {
+     "prova": "200m Bruços",
+     "sessao": 3,
+     "estafeta": false
+    },
+    {
+     "prova": "50m Costas",
+     "sessao": 3,
+     "estafeta": false
+    },
+    {
+     "prova": "100m Mariposa",
+     "sessao": 3,
+     "estafeta": false
+    },
+    {
+     "prova": "400m Estilos",
+     "sessao": 4,
+     "estafeta": false
+    },
+    {
+     "prova": "100m Livres",
+     "sessao": 4,
+     "estafeta": false
+    },
+    {
+     "prova": "200m Costas",
+     "sessao": 4,
+     "estafeta": false
+    },
+    {
+     "prova": "50m Bruços",
+     "sessao": 4,
+     "estafeta": false
+    },
+    {
+     "prova": "4x200m Livres",
+     "sessao": 4,
+     "estafeta": true
+    }
+   ],
+   "base": {
+    "fonte": "CN Clubes 1.ª Divisão 2025 · Quarteira, 20–21/12/2025",
+    "adversarios": {
+     "400m Livres": [
+      {
+       "clube": "Sporting Clube de Portugal",
+       "tempo": "4:09.34",
+       "nome": "Anna, FOMINA"
+      },
+      {
+       "clube": "Futebol Clube do Porto",
+       "tempo": "4:12.39",
+       "nome": "Paula Otero, FERNANDEZ"
+      },
+      {
+       "clube": "Sport Lisboa e Benfica",
+       "tempo": "4:14.47",
+       "nome": "Diana Margarida, DURAES"
+      },
+      {
+       "clube": "Sport Alges e Dafundo",
+       "tempo": "4:18.60",
+       "nome": "Li, TONGGUER"
+      },
+      {
+       "clube": "Clube dos Galitos / Bresimar",
+       "tempo": "4:26.90",
+       "nome": "Carolina Vizinho, CABRAL"
+      },
+      {
+       "clube": "Condeixa Aqua Clube",
+       "tempo": "4:31.19",
+       "nome": "Camila Duarte, MARCELO"
+      },
+      {
+       "clube": "Clube Fluvial Portuense",
+       "tempo": "4:32.63",
+       "nome": "Maria Luis, SA"
+      },
+      {
+       "clube": "Sporting Clube de Braga",
+       "tempo": "4:33.24",
+       "nome": "Carolina Esteves, PEIXOTO"
+      },
+      {
+       "clube": "Clube Futebol Os Belenenses",
+       "tempo": "4:33.53",
+       "nome": "Ana Rita, MATOS"
+      },
+      {
+       "clube": "Gesloures - Gestão Equipamentos E.M.",
+       "tempo": "4:34.38",
+       "nome": "Beatriz Paulo, RANITO"
+      },
+      {
+       "clube": "Clube Desportivo de Estarreja",
+       "tempo": "4:40.99",
+       "nome": "Carolina Mendes, NUNES"
+      },
+      {
+       "clube": "Colegio Efanor",
+       "tempo": "4:43.55",
+       "nome": "Madalena Valente, MOREIRA"
+      },
+      {
+       "clube": "Clube Fluvial Vilacondense",
+       "tempo": "4:46.29",
+       "nome": "Ines Martins, SILVA"
+      },
+      {
+       "clube": "Louzan Natacao/EFAPEL",
+       "tempo": "4:56.40",
+       "nome": "Raquel Alexandra, CANCELA"
+      },
+      {
+       "clube": "Ginasio Clube de Vila Real",
+       "tempo": "5:11.64",
+       "nome": "Maria Ines, MESQUITA"
+      }
+     ],
+     "50m Mariposa": [
+      {
+       "clube": "Sport Lisboa e Benfica",
+       "tempo": "26.65",
+       "nome": "Alix Genevieve, PREDINE"
+      },
+      {
+       "clube": "Ginasio Clube de Vila Real",
+       "tempo": "26.76",
+       "nome": "Ana Margarida, GUEDES"
+      },
+      {
+       "clube": "Sporting Clube de Braga",
+       "tempo": "26.90",
+       "nome": "Ana Pinho, RODRIGUES"
+      },
+      {
+       "clube": "Sporting Clube de Portugal",
+       "tempo": "27.39",
+       "nome": "Maria Ferreira, MOURA"
+      },
+      {
+       "clube": "Sport Alges e Dafundo",
+       "tempo": "27.50",
+       "nome": "Rafaela Gomes, AZEVEDO"
+      },
+      {
+       "clube": "Clube dos Galitos / Bresimar",
+       "tempo": "27.66",
+       "nome": "Maria Carolina, ALMEIDA"
+      },
+      {
+       "clube": "Futebol Clube do Porto",
+       "tempo": "27.98",
+       "nome": "Iria Guadalupe, FERNANDEZ"
+      },
+      {
+       "clube": "Clube Fluvial Portuense",
+       "tempo": "28.58",
+       "nome": "Uxia Romero, COSTA"
+      },
+      {
+       "clube": "Condeixa Aqua Clube",
+       "tempo": "28.67",
+       "nome": "Beatriz Nunes, CARDEAL"
+      },
+      {
+       "clube": "Gesloures - Gestão Equipamentos E.M.",
+       "tempo": "29.58",
+       "nome": "Mariana Marques, MERCEDES"
+      },
+      {
+       "clube": "Clube Desportivo de Estarreja",
+       "tempo": "30.14",
+       "nome": "Carolina Martins, SILVA"
+      },
+      {
+       "clube": "Clube Futebol Os Belenenses",
+       "tempo": "30.25",
+       "nome": "Madalena Rodrigues, TOME"
+      },
+      {
+       "clube": "Colegio Efanor",
+       "tempo": "30.41",
+       "nome": "Joana Ferreira, SILVA"
+      },
+      {
+       "clube": "Clube Fluvial Vilacondense",
+       "tempo": "32.26",
+       "nome": "Ana Castro, SILVA"
+      },
+      {
+       "clube": "Louzan Natacao/EFAPEL",
+       "tempo": "32.60",
+       "nome": "Kateryna, DZYAKANAVA"
+      }
+     ],
+     "100m Costas": [
+      {
+       "clube": "Louzan Natacao/EFAPEL",
+       "tempo": "58.94",
+       "nome": "Camila Rodrigues, REBELO"
+      },
+      {
+       "clube": "Sport Lisboa e Benfica",
+       "tempo": "1:00.95",
+       "nome": "Rita Barros, FRISCHKNECHT"
+      },
+      {
+       "clube": "Sporting Clube de Portugal",
+       "tempo": "1:01.38",
+       "nome": "Maelie, FONSECA"
+      },
+      {
+       "clube": "Sporting Clube de Braga",
+       "tempo": "1:01.95",
+       "nome": "Maria Gomes, NEVES"
+      },
+      {
+       "clube": "Futebol Clube do Porto",
+       "tempo": "1:02.03",
+       "nome": "Ana Cernadas, GONZALEZ"
+      },
+      {
+       "clube": "Clube dos Galitos / Bresimar",
+       "tempo": "1:02.29",
+       "nome": "Carolina Ratola, TAVEIRA"
+      },
+      {
+       "clube": "Sport Alges e Dafundo",
+       "tempo": "1:02.46",
+       "nome": "Rafaela Gomes, AZEVEDO"
+      },
+      {
+       "clube": "Ginasio Clube de Vila Real",
+       "tempo": "1:03.90",
+       "nome": "Maria Carolina, EIRA"
+      },
+      {
+       "clube": "Condeixa Aqua Clube",
+       "tempo": "1:04.18",
+       "nome": "Joana Nunes, CARDEAL"
+      },
+      {
+       "clube": "Clube Fluvial Portuense",
+       "tempo": "1:04.75",
+       "nome": "Cloe Canadas, NOGUEIRA"
+      },
+      {
+       "clube": "Colegio Efanor",
+       "tempo": "1:06.94",
+       "nome": "Catarina Sousa, OLIVEIRA"
+      },
+      {
+       "clube": "Clube Desportivo de Estarreja",
+       "tempo": "1:07.73",
+       "nome": "Mariana Nunes, MARQUES"
+      },
+      {
+       "clube": "Gesloures - Gestão Equipamentos E.M.",
+       "tempo": "1:07.75",
+       "nome": "Joana Monteiro, CAETANO"
+      },
+      {
+       "clube": "Clube Fluvial Vilacondense",
+       "tempo": "1:11.54",
+       "nome": "Ines Sousa, SANTOS"
+      }
+     ],
+     "200m Estilos": [
+      {
+       "clube": "Sport Lisboa e Benfica",
+       "tempo": "2:13.97",
+       "nome": "Camille Amelie, TISSANDIE"
+      },
+      {
+       "clube": "Colegio Efanor",
+       "tempo": "2:16.02",
+       "nome": "Mariana Pacheco, CUNHA"
+      },
+      {
+       "clube": "Sport Alges e Dafundo",
+       "tempo": "2:16.67",
+       "nome": "Marta Joao, PIRES"
+      },
+      {
+       "clube": "Sporting Clube de Portugal",
+       "tempo": "2:16.98",
+       "nome": "Mariana Amaral, MENDES"
+      },
+      {
+       "clube": "Futebol Clube do Porto",
+       "tempo": "2:20.02",
+       "nome": "Sofia Mourenza, ROCHA"
+      },
+      {
+       "clube": "Condeixa Aqua Clube",
+       "tempo": "2:21.31",
+       "nome": "Helena Nunes, RODRIGUES"
+      },
+      {
+       "clube": "Sporting Clube de Braga",
+       "tempo": "2:21.35",
+       "nome": "Margarida Vieira, PINTO"
+      },
+      {
+       "clube": "Clube dos Galitos / Bresimar",
+       "tempo": "2:26.76",
+       "nome": "Carolina Ratola, TAVEIRA"
+      },
+      {
+       "clube": "Louzan Natacao/EFAPEL",
+       "tempo": "2:27.23",
+       "nome": "Angela Rodrigues, REBELO"
+      },
+      {
+       "clube": "Clube Futebol Os Belenenses",
+       "tempo": "2:27.54",
+       "nome": "Raquel Sofia, BRAS"
+      },
+      {
+       "clube": "Gesloures - Gestão Equipamentos E.M.",
+       "tempo": "2:27.97",
+       "nome": "Catarina Alexandra, ALVES"
+      },
+      {
+       "clube": "Clube Fluvial Portuense",
+       "tempo": "2:29.22",
+       "nome": "Ana Carolina, NEVES"
+      },
+      {
+       "clube": "Clube Desportivo de Estarreja",
+       "tempo": "2:29.84",
+       "nome": "Barbara Nunes, MARQUES"
+      },
+      {
+       "clube": "Ginasio Clube de Vila Real",
+       "tempo": "2:30.86",
+       "nome": "Leonor Carnide, SILVA"
+      },
+      {
+       "clube": "Clube Fluvial Vilacondense",
+       "tempo": "2:36.81",
+       "nome": "Maria Joao, COSTA"
+      }
+     ],
+     "4x100m Livres": [
+      {
+       "clube": "Sport Lisboa e Benfica",
+       "tempo": "3:42.20",
+       "nome": "Benfica 1"
+      },
+      {
+       "clube": "Sporting Clube de Portugal",
+       "tempo": "3:42.27",
+       "nome": "Sporting 1"
+      },
+      {
+       "clube": "Futebol Clube do Porto",
+       "tempo": "3:46.86",
+       "nome": "Porto 1"
+      },
+      {
+       "clube": "Sport Alges e Dafundo",
+       "tempo": "3:47.51",
+       "nome": "Sport Alges e Dafundo 1"
+      },
+      {
+       "clube": "Sporting Clube de Braga",
+       "tempo": "3:50.05",
+       "nome": "Sporting Clube de Braga 1"
+      },
+      {
+       "clube": "Condeixa Aqua Clube",
+       "tempo": "3:51.33",
+       "nome": "Condeixa Aqua Clube 1"
+      },
+      {
+       "clube": "Clube dos Galitos / Bresimar",
+       "tempo": "3:53.90",
+       "nome": "Galitos / Bresimar 1"
+      },
+      {
+       "clube": "Louzan Natacao/EFAPEL",
+       "tempo": "3:55.75",
+       "nome": "Louzan Natacao/EFAPEL 1"
+      },
+      {
+       "clube": "Clube Fluvial Portuense",
+       "tempo": "3:56.54",
+       "nome": "Clube Fluvial Portuense 1"
+      },
+      {
+       "clube": "Ginasio Clube de Vila Real",
+       "tempo": "3:59.47",
+       "nome": "Gcvr 1"
+      },
+      {
+       "clube": "Clube Desportivo de Estarreja",
+       "tempo": "4:03.01",
+       "nome": "Clube Desportivo de Estarreja 1"
+      },
+      {
+       "clube": "Clube Futebol Os Belenenses",
+       "tempo": "4:03.63",
+       "nome": "Os Belenenses 1"
+      },
+      {
+       "clube": "Colegio Efanor",
+       "tempo": "4:04.38",
+       "nome": "Colegio Efanor 1"
+      },
+      {
+       "clube": "Gesloures - Gestão Equipamentos E.M.",
+       "tempo": "4:05.77",
+       "nome": "Gesloures 1"
+      },
+      {
+       "clube": "Clube Fluvial Vilacondense",
+       "tempo": "4:10.07",
+       "nome": "Vilacondense 1"
+      }
+     ],
+     "200m Mariposa": [
+      {
+       "clube": "Louzan Natacao/EFAPEL",
+       "tempo": "2:09.23",
+       "nome": "Ines Jacinto, HENRIQUES"
+      },
+      {
+       "clube": "Colegio Efanor",
+       "tempo": "2:09.63",
+       "nome": "Mariana Pacheco, CUNHA"
+      },
+      {
+       "clube": "Sporting Clube de Portugal",
+       "tempo": "2:11.17",
+       "nome": "Maria Ferreira, MOURA"
+      },
+      {
+       "clube": "Sport Lisboa e Benfica",
+       "tempo": "2:12.55",
+       "nome": "Camille Amelie, TISSANDIE"
+      },
+      {
+       "clube": "Futebol Clube do Porto",
+       "tempo": "2:13.71",
+       "nome": "Angelica Maria, ANDRE"
+      },
+      {
+       "clube": "Clube Futebol Os Belenenses",
+       "tempo": "2:17.19",
+       "nome": "Maria Jardim, FIDALGO"
+      },
+      {
+       "clube": "Condeixa Aqua Clube",
+       "tempo": "2:17.29",
+       "nome": "Beatriz Nunes, CARDEAL"
+      },
+      {
+       "clube": "Sporting Clube de Braga",
+       "tempo": "2:18.02",
+       "nome": "Daniela Silva, LIGEIRO"
+      },
+      {
+       "clube": "Clube dos Galitos / Bresimar",
+       "tempo": "2:22.89",
+       "nome": "Maria Emilia, ALMEIDA"
+      },
+      {
+       "clube": "Sport Alges e Dafundo",
+       "tempo": "2:26.00",
+       "nome": "Li, TONGGUER"
+      },
+      {
+       "clube": "Clube Fluvial Portuense",
+       "tempo": "2:26.31",
+       "nome": "Uxia Romero, COSTA"
+      },
+      {
+       "clube": "Gesloures - Gestão Equipamentos E.M.",
+       "tempo": "2:26.80",
+       "nome": "Catarina Alexandra, ALVES"
+      },
+      {
+       "clube": "Clube Desportivo de Estarreja",
+       "tempo": "2:31.06",
+       "nome": "Carolina Mendes, NUNES"
+      },
+      {
+       "clube": "Clube Fluvial Vilacondense",
+       "tempo": "2:37.23",
+       "nome": "Ana Castro, SILVA"
+      },
+      {
+       "clube": "Ginasio Clube de Vila Real",
+       "tempo": "2:42.22",
+       "nome": "Leonor Santos, SILVA"
+      }
+     ],
+     "100m Bruços": [
+      {
+       "clube": "Sport Lisboa e Benfica",
+       "tempo": "1:08.23",
+       "nome": "Giulia Felicie, ROSSI-BENE"
+      },
+      {
+       "clube": "Sport Alges e Dafundo",
+       "tempo": "1:09.75",
+       "nome": "Claudia Ferreira, BORGES"
+      },
+      {
+       "clube": "Sporting Clube de Portugal",
+       "tempo": "1:10.62",
+       "nome": "Madalena Reis, CERDEIRA"
+      },
+      {
+       "clube": "Futebol Clube do Porto",
+       "tempo": "1:10.89",
+       "nome": "Sofia Mourenza, ROCHA"
+      },
+      {
+       "clube": "Sporting Clube de Braga",
+       "tempo": "1:11.61",
+       "nome": "Beatriz Maciel, PEREIRA"
+      },
+      {
+       "clube": "Clube Futebol Os Belenenses",
+       "tempo": "1:12.22",
+       "nome": "Lidiana Correia, RODRIGUES"
+      },
+      {
+       "clube": "Ginasio Clube de Vila Real",
+       "tempo": "1:12.41",
+       "nome": "Maria Manuel, BRAZ"
+      },
+      {
+       "clube": "Louzan Natacao/EFAPEL",
+       "tempo": "1:12.79",
+       "nome": "Angela Rodrigues, REBELO"
+      },
+      {
+       "clube": "Clube Desportivo de Estarreja",
+       "tempo": "1:12.96",
+       "nome": "Margarida Santos, LOPES"
+      },
+      {
+       "clube": "Clube Fluvial Portuense",
+       "tempo": "1:13.32",
+       "nome": "Francisca Macedo, LOPES"
+      },
+      {
+       "clube": "Condeixa Aqua Clube",
+       "tempo": "1:14.72",
+       "nome": "Maria Neto, SIMOES"
+      },
+      {
+       "clube": "Gesloures - Gestão Equipamentos E.M.",
+       "tempo": "1:15.25",
+       "nome": "Raquel Rodrigues, AUGUSTO"
+      },
+      {
+       "clube": "Clube dos Galitos / Bresimar",
+       "tempo": "1:16.44",
+       "nome": "Raquel Domingues, RE"
+      },
+      {
+       "clube": "Colegio Efanor",
+       "tempo": "1:19.00",
+       "nome": "Joana Ferreira, SILVA"
+      },
+      {
+       "clube": "Clube Fluvial Vilacondense",
+       "tempo": "1:21.35",
+       "nome": "Leonor Isabel, MARTINS"
+      }
+     ],
+     "200m Livres": [
+      {
+       "clube": "Sporting Clube de Portugal",
+       "tempo": "1:58.28",
+       "nome": "Anna, FOMINA"
+      },
+      {
+       "clube": "Sport Lisboa e Benfica",
+       "tempo": "1:59.11",
+       "nome": "Rita Barros, FRISCHKNECHT"
+      },
+      {
+       "clube": "Condeixa Aqua Clube",
+       "tempo": "1:59.89",
+       "nome": "Joana Nunes, CARDEAL"
+      },
+      {
+       "clube": "Louzan Natacao/EFAPEL",
+       "tempo": "2:00.39",
+       "nome": "Camila Rodrigues, REBELO"
+      },
+      {
+       "clube": "Sport Alges e Dafundo",
+       "tempo": "2:00.54",
+       "nome": "Ema Jeronimo, CONCEICAO"
+      },
+      {
+       "clube": "Futebol Clube do Porto",
+       "tempo": "2:02.01",
+       "nome": "Paula Otero, FERNANDEZ"
+      },
+      {
+       "clube": "Sporting Clube de Braga",
+       "tempo": "2:05.12",
+       "nome": "Margarida Vieira, PINTO"
+      },
+      {
+       "clube": "Clube dos Galitos / Bresimar",
+       "tempo": "2:05.37",
+       "nome": "Carolina Vizinho, CABRAL"
+      },
+      {
+       "clube": "Clube Futebol Os Belenenses",
+       "tempo": "2:07.76",
+       "nome": "Maria Jardim, FIDALGO"
+      },
+      {
+       "clube": "Clube Fluvial Portuense",
+       "tempo": "2:07.79",
+       "nome": "Maria Luis, SA"
+      },
+      {
+       "clube": "Colegio Efanor",
+       "tempo": "2:10.36",
+       "nome": "Madalena Valente, MOREIRA"
+      },
+      {
+       "clube": "Gesloures - Gestão Equipamentos E.M.",
+       "tempo": "2:10.67",
+       "nome": "Beatriz Paulo, RANITO"
+      },
+      {
+       "clube": "Clube Desportivo de Estarreja",
+       "tempo": "2:11.51",
+       "nome": "Erica Domitila, AMADOR"
+      },
+      {
+       "clube": "Ginasio Clube de Vila Real",
+       "tempo": "2:13.34",
+       "nome": "Maria Carolina, EIRA"
+      },
+      {
+       "clube": "Clube Fluvial Vilacondense",
+       "tempo": "2:15.91",
+       "nome": "Ines Martins, SILVA"
+      }
+     ],
+     "4x100m Estilos": [
+      {
+       "clube": "Sport Lisboa e Benfica",
+       "tempo": "4:04.04",
+       "nome": "Benfica 1"
+      },
+      {
+       "clube": "Sporting Clube de Portugal",
+       "tempo": "4:05.43",
+       "nome": "Sporting 1"
+      },
+      {
+       "clube": "Sport Alges e Dafundo",
+       "tempo": "4:06.28",
+       "nome": "Sport Alges e Dafundo 1"
+      },
+      {
+       "clube": "Futebol Clube do Porto",
+       "tempo": "4:08.73",
+       "nome": "Porto 1"
+      },
+      {
+       "clube": "Sporting Clube de Braga",
+       "tempo": "4:10.33",
+       "nome": "Sporting Clube de Braga 1"
+      },
+      {
+       "clube": "Louzan Natacao/EFAPEL",
+       "tempo": "4:12.51",
+       "nome": "Louzan Natacao/EFAPEL 1"
+      },
+      {
+       "clube": "Ginasio Clube de Vila Real",
+       "tempo": "4:18.11",
+       "nome": "Gcvr 1"
+      },
+      {
+       "clube": "Clube dos Galitos / Bresimar",
+       "tempo": "4:19.83",
+       "nome": "Galitos / Bresimar 1"
+      },
+      {
+       "clube": "Clube Futebol Os Belenenses",
+       "tempo": "4:21.17",
+       "nome": "Os Belenenses 1"
+      },
+      {
+       "clube": "Condeixa Aqua Clube",
+       "tempo": "4:21.35",
+       "nome": "Condeixa Aqua Clube 1"
+      },
+      {
+       "clube": "Clube Fluvial Portuense",
+       "tempo": "4:24.70",
+       "nome": "Clube Fluvial Portuense 1"
+      },
+      {
+       "clube": "Colegio Efanor",
+       "tempo": "4:27.28",
+       "nome": "Colegio Efanor 1"
+      },
+      {
+       "clube": "Clube Desportivo de Estarreja",
+       "tempo": "4:28.29",
+       "nome": "Clube Desportivo de Estarreja 1"
+      },
+      {
+       "clube": "Gesloures - Gestão Equipamentos E.M.",
+       "tempo": "4:28.41",
+       "nome": "Gesloures 1"
+      },
+      {
+       "clube": "Clube Fluvial Vilacondense",
+       "tempo": "4:47.29",
+       "nome": "Vilacondense 1"
+      }
+     ],
+     "800m Livres": [
+      {
+       "clube": "Futebol Clube do Porto",
+       "tempo": "8:33.35",
+       "nome": "Paula Otero, FERNANDEZ"
+      },
+      {
+       "clube": "Louzan Natacao/EFAPEL",
+       "tempo": "8:43.86",
+       "nome": "Ines Jacinto, HENRIQUES"
+      },
+      {
+       "clube": "Sport Lisboa e Benfica",
+       "tempo": "8:45.03",
+       "nome": "Diana Margarida, DURAES"
+      },
+      {
+       "clube": "Sporting Clube de Portugal",
+       "tempo": "8:47.13",
+       "nome": "Mariana Amaral, MENDES"
+      },
+      {
+       "clube": "Sport Alges e Dafundo",
+       "tempo": "9:05.18",
+       "nome": "Li, TONGGUER"
+      },
+      {
+       "clube": "Condeixa Aqua Clube",
+       "tempo": "9:14.51",
+       "nome": "Camila Duarte, MARCELO"
+      },
+      {
+       "clube": "Clube dos Galitos / Bresimar",
+       "tempo": "9:18.72",
+       "nome": "Carolina Vizinho, CABRAL"
+      },
+      {
+       "clube": "Clube Futebol Os Belenenses",
+       "tempo": "9:21.22",
+       "nome": "Ana Rita, MATOS"
+      },
+      {
+       "clube": "Gesloures - Gestão Equipamentos E.M.",
+       "tempo": "9:24.58",
+       "nome": "Beatriz Paulo, RANITO"
+      },
+      {
+       "clube": "Sporting Clube de Braga",
+       "tempo": "9:27.26",
+       "nome": "Carolina Esteves, PEIXOTO"
+      },
+      {
+       "clube": "Clube Fluvial Portuense",
+       "tempo": "9:27.49",
+       "nome": "Matilde Paiva, CARDOSO"
+      },
+      {
+       "clube": "Colegio Efanor",
+       "tempo": "9:33.35",
+       "nome": "Maria Rita, CUNHA"
+      },
+      {
+       "clube": "Clube Fluvial Vilacondense",
+       "tempo": "9:40.83",
+       "nome": "Alice Bezerra, CUNHA"
+      },
+      {
+       "clube": "Clube Desportivo de Estarreja",
+       "tempo": "10:03.71",
+       "nome": "Barbara Nunes, MARQUES"
+      },
+      {
+       "clube": "Ginasio Clube de Vila Real",
+       "tempo": "10:38.54",
+       "nome": "Maria Ines, MESQUITA"
+      }
+     ],
+     "50m Livres": [
+      {
+       "clube": "Sporting Clube de Braga",
+       "tempo": "25.06",
+       "nome": "Ana Pinho, RODRIGUES"
+      },
+      {
+       "clube": "Sport Lisboa e Benfica",
+       "tempo": "25.36",
+       "nome": "Giulia Felicie, ROSSI-BENE"
+      },
+      {
+       "clube": "Sport Alges e Dafundo",
+       "tempo": "25.38",
+       "nome": "Ema Jeronimo, CONCEICAO"
+      },
+      {
+       "clube": "Futebol Clube do Porto",
+       "tempo": "25.76",
+       "nome": "Iria Guadalupe, FERNANDEZ"
+      },
+      {
+       "clube": "Sporting Clube de Portugal",
+       "tempo": "25.91",
+       "nome": "Laura Espinola, BARBEITO"
+      },
+      {
+       "clube": "Clube Fluvial Portuense",
+       "tempo": "26.82",
+       "nome": "Ana Carolina, NEVES"
+      },
+      {
+       "clube": "Clube dos Galitos / Bresimar",
+       "tempo": "26.90",
+       "nome": "Carolina Miranda, FERNANDES"
+      },
+      {
+       "clube": "Clube Desportivo de Estarreja",
+       "tempo": "27.04",
+       "nome": "Erica Domitila, AMADOR"
+      },
+      {
+       "clube": "Condeixa Aqua Clube",
+       "tempo": "27.07",
+       "nome": "Leonor Nunes, CARDEAL"
+      },
+      {
+       "clube": "Ginasio Clube de Vila Real",
+       "tempo": "27.21",
+       "nome": "Leonor Carnide, SILVA"
+      },
+      {
+       "clube": "Gesloures - Gestão Equipamentos E.M.",
+       "tempo": "27.49",
+       "nome": "Mariana Marques, MERCEDES"
+      },
+      {
+       "clube": "Louzan Natacao/EFAPEL",
+       "tempo": "28.23",
+       "nome": "Dania Simoes, RODRIGUES"
+      },
+      {
+       "clube": "Clube Fluvial Vilacondense",
+       "tempo": "28.50",
+       "nome": "Maria Joao, COSTA"
+      },
+      {
+       "clube": "Clube Futebol Os Belenenses",
+       "tempo": "28.57",
+       "nome": "Madalena Rodrigues, TOME"
+      },
+      {
+       "clube": "Colegio Efanor",
+       "tempo": "29.35",
+       "nome": "Sofia Rodrigues, COSTA"
+      }
+     ],
+     "200m Bruços": [
+      {
+       "clube": "Futebol Clube do Porto",
+       "tempo": "2:28.95",
+       "nome": "Angelica Maria, ANDRE"
+      },
+      {
+       "clube": "Sport Lisboa e Benfica",
+       "tempo": "2:29.22",
+       "nome": "Camille Amelie, TISSANDIE"
+      },
+      {
+       "clube": "Sporting Clube de Portugal",
+       "tempo": "2:29.23",
+       "nome": "Madalena Reis, CERDEIRA"
+      },
+      {
+       "clube": "Sport Alges e Dafundo",
+       "tempo": "2:33.42",
+       "nome": "Claudia Ferreira, BORGES"
+      },
+      {
+       "clube": "Clube Futebol Os Belenenses",
+       "tempo": "2:34.55",
+       "nome": "Lidiana Correia, RODRIGUES"
+      },
+      {
+       "clube": "Sporting Clube de Braga",
+       "tempo": "2:35.10",
+       "nome": "Beatriz Maciel, PEREIRA"
+      },
+      {
+       "clube": "Gesloures - Gestão Equipamentos E.M.",
+       "tempo": "2:41.48",
+       "nome": "Raquel Rodrigues, AUGUSTO"
+      },
+      {
+       "clube": "Ginasio Clube de Vila Real",
+       "tempo": "2:42.07",
+       "nome": "Maria Manuel, BRAZ"
+      },
+      {
+       "clube": "Clube Fluvial Portuense",
+       "tempo": "2:42.26",
+       "nome": "Francisca Macedo, LOPES"
+      },
+      {
+       "clube": "Condeixa Aqua Clube",
+       "tempo": "2:43.34",
+       "nome": "Maria Neto, SIMOES"
+      },
+      {
+       "clube": "Clube Desportivo de Estarreja",
+       "tempo": "2:45.16",
+       "nome": "Margarida Santos, LOPES"
+      },
+      {
+       "clube": "Clube dos Galitos / Bresimar",
+       "tempo": "2:47.27",
+       "nome": "Carlota Ganito, SANTOS"
+      },
+      {
+       "clube": "Louzan Natacao/EFAPEL",
+       "tempo": "2:54.36",
+       "nome": "Laura Duarte, NEVES"
+      },
+      {
+       "clube": "Clube Fluvial Vilacondense",
+       "tempo": "2:56.37",
+       "nome": "Leonor Isabel, MARTINS"
+      },
+      {
+       "clube": "Colegio Efanor",
+       "tempo": "2:59.04",
+       "nome": "Francisca Lamas, SILVA"
+      }
+     ],
+     "50m Costas": [
+      {
+       "clube": "Sport Alges e Dafundo",
+       "tempo": "28.07",
+       "nome": "Rafaela Gomes, AZEVEDO"
+      },
+      {
+       "clube": "Sporting Clube de Portugal",
+       "tempo": "28.42",
+       "nome": "Maelie, FONSECA"
+      },
+      {
+       "clube": "Sport Lisboa e Benfica",
+       "tempo": "28.95",
+       "nome": "Jacqueline Nicole, BANKY"
+      },
+      {
+       "clube": "Futebol Clube do Porto",
+       "tempo": "29.02",
+       "nome": "Ana Cernadas, GONZALEZ"
+      },
+      {
+       "clube": "Sporting Clube de Braga",
+       "tempo": "29.30",
+       "nome": "Maria Gomes, NEVES"
+      },
+      {
+       "clube": "Clube dos Galitos / Bresimar",
+       "tempo": "29.43",
+       "nome": "Carolina Ratola, TAVEIRA"
+      },
+      {
+       "clube": "Ginasio Clube de Vila Real",
+       "tempo": "29.79",
+       "nome": "Maria Carolina, EIRA"
+      },
+      {
+       "clube": "Clube Fluvial Portuense",
+       "tempo": "29.98",
+       "nome": "Matilde Brandao, CARVALHO"
+      },
+      {
+       "clube": "Condeixa Aqua Clube",
+       "tempo": "30.37",
+       "nome": "Helena Nunes, RODRIGUES"
+      },
+      {
+       "clube": "Gesloures - Gestão Equipamentos E.M.",
+       "tempo": "30.93",
+       "nome": "Joana Monteiro, CAETANO"
+      },
+      {
+       "clube": "Clube Futebol Os Belenenses",
+       "tempo": "31.06",
+       "nome": "Luana Correia, RODRIGUES"
+      },
+      {
+       "clube": "Colegio Efanor",
+       "tempo": "31.23",
+       "nome": "Catarina Sousa, OLIVEIRA"
+      },
+      {
+       "clube": "Clube Desportivo de Estarreja",
+       "tempo": "31.31",
+       "nome": "Mariana Nunes, MARQUES"
+      },
+      {
+       "clube": "Louzan Natacao/EFAPEL",
+       "tempo": "31.49",
+       "nome": "Dania Simoes, RODRIGUES"
+      },
+      {
+       "clube": "Clube Fluvial Vilacondense",
+       "tempo": "32.43",
+       "nome": "Ines Sousa, SANTOS"
+      }
+     ],
+     "100m Mariposa": [
+      {
+       "clube": "Colegio Efanor",
+       "tempo": "58.82",
+       "nome": "Mariana Pacheco, CUNHA"
+      },
+      {
+       "clube": "Sport Lisboa e Benfica",
+       "tempo": "1:00.07",
+       "nome": "Alix Genevieve, PREDINE"
+      },
+      {
+       "clube": "Sporting Clube de Portugal",
+       "tempo": "1:00.31",
+       "nome": "Maria Ferreira, MOURA"
+      },
+      {
+       "clube": "Ginasio Clube de Vila Real",
+       "tempo": "1:00.65",
+       "nome": "Ana Margarida, GUEDES"
+      },
+      {
+       "clube": "Sport Alges e Dafundo",
+       "tempo": "1:01.82",
+       "nome": "Marta Joao, PIRES"
+      },
+      {
+       "clube": "Clube Futebol Os Belenenses",
+       "tempo": "1:02.55",
+       "nome": "Maria Jardim, FIDALGO"
+      },
+      {
+       "clube": "Futebol Clube do Porto",
+       "tempo": "1:03.09",
+       "nome": "Ines Mourenza, ROCHA"
+      },
+      {
+       "clube": "Sporting Clube de Braga",
+       "tempo": "1:03.23",
+       "nome": "Daniela Silva, LIGEIRO"
+      },
+      {
+       "clube": "Clube dos Galitos / Bresimar",
+       "tempo": "1:03.53",
+       "nome": "Maria Carolina, ALMEIDA"
+      },
+      {
+       "clube": "Condeixa Aqua Clube",
+       "tempo": "1:03.55",
+       "nome": "Beatriz Nunes, CARDEAL"
+      },
+      {
+       "clube": "Louzan Natacao/EFAPEL",
+       "tempo": "1:05.59",
+       "nome": "Angela Rodrigues, REBELO"
+      },
+      {
+       "clube": "Clube Fluvial Portuense",
+       "tempo": "1:06.12",
+       "nome": "Uxia Romero, COSTA"
+      },
+      {
+       "clube": "Clube Desportivo de Estarreja",
+       "tempo": "1:06.83",
+       "nome": "Carolina Martins, SILVA"
+      },
+      {
+       "clube": "Gesloures - Gestão Equipamentos E.M.",
+       "tempo": "1:08.09",
+       "nome": "Claudia Beatriz, MARTINS"
+      },
+      {
+       "clube": "Clube Fluvial Vilacondense",
+       "tempo": "1:12.79",
+       "nome": "Ana Castro, SILVA"
+      }
+     ],
+     "400m Estilos": [
+      {
+       "clube": "Futebol Clube do Porto",
+       "tempo": "4:43.36",
+       "nome": "Angelica Maria, ANDRE"
+      },
+      {
+       "clube": "Louzan Natacao/EFAPEL",
+       "tempo": "4:43.83",
+       "nome": "Ines Jacinto, HENRIQUES"
+      },
+      {
+       "clube": "Sporting Clube de Portugal",
+       "tempo": "4:45.75",
+       "nome": "Mariana Amaral, MENDES"
+      },
+      {
+       "clube": "Sport Lisboa e Benfica",
+       "tempo": "4:47.72",
+       "nome": "Diana Margarida, DURAES"
+      },
+      {
+       "clube": "Sport Alges e Dafundo",
+       "tempo": "4:52.30",
+       "nome": "Marta Joao, PIRES"
+      },
+      {
+       "clube": "Condeixa Aqua Clube",
+       "tempo": "4:57.86",
+       "nome": "Helena Nunes, RODRIGUES"
+      },
+      {
+       "clube": "Sporting Clube de Braga",
+       "tempo": "4:59.43",
+       "nome": "Margarida Vieira, PINTO"
+      },
+      {
+       "clube": "Clube Fluvial Portuense",
+       "tempo": "5:06.24",
+       "nome": "Francisca Macedo, LOPES"
+      },
+      {
+       "clube": "Gesloures - Gestão Equipamentos E.M.",
+       "tempo": "5:10.90",
+       "nome": "Catarina Alexandra, ALVES"
+      },
+      {
+       "clube": "Clube Futebol Os Belenenses",
+       "tempo": "5:12.11",
+       "nome": "Raquel Sofia, BRAS"
+      },
+      {
+       "clube": "Colegio Efanor",
+       "tempo": "5:12.89",
+       "nome": "Maria Rita, CUNHA"
+      },
+      {
+       "clube": "Clube dos Galitos / Bresimar",
+       "tempo": "5:15.94",
+       "nome": "Maria Emilia, ALMEIDA"
+      },
+      {
+       "clube": "Clube Desportivo de Estarreja",
+       "tempo": "5:18.49",
+       "nome": "Carolina Mendes, NUNES"
+      },
+      {
+       "clube": "Ginasio Clube de Vila Real",
+       "tempo": "5:31.64",
+       "nome": "Maria Silva, POETA"
+      },
+      {
+       "clube": "Clube Fluvial Vilacondense",
+       "tempo": "5:32.83",
+       "nome": "Maria Joao, COSTA"
+      }
+     ],
+     "100m Livres": [
+      {
+       "clube": "Sporting Clube de Portugal",
+       "tempo": "55.01",
+       "nome": "Anna, FOMINA"
+      },
+      {
+       "clube": "Sport Alges e Dafundo",
+       "tempo": "55.38",
+       "nome": "Ema Jeronimo, CONCEICAO"
+      },
+      {
+       "clube": "Futebol Clube do Porto",
+       "tempo": "55.53",
+       "nome": "Eva Feijoo, GOMEZ"
+      },
+      {
+       "clube": "Sport Lisboa e Benfica",
+       "tempo": "55.66",
+       "nome": "Alix Genevieve, PREDINE"
+      },
+      {
+       "clube": "Sporting Clube de Braga",
+       "tempo": "55.74",
+       "nome": "Ana Pinho, RODRIGUES"
+      },
+      {
+       "clube": "Condeixa Aqua Clube",
+       "tempo": "58.19",
+       "nome": "Leonor Nunes, CARDEAL"
+      },
+      {
+       "clube": "Gesloures - Gestão Equipamentos E.M.",
+       "tempo": "58.22",
+       "nome": "Mariana Marques, MERCEDES"
+      },
+      {
+       "clube": "Clube Fluvial Portuense",
+       "tempo": "58.96",
+       "nome": "Maria Luis, SA"
+      },
+      {
+       "clube": "Clube Desportivo de Estarreja",
+       "tempo": "59.69",
+       "nome": "Erica Domitila, AMADOR"
+      },
+      {
+       "clube": "Clube dos Galitos / Bresimar",
+       "tempo": "1:00.04",
+       "nome": "Zoe Pinho, NUNES"
+      },
+      {
+       "clube": "Louzan Natacao/EFAPEL",
+       "tempo": "1:01.16",
+       "nome": "Dania Simoes, RODRIGUES"
+      },
+      {
+       "clube": "Clube Futebol Os Belenenses",
+       "tempo": "1:01.20",
+       "nome": "Madalena Rodrigues, TOME"
+      },
+      {
+       "clube": "Ginasio Clube de Vila Real",
+       "tempo": "1:01.25",
+       "nome": "Leonor Carnide, SILVA"
+      },
+      {
+       "clube": "Colegio Efanor",
+       "tempo": "1:01.86",
+       "nome": "Madalena Valente, MOREIRA"
+      },
+      {
+       "clube": "Clube Fluvial Vilacondense",
+       "tempo": "1:03.53",
+       "nome": "Filipa Correia, REGO"
+      }
+     ],
+     "200m Costas": [
+      {
+       "clube": "Louzan Natacao/EFAPEL",
+       "tempo": "2:08.43",
+       "nome": "Camila Rodrigues, REBELO"
+      },
+      {
+       "clube": "Sport Lisboa e Benfica",
+       "tempo": "2:10.74",
+       "nome": "Rita Barros, FRISCHKNECHT"
+      },
+      {
+       "clube": "Sporting Clube de Braga",
+       "tempo": "2:12.42",
+       "nome": "Maria Gomes, NEVES"
+      },
+      {
+       "clube": "Sporting Clube de Portugal",
+       "tempo": "2:14.45",
+       "nome": "Maelie, FONSECA"
+      },
+      {
+       "clube": "Futebol Clube do Porto",
+       "tempo": "2:14.55",
+       "nome": "Ana Cernadas, GONZALEZ"
+      },
+      {
+       "clube": "Sport Alges e Dafundo",
+       "tempo": "2:15.06",
+       "nome": "Luana Cardoso, MAGALHAES"
+      },
+      {
+       "clube": "Ginasio Clube de Vila Real",
+       "tempo": "2:16.30",
+       "nome": "Ana Margarida, GUEDES"
+      },
+      {
+       "clube": "Condeixa Aqua Clube",
+       "tempo": "2:18.57",
+       "nome": "Joana Nunes, CARDEAL"
+      },
+      {
+       "clube": "Clube Futebol Os Belenenses",
+       "tempo": "2:21.39",
+       "nome": "Luana Correia, RODRIGUES"
+      },
+      {
+       "clube": "Clube dos Galitos / Bresimar",
+       "tempo": "2:22.53",
+       "nome": "Joana Almeida, SANTOS"
+      },
+      {
+       "clube": "Clube Fluvial Portuense",
+       "tempo": "2:25.57",
+       "nome": "Cloe Canadas, NOGUEIRA"
+      },
+      {
+       "clube": "Gesloures - Gestão Equipamentos E.M.",
+       "tempo": "2:27.15",
+       "nome": "Joana Monteiro, CAETANO"
+      },
+      {
+       "clube": "Colegio Efanor",
+       "tempo": "2:27.36",
+       "nome": "Catarina Sousa, OLIVEIRA"
+      },
+      {
+       "clube": "Clube Desportivo de Estarreja",
+       "tempo": "2:29.79",
+       "nome": "Mariana Nunes, MARQUES"
+      },
+      {
+       "clube": "Clube Fluvial Vilacondense",
+       "tempo": "2:30.95",
+       "nome": "Alice Bezerra, CUNHA"
+      }
+     ],
+     "50m Bruços": [
+      {
+       "clube": "Sport Lisboa e Benfica",
+       "tempo": "30.73",
+       "nome": "Giulia Felicie, ROSSI-BENE"
+      },
+      {
+       "clube": "Sport Alges e Dafundo",
+       "tempo": "32.16",
+       "nome": "Claudia Ferreira, BORGES"
+      },
+      {
+       "clube": "Sporting Clube de Portugal",
+       "tempo": "32.54",
+       "nome": "Margarida Domingues, NUNES"
+      },
+      {
+       "clube": "Futebol Clube do Porto",
+       "tempo": "32.78",
+       "nome": "Sofia Mourenza, ROCHA"
+      },
+      {
+       "clube": "Clube Futebol Os Belenenses",
+       "tempo": "33.18",
+       "nome": "Lidiana Correia, RODRIGUES"
+      },
+      {
+       "clube": "Ginasio Clube de Vila Real",
+       "tempo": "33.29",
+       "nome": "Maria Manuel, BRAZ"
+      },
+      {
+       "clube": "Sporting Clube de Braga",
+       "tempo": "33.50",
+       "nome": "Beatriz Maciel, PEREIRA"
+      },
+      {
+       "clube": "Gesloures - Gestão Equipamentos E.M.",
+       "tempo": "34.00",
+       "nome": "Raquel Rodrigues, AUGUSTO"
+      },
+      {
+       "clube": "Clube Desportivo de Estarreja",
+       "tempo": "34.68",
+       "nome": "Margarida Santos, LOPES"
+      },
+      {
+       "clube": "Louzan Natacao/EFAPEL",
+       "tempo": "34.73",
+       "nome": "Laura Duarte, NEVES"
+      },
+      {
+       "clube": "Colegio Efanor",
+       "tempo": "34.87",
+       "nome": "Joana Ferreira, SILVA"
+      },
+      {
+       "clube": "Clube dos Galitos / Bresimar",
+       "tempo": "34.92",
+       "nome": "Lara Rodrigues, VASCONCELOS"
+      },
+      {
+       "clube": "Condeixa Aqua Clube",
+       "tempo": "35.14",
+       "nome": "Maria Neto, SIMOES"
+      },
+      {
+       "clube": "Clube Fluvial Portuense",
+       "tempo": "35.61",
+       "nome": "Violeta Bernardo, FERREIRA"
+      },
+      {
+       "clube": "Clube Fluvial Vilacondense",
+       "tempo": "37.03",
+       "nome": "Leonor Isabel, MARTINS"
+      }
+     ],
+     "4x200m Livres": [
+      {
+       "clube": "Sporting Clube de Portugal",
+       "tempo": "8:03.62",
+       "nome": "Sporting 1"
+      },
+      {
+       "clube": "Sport Lisboa e Benfica",
+       "tempo": "8:05.32",
+       "nome": "Benfica 1"
+      },
+      {
+       "clube": "Futebol Clube do Porto",
+       "tempo": "8:08.88",
+       "nome": "Porto 1"
+      },
+      {
+       "clube": "Sport Alges e Dafundo",
+       "tempo": "8:09.35",
+       "nome": "Sport Alges e Dafundo 1"
+      },
+      {
+       "clube": "Condeixa Aqua Clube",
+       "tempo": "8:19.97",
+       "nome": "Condeixa Aqua Clube 1"
+      },
+      {
+       "clube": "Clube dos Galitos / Bresimar",
+       "tempo": "8:31.59",
+       "nome": "Galitos / Bresimar 1"
+      },
+      {
+       "clube": "Louzan Natacao/EFAPEL",
+       "tempo": "8:34.98",
+       "nome": "Louzan Natacao/EFAPEL 1"
+      },
+      {
+       "clube": "Sporting Clube de Braga",
+       "tempo": "8:35.46",
+       "nome": "Sporting Clube de Braga 1"
+      },
+      {
+       "clube": "Clube Fluvial Portuense",
+       "tempo": "8:38.67",
+       "nome": "Clube Fluvial Portuense 1"
+      },
+      {
+       "clube": "Clube Futebol Os Belenenses",
+       "tempo": "8:42.11",
+       "nome": "Os Belenenses 1"
+      },
+      {
+       "clube": "Colegio Efanor",
+       "tempo": "8:45.19",
+       "nome": "Colegio Efanor 1"
+      },
+      {
+       "clube": "Gesloures - Gestão Equipamentos E.M.",
+       "tempo": "8:52.29",
+       "nome": "Gesloures 1"
+      },
+      {
+       "clube": "Ginasio Clube de Vila Real",
+       "tempo": "9:03.82",
+       "nome": "Gcvr 1"
+      },
+      {
+       "clube": "Clube Desportivo de Estarreja",
+       "tempo": "9:08.84",
+       "nome": "Clube Desportivo de Estarreja 1"
+      },
+      {
+       "clube": "Clube Fluvial Vilacondense",
+       "tempo": "9:09.79",
+       "nome": "Vilacondense 1"
+      }
+     ]
+    },
+    "classificacao": [
+     {
+      "clube": "Sport Lisboa e Benfica",
+      "sigla": "SLB",
+      "pts": 286.0
+     },
+     {
+      "clube": "Sporting Clube de Portugal",
+      "sigla": "SCP",
+      "pts": 275.0
+     },
+     {
+      "clube": "Futebol Clube do Porto",
+      "sigla": "FCP",
+      "pts": 250.0
+     },
+     {
+      "clube": "Sport Alges e Dafundo",
+      "sigla": "SAD",
+      "pts": 242.0
+     },
+     {
+      "clube": "Sporting Clube de Braga",
+      "sigla": "SCB",
+      "pts": 208.0
+     },
+     {
+      "clube": "Condeixa Aqua Clube",
+      "sigla": "CAQC",
+      "pts": 171.0
+     },
+     {
+      "clube": "Louzan Natacao/EFAPEL",
+      "sigla": "ALN",
+      "pts": 168.0
+     },
+     {
+      "clube": "Clube dos Galitos / Bresimar",
+      "sigla": "CGA",
+      "pts": 157.0
+     },
+     {
+      "clube": "Clube Futebol Os Belenenses",
+      "sigla": "CFB",
+      "pts": 134.0
+     },
+     {
+      "clube": "Clube Fluvial Portuense",
+      "sigla": "CFP",
+      "pts": 131.0
+     },
+     {
+      "clube": "FOCA - Clube de Natacao de Felgueiras",
+      "sigla": "FOCA",
+      "pts": 125.0
+     },
+     {
+      "clube": "Ginasio Clube de Vila Real",
+      "sigla": "GCVR",
+      "pts": 125.0
+     },
+     {
+      "clube": "Colegio Efanor",
+      "sigla": "CE",
+      "pts": 108.0
+     },
+     {
+      "clube": "Gesloures - Gestão Equipamentos E.M.",
+      "sigla": "GESL",
+      "pts": 105.0
+     },
+     {
+      "clube": "Clube Desportivo de Estarreja",
+      "sigla": "CDE",
+      "pts": 87.0
+     },
+     {
+      "clube": "Clube Fluvial Vilacondense",
+      "sigla": "CFV",
+      "pts": 30.0
+     }
+    ],
+    "foca": {
+     "400m Livres": [
+      {
+       "lugar": 3,
+       "tempo": "4:12.50",
+       "pts": 14.0,
+       "nome": "Francisca Soares, MARTINS"
+      }
+     ],
+     "50m Mariposa": [
+      {
+       "lugar": 14,
+       "tempo": "30.75",
+       "pts": 3.0,
+       "nome": "Isilda Raquel, GOMES"
+      }
+     ],
+     "100m Costas": [
+      {
+       "lugar": 11,
+       "tempo": "1:06.56",
+       "pts": 6.0,
+       "nome": "Maria Joao, FERREIRA"
+      }
+     ],
+     "200m Estilos": [
+      {
+       "lugar": 8,
+       "tempo": "2:24.69",
+       "pts": 9.0,
+       "nome": "Ana Beatriz, VIEIRA"
+      }
+     ],
+     "4x100m Livres": [
+      {
+       "lugar": 10,
+       "tempo": "3:58.63",
+       "pts": 7.0,
+       "nome": "FOCA Quinta Da Lixa - Cnf 1"
+      }
+     ],
+     "200m Mariposa": [
+      {
+       "lugar": 14,
+       "tempo": "2:33.43",
+       "pts": 3.0,
+       "nome": "Matilde Ventura, MARTINS"
+      }
+     ],
+     "100m Bruços": [
+      {
+       "lugar": 14,
+       "tempo": "1:17.53",
+       "pts": 3.0,
+       "nome": "Mariana Pinto, FERREIRA"
+      }
+     ],
+     "200m Livres": [
+      {
+       "lugar": 9,
+       "tempo": "2:05.41",
+       "pts": 8.0,
+       "nome": "Ana Beatriz, VIEIRA"
+      }
+     ],
+     "4x100m Estilos": [
+      {
+       "lugar": 12,
+       "tempo": "4:27.09",
+       "pts": 5.0,
+       "nome": "FOCA Quinta Da Lixa - Cnf 1"
+      }
+     ],
+     "800m Livres": [
+      {
+       "lugar": 14,
+       "tempo": "9:43.63",
+       "pts": 3.0,
+       "nome": "Mariana Fernandes, CUNHA"
+      }
+     ],
+     "50m Livres": [
+      {
+       "lugar": 11,
+       "tempo": "27.47",
+       "pts": 6.0,
+       "nome": "Ana Beatriz, VIEIRA"
+      }
+     ],
+     "200m Bruços": [
+      {
+       "lugar": 13,
+       "tempo": "2:50.72",
+       "pts": 4.0,
+       "nome": "Mariana Pinto, FERREIRA"
+      }
+     ],
+     "50m Costas": [
+      {
+       "lugar": 14,
+       "tempo": "31.35",
+       "pts": 3.0,
+       "nome": "Maria Joao, FERREIRA"
+      }
+     ],
+     "100m Mariposa": [
+      {
+       "lugar": 6,
+       "tempo": "1:01.86",
+       "pts": 11.0,
+       "nome": "Francisca Soares, MARTINS"
+      }
+     ],
+     "400m Estilos": [
+      {
+       "lugar": 13,
+       "tempo": "5:18.46",
+       "pts": 4.0,
+       "nome": "Mariana Fernandes, CUNHA"
+      }
+     ],
+     "100m Livres": [
+      {
+       "lugar": 2,
+       "tempo": "55.14",
+       "pts": 15.0,
+       "nome": "Francisca Soares, MARTINS"
+      }
+     ],
+     "200m Costas": [
+      {
+       "lugar": 9,
+       "tempo": "2:20.93",
+       "pts": 8.0,
+       "nome": "Maria Joao, FERREIRA"
+      }
+     ],
+     "50m Bruços": [
+      {
+       "lugar": 14,
+       "tempo": "35.24",
+       "pts": 3.0,
+       "nome": "Mariana Pinto, FERREIRA"
+      }
+     ],
+     "4x200m Livres": [
+      {
+       "lugar": 7,
+       "tempo": "8:32.57",
+       "pts": 10.0,
+       "nome": "FOCA Quinta Da Lixa - Cnf 1"
+      }
+     ]
+    }
+   },
+   "entry": null
+  },
+  {
+   "id": "2div",
+   "nome": "2.ª Divisão",
+   "genero": "M",
+   "clubes": 24,
+   "local": "ANCNP – Mealhada",
+   "datas": "28–29/11/2026",
+   "piscina": 25,
+   "maxAtletas": 12,
+   "maxIndiv": 3,
+   "provas": [
+    {
+     "prova": "400m Livres",
+     "sessao": 1,
+     "estafeta": false
+    },
+    {
+     "prova": "50m Mariposa",
+     "sessao": 1,
+     "estafeta": false
+    },
+    {
+     "prova": "100m Costas",
+     "sessao": 1,
+     "estafeta": false
+    },
+    {
+     "prova": "200m Estilos",
+     "sessao": 1,
+     "estafeta": false
+    },
+    {
+     "prova": "4x100m Livres",
+     "sessao": 1,
+     "estafeta": true
+    },
+    {
+     "prova": "200m Mariposa",
+     "sessao": 2,
+     "estafeta": false
+    },
+    {
+     "prova": "100m Bruços",
+     "sessao": 2,
+     "estafeta": false
+    },
+    {
+     "prova": "200m Livres",
+     "sessao": 2,
+     "estafeta": false
+    },
+    {
+     "prova": "4x100m Estilos",
+     "sessao": 2,
+     "estafeta": true
+    },
+    {
+     "prova": "1500m Livres",
+     "sessao": 3,
+     "estafeta": false
+    },
+    {
+     "prova": "50m Livres",
+     "sessao": 3,
+     "estafeta": false
+    },
+    {
+     "prova": "200m Bruços",
+     "sessao": 3,
+     "estafeta": false
+    },
+    {
+     "prova": "50m Costas",
+     "sessao": 3,
+     "estafeta": false
+    },
+    {
+     "prova": "100m Mariposa",
+     "sessao": 3,
+     "estafeta": false
+    },
+    {
+     "prova": "400m Estilos",
+     "sessao": 4,
+     "estafeta": false
+    },
+    {
+     "prova": "100m Livres",
+     "sessao": 4,
+     "estafeta": false
+    },
+    {
+     "prova": "200m Costas",
+     "sessao": 4,
+     "estafeta": false
+    },
+    {
+     "prova": "50m Bruços",
+     "sessao": 4,
+     "estafeta": false
+    },
+    {
+     "prova": "4x200m Livres",
+     "sessao": 4,
+     "estafeta": true
+    }
+   ],
+   "base": {
+    "fonte": "CN Clubes 2.ª Divisão 2025 · Tomar, 30/11–01/12/2025",
+    "adversarios": {
+     "400m Livres": [
+      {
+       "clube": "Condeixa Aqua Clube",
+       "tempo": "3:55.20",
+       "nome": "Duarte Cachulo, MARQUES"
+      },
+      {
+       "clube": "Desportivo Nautico da Marinha Grande",
+       "tempo": "4:04.36",
+       "nome": "Paulo, KOT"
+      },
+      {
+       "clube": "Soc Instrucao e Recreio Os Pimpoes/Cimai",
+       "tempo": "4:04.70",
+       "nome": "Santiago Agostinho, PARREIRA"
+      },
+      {
+       "clube": "Palmela Desporto, E.M.",
+       "tempo": "4:05.71",
+       "nome": "Rafael Lin, MONIZ"
+      },
+      {
+       "clube": "Assoc Desp Rec Cult Colegio Int Monte Maior",
+       "tempo": "4:06.39",
+       "nome": "Martim Chambel, PINTO"
+      },
+      {
+       "clube": "Associacao Academica de Coimbra",
+       "tempo": "4:08.07",
+       "nome": "Joao Ferreira, MARQUES"
+      },
+      {
+       "clube": "Clube Nacional de Natação",
+       "tempo": "4:08.47",
+       "nome": "Joao Almeida, GOMES"
+      },
+      {
+       "clube": "Portinado-Assoc Natacao de Portimao",
+       "tempo": "4:09.60",
+       "nome": "Miguel Salomao, TRISTAO"
+      },
+      {
+       "clube": "Colegio Efanor",
+       "tempo": "4:10.10",
+       "nome": "Tomas Rocha, DORES"
+      },
+      {
+       "clube": "Clube Nautico de Leiria - VOID",
+       "tempo": "4:12.47",
+       "nome": "Afonso Dinis, ROQUE"
+      },
+      {
+       "clube": "Gesloures - Gestão Equipamentos E.M.",
+       "tempo": "4:13.02",
+       "nome": "Joao Miguel, CARDOSO"
+      },
+      {
+       "clube": "Clube Fluvial Portuense",
+       "tempo": "4:13.51",
+       "nome": "Andre Bernardes, FERREIRA"
+      },
+      {
+       "clube": "Clube de Instrucao e Recreio do Laranjeiro",
+       "tempo": "4:14.27",
+       "nome": "Xavier Rosa, MADEIRA"
+      },
+      {
+       "clube": "Clube Naval Povoense",
+       "tempo": "4:14.39",
+       "nome": "Martim Machado, SILVA"
+      },
+      {
+       "clube": "Clube Desportivo de Estarreja",
+       "tempo": "4:15.99",
+       "nome": "Paulo Jorge, OLIVEIRA"
+      },
+      {
+       "clube": "Clube Natacao Olhao",
+       "tempo": "4:17.72",
+       "nome": "Ivan Vazquez, MACIAS"
+      },
+      {
+       "clube": "Academico Viseu Futebol Clube",
+       "tempo": "4:18.95",
+       "nome": "Andre Ferreira, SANTOS"
+      },
+      {
+       "clube": "Leixoes Sport Clube",
+       "tempo": "4:19.21",
+       "nome": "Bernardo Sousa, ROCHA"
+      },
+      {
+       "clube": "Clube de Natacao de Valongo",
+       "tempo": "4:20.23",
+       "nome": "Marco Santos, SOARES"
+      },
+      {
+       "clube": "Clube Aquatico Pacense",
+       "tempo": "4:20.32",
+       "nome": "Francisco Bentes, SANTOS"
+      },
+      {
+       "clube": "Clube de Natacao de Torres Novas",
+       "tempo": "4:24.74",
+       "nome": "Afonso Formigo, PINHO"
+      },
+      {
+       "clube": "Clube Desportivo Nacional",
+       "tempo": "4:30.50",
+       "nome": "Mateus Medeiros, RAPOSO"
+      },
+      {
+       "clube": "Clube Desportivo Sao Roque",
+       "tempo": "4:34.54",
+       "nome": "Goncalo Andre, GOMES"
+      }
+     ],
+     "50m Mariposa": [
+      {
+       "clube": "Clube Nautico de Leiria - VOID",
+       "tempo": "23.87",
+       "nome": "Francisco Ribeiro, VIEIRA"
+      },
+      {
+       "clube": "Clube de Natacao de Torres Novas",
+       "tempo": "24.09",
+       "nome": "Paulo, VAKULYUK"
+      },
+      {
+       "clube": "Associacao Academica de Coimbra",
+       "tempo": "24.50",
+       "nome": "Miguel Freitas, OVIEDO"
+      },
+      {
+       "clube": "Gesloures - Gestão Equipamentos E.M.",
+       "tempo": "24.55",
+       "nome": "Andre Tavares, GRENHO"
+      },
+      {
+       "clube": "Desportivo Nautico da Marinha Grande",
+       "tempo": "24.92",
+       "nome": "Miguel Vicente, SILVA"
+      },
+      {
+       "clube": "Clube Nacional de Natação",
+       "tempo": "24.93",
+       "nome": "Fernando Souza, SILVA"
+      },
+      {
+       "clube": "Palmela Desporto, E.M.",
+       "tempo": "25.40",
+       "nome": "Bernardo Antunes, AUGUSTO"
+      },
+      {
+       "clube": "Clube Desportivo Nacional",
+       "tempo": "25.45",
+       "nome": "B., MACHADO"
+      },
+      {
+       "clube": "Clube Natacao Olhao",
+       "tempo": "25.46",
+       "nome": "Joao Duarte, SANTOS"
+      },
+      {
+       "clube": "Colegio Efanor",
+       "tempo": "25.47",
+       "nome": "Bruno Rafael, MACHADO"
+      },
+      {
+       "clube": "Assoc Desp Rec Cult Colegio Int Monte Maior",
+       "tempo": "25.47",
+       "nome": "Afonso Rodrigues, CALHELHA"
+      },
+      {
+       "clube": "Leixoes Sport Clube",
+       "tempo": "25.72",
+       "nome": "David Alexandre, ANTUNES"
+      },
+      {
+       "clube": "Condeixa Aqua Clube",
+       "tempo": "25.88",
+       "nome": "R., TRAVASSOS"
+      },
+      {
+       "clube": "Clube Desportivo Sao Roque",
+       "tempo": "26.05",
+       "nome": "Miguel Freitas, MARQUES"
+      },
+      {
+       "clube": "Portinado-Assoc Natacao de Portimao",
+       "tempo": "26.32",
+       "nome": "Dario Rafael, OLIVEIRA"
+      },
+      {
+       "clube": "Clube Naval Povoense",
+       "tempo": "26.41",
+       "nome": "Tiago Fonseca, CARVALHO"
+      },
+      {
+       "clube": "Clube Fluvial Portuense",
+       "tempo": "26.49",
+       "nome": "Matias Barros, REIS"
+      },
+      {
+       "clube": "Clube Aquatico Pacense",
+       "tempo": "26.59",
+       "nome": "Dinis Barros, LEAL"
+      },
+      {
+       "clube": "Soc Instrucao e Recreio Os Pimpoes/Cimai",
+       "tempo": "26.62",
+       "nome": "Gil Santos, LEMOS"
+      },
+      {
+       "clube": "Academico Viseu Futebol Clube",
+       "tempo": "26.98",
+       "nome": "Tiberius Sebastian, NEAGU"
+      },
+      {
+       "clube": "Clube Desportivo de Estarreja",
+       "tempo": "27.17",
+       "nome": "Ricardo Gabriel, OLIVEIRA"
+      },
+      {
+       "clube": "Clube de Instrucao e Recreio do Laranjeiro",
+       "tempo": "27.26",
+       "nome": "Rodrigo Costa, TEIXEIRA"
+      },
+      {
+       "clube": "Clube de Natacao de Valongo",
+       "tempo": "27.46",
+       "nome": "Rui Pedro, CORREIA"
+      }
+     ],
+     "100m Costas": [
+      {
+       "clube": "Clube Nacional de Natação",
+       "tempo": "55.64",
+       "nome": "Afonso Bjork, FREITAS"
+      },
+      {
+       "clube": "Portinado-Assoc Natacao de Portimao",
+       "tempo": "55.73",
+       "nome": "Marin, CEPELEAGA"
+      },
+      {
+       "clube": "Palmela Desporto, E.M.",
+       "tempo": "55.75",
+       "nome": "Andre Azevedo, BARAONA"
+      },
+      {
+       "clube": "Soc Instrucao e Recreio Os Pimpoes/Cimai",
+       "tempo": "56.91",
+       "nome": "Mikhael, ONUTSKYY"
+      },
+      {
+       "clube": "Assoc Desp Rec Cult Colegio Int Monte Maior",
+       "tempo": "57.15",
+       "nome": "R., FERNANDES"
+      },
+      {
+       "clube": "Clube Nautico de Leiria - VOID",
+       "tempo": "57.55",
+       "nome": "Rodolfo Junior, ALECRIM"
+      },
+      {
+       "clube": "Clube Naval Povoense",
+       "tempo": "58.39",
+       "nome": "Porfirio Braga, NUNES"
+      },
+      {
+       "clube": "Leixoes Sport Clube",
+       "tempo": "58.74",
+       "nome": "Pedro Santos, PEREIRA"
+      },
+      {
+       "clube": "Clube de Natacao de Valongo",
+       "tempo": "58.85",
+       "nome": "Tiago Campos, LOURENCO"
+      },
+      {
+       "clube": "Colegio Efanor",
+       "tempo": "58.86",
+       "nome": "Pedro Pereira, ALMEIDA"
+      },
+      {
+       "clube": "Clube Desportivo de Estarreja",
+       "tempo": "58.96",
+       "nome": "Tiago Diniz, LIMA"
+      },
+      {
+       "clube": "Academico Viseu Futebol Clube",
+       "tempo": "59.25",
+       "nome": "Joao Miguel, VITORIA"
+      },
+      {
+       "clube": "Associacao Academica de Coimbra",
+       "tempo": "59.57",
+       "nome": "Francisco Fernandes, PEREIRA"
+      },
+      {
+       "clube": "Clube Desportivo Sao Roque",
+       "tempo": "59.73",
+       "nome": "Rui Afonso, FERNANDES"
+      },
+      {
+       "clube": "Clube Aquatico Pacense",
+       "tempo": "59.80",
+       "nome": "Vitor Samuel, ROCHA"
+      },
+      {
+       "clube": "Clube Fluvial Portuense",
+       "tempo": "1:00.07",
+       "nome": "Jose Moutinho, VALENTE"
+      },
+      {
+       "clube": "Gesloures - Gestão Equipamentos E.M.",
+       "tempo": "1:00.16",
+       "nome": "David Emanuel, TOME"
+      },
+      {
+       "clube": "Condeixa Aqua Clube",
+       "tempo": "1:00.30",
+       "nome": "Gustavo Pires, MARQUES"
+      },
+      {
+       "clube": "Clube de Natacao de Torres Novas",
+       "tempo": "1:00.56",
+       "nome": "Afonso Bernardo, EVARISTO"
+      },
+      {
+       "clube": "Clube Natacao Olhao",
+       "tempo": "1:00.99",
+       "nome": "Hugo Miguel, VIEGAS"
+      },
+      {
+       "clube": "Desportivo Nautico da Marinha Grande",
+       "tempo": "1:02.19",
+       "nome": "Tomas Manuel, PALMEIRO"
+      },
+      {
+       "clube": "Clube Desportivo Nacional",
+       "tempo": "1:04.09",
+       "nome": "Joao Bernardo, SILVA"
+      },
+      {
+       "clube": "Clube de Instrucao e Recreio do Laranjeiro",
+       "tempo": "1:04.42",
+       "nome": "Simao Verissimo, AIRES"
+      }
+     ],
+     "200m Estilos": [
+      {
+       "clube": "Clube Aquatico Pacense",
+       "tempo": "2:02.53",
+       "nome": "Ricardo Filipe, ROCHA"
+      },
+      {
+       "clube": "Gesloures - Gestão Equipamentos E.M.",
+       "tempo": "2:04.53",
+       "nome": "Joao Peres, COSTA"
+      },
+      {
+       "clube": "Clube Nacional de Natação",
+       "tempo": "2:05.35",
+       "nome": "Timothy, DONOVAN JOHNSON"
+      },
+      {
+       "clube": "Portinado-Assoc Natacao de Portimao",
+       "tempo": "2:07.50",
+       "nome": "Miguel Salomao, TRISTAO"
+      },
+      {
+       "clube": "Associacao Academica de Coimbra",
+       "tempo": "2:08.84",
+       "nome": "Joaquim Agra, MERUJE"
+      },
+      {
+       "clube": "Assoc Desp Rec Cult Colegio Int Monte Maior",
+       "tempo": "2:09.55",
+       "nome": "Rui Silva, PEREIRA"
+      },
+      {
+       "clube": "Palmela Desporto, E.M.",
+       "tempo": "2:09.89",
+       "nome": "Diogo Garcez, MATEUS"
+      },
+      {
+       "clube": "Clube Fluvial Portuense",
+       "tempo": "2:10.00",
+       "nome": "Gil Afonso, RODRIGUES"
+      },
+      {
+       "clube": "Clube Naval Povoense",
+       "tempo": "2:10.45",
+       "nome": "Sergio Daniel, ARAUJO"
+      },
+      {
+       "clube": "Desportivo Nautico da Marinha Grande",
+       "tempo": "2:10.96",
+       "nome": "David Ferreira, RELVAS"
+      },
+      {
+       "clube": "Soc Instrucao e Recreio Os Pimpoes/Cimai",
+       "tempo": "2:11.70",
+       "nome": "Guilherme Costa, REBELO"
+      },
+      {
+       "clube": "Clube Nautico de Leiria - VOID",
+       "tempo": "2:11.92",
+       "nome": "Francisco Marques, SIMOES"
+      },
+      {
+       "clube": "Clube de Natacao de Valongo",
+       "tempo": "2:12.01",
+       "nome": "F., LOURENCO"
+      },
+      {
+       "clube": "Clube Desportivo Sao Roque",
+       "tempo": "2:13.23",
+       "nome": "Paulo Rodrigues, ALVES"
+      },
+      {
+       "clube": "Leixoes Sport Clube",
+       "tempo": "2:13.90",
+       "nome": "Joao Simons, CUNHA"
+      },
+      {
+       "clube": "Clube Desportivo Nacional",
+       "tempo": "2:14.00",
+       "nome": "Euan, WEIR"
+      },
+      {
+       "clube": "Academico Viseu Futebol Clube",
+       "tempo": "2:15.31",
+       "nome": "Tomas Alexandre, SOUSA"
+      },
+      {
+       "clube": "Clube de Instrucao e Recreio do Laranjeiro",
+       "tempo": "2:16.33",
+       "nome": "Jose Tomas, SIMEAO"
+      },
+      {
+       "clube": "Colegio Efanor",
+       "tempo": "2:16.37",
+       "nome": "Guilherme Simao, BESSA"
+      },
+      {
+       "clube": "Condeixa Aqua Clube",
+       "tempo": "2:17.41",
+       "nome": "Rafael Pereira, RODRIGUES"
+      },
+      {
+       "clube": "Clube de Natacao de Torres Novas",
+       "tempo": "2:18.58",
+       "nome": "Duarte Moura, MENDES"
+      },
+      {
+       "clube": "Clube Desportivo de Estarreja",
+       "tempo": "2:20.80",
+       "nome": "Dinis Amorim, MOUTELA"
+      }
+     ],
+     "4x100m Livres": [
+      {
+       "clube": "Clube Nautico de Leiria - VOID",
+       "tempo": "3:25.61",
+       "nome": "CNLeiria - VOID 1"
+      },
+      {
+       "clube": "Gesloures - Gestão Equipamentos E.M.",
+       "tempo": "3:25.64",
+       "nome": "Gesloures 1"
+      },
+      {
+       "clube": "Palmela Desporto, E.M.",
+       "tempo": "3:26.62",
+       "nome": "Palmela Desporto 1"
+      },
+      {
+       "clube": "Clube Nacional de Natação",
+       "tempo": "3:26.68",
+       "nome": "Nacional de Natação 1"
+      },
+      {
+       "clube": "Condeixa Aqua Clube",
+       "tempo": "3:29.70",
+       "nome": "Condeixa Aqua Clube 1"
+      },
+      {
+       "clube": "Soc Instrucao e Recreio Os Pimpoes/Cimai",
+       "tempo": "3:30.54",
+       "nome": "Pimpoes/Cimai 1"
+      },
+      {
+       "clube": "Portinado-Assoc Natacao de Portimao",
+       "tempo": "3:31.14",
+       "nome": "Portinado 1"
+      },
+      {
+       "clube": "Leixoes Sport Clube",
+       "tempo": "3:31.35",
+       "nome": "Leixoes Sport Clube 1"
+      },
+      {
+       "clube": "Associacao Academica de Coimbra",
+       "tempo": "3:32.03",
+       "nome": "Aac 1"
+      },
+      {
+       "clube": "Colegio Efanor",
+       "tempo": "3:32.28",
+       "nome": "Colegio Efanor 1"
+      },
+      {
+       "clube": "Assoc Desp Rec Cult Colegio Int Monte Maior",
+       "tempo": "3:32.78",
+       "nome": "Adrcimm 1"
+      },
+      {
+       "clube": "Clube Natacao Olhao",
+       "tempo": "3:33.00",
+       "nome": "Clube Nataco Olhao"
+      },
+      {
+       "clube": "Desportivo Nautico da Marinha Grande",
+       "tempo": "3:33.96",
+       "nome": "Nautico Marinha Grande 1"
+      },
+      {
+       "clube": "Clube Desportivo Sao Roque",
+       "tempo": "3:35.01",
+       "nome": "Clube Desportivo Sao Roque 1"
+      },
+      {
+       "clube": "Clube Naval Povoense",
+       "tempo": "3:35.27",
+       "nome": "Clube Naval Povoense 1"
+      },
+      {
+       "clube": "Clube Desportivo Nacional",
+       "tempo": "3:35.58",
+       "nome": "Clube Desportivo Nacional 1"
+      },
+      {
+       "clube": "Clube de Natacao de Torres Novas",
+       "tempo": "3:36.07",
+       "nome": "Torres Novas 1"
+      },
+      {
+       "clube": "Clube Desportivo de Estarreja",
+       "tempo": "3:36.53",
+       "nome": "Clube Desportivo de Estarreja 1"
+      },
+      {
+       "clube": "Clube Aquatico Pacense",
+       "tempo": "3:36.58",
+       "nome": "Aquatico Pacense 1"
+      },
+      {
+       "clube": "Clube Fluvial Portuense",
+       "tempo": "3:36.84",
+       "nome": "Fluvial Portuense 1"
+      },
+      {
+       "clube": "Clube de Instrucao e Recreio do Laranjeiro",
+       "tempo": "3:37.40",
+       "nome": "Laranjeiro 1"
+      },
+      {
+       "clube": "Academico Viseu Futebol Clube",
+       "tempo": "3:38.25",
+       "nome": "Academico Viseu Futebol Clube 1"
+      },
+      {
+       "clube": "Clube de Natacao de Valongo",
+       "tempo": "3:38.68",
+       "nome": "Natacao de Valongo 1"
+      }
+     ],
+     "200m Mariposa": [
+      {
+       "clube": "Associacao Academica de Coimbra",
+       "tempo": "2:00.96",
+       "nome": "Miguel Freitas, OVIEDO"
+      },
+      {
+       "clube": "Clube Desportivo Nacional",
+       "tempo": "2:04.23",
+       "nome": "Luis Galvao, GOUVEIA"
+      },
+      {
+       "clube": "Gesloures - Gestão Equipamentos E.M.",
+       "tempo": "2:05.08",
+       "nome": "Andre Tavares, GRENHO"
+      },
+      {
+       "clube": "Clube Naval Povoense",
+       "tempo": "2:07.21",
+       "nome": "Luis Filipe, CARVALHO"
+      },
+      {
+       "clube": "Desportivo Nautico da Marinha Grande",
+       "tempo": "2:07.23",
+       "nome": "David Ferreira, RELVAS"
+      },
+      {
+       "clube": "Assoc Desp Rec Cult Colegio Int Monte Maior",
+       "tempo": "2:07.42",
+       "nome": "Rui Silva, PEREIRA"
+      },
+      {
+       "clube": "Colegio Efanor",
+       "tempo": "2:08.86",
+       "nome": "Tomas Rocha, DORES"
+      },
+      {
+       "clube": "Clube Natacao Olhao",
+       "tempo": "2:09.48",
+       "nome": "Ivan Vazquez, MACIAS"
+      },
+      {
+       "clube": "Clube Nautico de Leiria - VOID",
+       "tempo": "2:10.25",
+       "nome": "Joao Moura, FRANCISCO"
+      },
+      {
+       "clube": "Condeixa Aqua Clube",
+       "tempo": "2:10.46",
+       "nome": "Jose Miguel, MARQUES"
+      },
+      {
+       "clube": "Palmela Desporto, E.M.",
+       "tempo": "2:10.69",
+       "nome": "Andre Azevedo, BARAONA"
+      },
+      {
+       "clube": "Clube Nacional de Natação",
+       "tempo": "2:10.92",
+       "nome": "Joao Almeida, GOMES"
+      },
+      {
+       "clube": "Clube Aquatico Pacense",
+       "tempo": "2:12.07",
+       "nome": "Rafael Dinis, PACHECO"
+      },
+      {
+       "clube": "Soc Instrucao e Recreio Os Pimpoes/Cimai",
+       "tempo": "2:12.11",
+       "nome": "Guilherme Costa, REBELO"
+      },
+      {
+       "clube": "Clube Desportivo de Estarreja",
+       "tempo": "2:14.10",
+       "nome": "Ricardo Gabriel, OLIVEIRA"
+      },
+      {
+       "clube": "Clube Fluvial Portuense",
+       "tempo": "2:14.17",
+       "nome": "Matias Barros, REIS"
+      },
+      {
+       "clube": "Leixoes Sport Clube",
+       "tempo": "2:15.04",
+       "nome": "Diogo Filipe, RIBEIRO"
+      },
+      {
+       "clube": "Clube Desportivo Sao Roque",
+       "tempo": "2:15.37",
+       "nome": "Rodrigo Reis, RODRIGUES"
+      },
+      {
+       "clube": "Clube de Natacao de Valongo",
+       "tempo": "2:15.62",
+       "nome": "Marco Santos, SOARES"
+      },
+      {
+       "clube": "Academico Viseu Futebol Clube",
+       "tempo": "2:15.65",
+       "nome": "Tomas Alexandre, SOUSA"
+      },
+      {
+       "clube": "Portinado-Assoc Natacao de Portimao",
+       "tempo": "2:16.01",
+       "nome": "Tiago Miguel, COSTA"
+      },
+      {
+       "clube": "Clube de Instrucao e Recreio do Laranjeiro",
+       "tempo": "2:16.69",
+       "nome": "Rafael Filipe, NUNES"
+      },
+      {
+       "clube": "Clube de Natacao de Torres Novas",
+       "tempo": "2:37.40",
+       "nome": "Francisco Sa, LOPES"
+      }
+     ],
+     "100m Bruços": [
+      {
+       "clube": "Palmela Desporto, E.M.",
+       "tempo": "1:03.38",
+       "nome": "Diogo Garcez, MATEUS"
+      },
+      {
+       "clube": "Gesloures - Gestão Equipamentos E.M.",
+       "tempo": "1:03.40",
+       "nome": "Afonso Amaro, SANTOS"
+      },
+      {
+       "clube": "Clube Naval Povoense",
+       "tempo": "1:03.47",
+       "nome": "Alexandre Moreira, DOURADO"
+      },
+      {
+       "clube": "Academico Viseu Futebol Clube",
+       "tempo": "1:03.58",
+       "nome": "Andre Magalhaes, MOURA"
+      },
+      {
+       "clube": "Clube Nautico de Leiria - VOID",
+       "tempo": "1:04.14",
+       "nome": "Filipe Miguel, GOMES"
+      },
+      {
+       "clube": "Associacao Academica de Coimbra",
+       "tempo": "1:04.43",
+       "nome": "Afonso Martim, GOUVEIA"
+      },
+      {
+       "clube": "Portinado-Assoc Natacao de Portimao",
+       "tempo": "1:04.94",
+       "nome": "Joao Pedro, ANTONIO"
+      },
+      {
+       "clube": "Clube de Instrucao e Recreio do Laranjeiro",
+       "tempo": "1:05.15",
+       "nome": "Andre Filipe, MAGALHAES"
+      },
+      {
+       "clube": "Clube Desportivo Nacional",
+       "tempo": "1:05.21",
+       "nome": "Euan, WEIR"
+      },
+      {
+       "clube": "Clube Natacao Olhao",
+       "tempo": "1:05.23",
+       "nome": "Vicente Henriques, VAZ"
+      },
+      {
+       "clube": "Leixoes Sport Clube",
+       "tempo": "1:05.28",
+       "nome": "Joao Simons, CUNHA"
+      },
+      {
+       "clube": "Clube Desportivo Sao Roque",
+       "tempo": "1:05.77",
+       "nome": "Pedro Maria, BESSA"
+      },
+      {
+       "clube": "Colegio Efanor",
+       "tempo": "1:06.13",
+       "nome": "Guilherme Simao, BESSA"
+      },
+      {
+       "clube": "Clube Aquatico Pacense",
+       "tempo": "1:07.00",
+       "nome": "Nuno Rafael, ALVES"
+      },
+      {
+       "clube": "Clube de Natacao de Torres Novas",
+       "tempo": "1:07.57",
+       "nome": "Guilherme Antonio, REIS"
+      },
+      {
+       "clube": "Clube Desportivo de Estarreja",
+       "tempo": "1:07.63",
+       "nome": "Joao Miguel, SANTOS"
+      },
+      {
+       "clube": "Assoc Desp Rec Cult Colegio Int Monte Maior",
+       "tempo": "1:07.95",
+       "nome": "Pedro Miguel, SILVA"
+      },
+      {
+       "clube": "Desportivo Nautico da Marinha Grande",
+       "tempo": "1:08.32",
+       "nome": "Pedro Domingues, DUARTE"
+      },
+      {
+       "clube": "Clube Fluvial Portuense",
+       "tempo": "1:08.48",
+       "nome": "Rodrigo Gil, CANCELA"
+      },
+      {
+       "clube": "Condeixa Aqua Clube",
+       "tempo": "1:09.93",
+       "nome": "Ivan Manuel, RABECA"
+      },
+      {
+       "clube": "Soc Instrucao e Recreio Os Pimpoes/Cimai",
+       "tempo": "1:10.33",
+       "nome": "Hugo Miguel, SANTOS"
+      },
+      {
+       "clube": "Clube Nacional de Natação",
+       "tempo": "1:11.02",
+       "nome": "Daniel, PANKIVSKIY"
+      },
+      {
+       "clube": "Clube de Natacao de Valongo",
+       "tempo": "1:11.70",
+       "nome": "Bruno Miguel, CAVADAS"
+      }
+     ],
+     "200m Livres": [
+      {
+       "clube": "Condeixa Aqua Clube",
+       "tempo": "1:50.99",
+       "nome": "Duarte Cachulo, MARQUES"
+      },
+      {
+       "clube": "Clube Aquatico Pacense",
+       "tempo": "1:51.40",
+       "nome": "Ricardo Filipe, ROCHA"
+      },
+      {
+       "clube": "Clube Nacional de Natação",
+       "tempo": "1:51.54",
+       "nome": "Afonso Bjork, FREITAS"
+      },
+      {
+       "clube": "Clube Nautico de Leiria - VOID",
+       "tempo": "1:55.16",
+       "nome": "Afonso Dinis, ROQUE"
+      },
+      {
+       "clube": "Assoc Desp Rec Cult Colegio Int Monte Maior",
+       "tempo": "1:55.18",
+       "nome": "R., FERNANDES"
+      },
+      {
+       "clube": "Desportivo Nautico da Marinha Grande",
+       "tempo": "1:55.26",
+       "nome": "G., MARRAZES"
+      },
+      {
+       "clube": "Palmela Desporto, E.M.",
+       "tempo": "1:55.30",
+       "nome": "Rodrigo Beja, LOPES"
+      },
+      {
+       "clube": "Gesloures - Gestão Equipamentos E.M.",
+       "tempo": "1:55.33",
+       "nome": "Luis Pedro, FIGUEIREDO"
+      },
+      {
+       "clube": "Associacao Academica de Coimbra",
+       "tempo": "1:55.41",
+       "nome": "Joao Ferreira, MARQUES"
+      },
+      {
+       "clube": "Clube de Instrucao e Recreio do Laranjeiro",
+       "tempo": "1:55.60",
+       "nome": "Xavier Rosa, MADEIRA"
+      },
+      {
+       "clube": "Clube Desportivo de Estarreja",
+       "tempo": "1:57.18",
+       "nome": "Paulo Jorge, OLIVEIRA"
+      },
+      {
+       "clube": "Soc Instrucao e Recreio Os Pimpoes/Cimai",
+       "tempo": "1:57.25",
+       "nome": "Gil Santos, LEMOS"
+      },
+      {
+       "clube": "Portinado-Assoc Natacao de Portimao",
+       "tempo": "1:57.34",
+       "nome": "Marin, CEPELEAGA"
+      },
+      {
+       "clube": "Clube Natacao Olhao",
+       "tempo": "1:57.52",
+       "nome": "Joao Tomas, NUNES"
+      },
+      {
+       "clube": "Clube Desportivo Sao Roque",
+       "tempo": "1:57.87",
+       "nome": "Joao Cruz, CASTRO"
+      },
+      {
+       "clube": "Clube Fluvial Portuense",
+       "tempo": "1:57.95",
+       "nome": "Jose Moutinho, VALENTE"
+      },
+      {
+       "clube": "Clube de Natacao de Torres Novas",
+       "tempo": "1:58.04",
+       "nome": "Joao Antonio, PIRES"
+      },
+      {
+       "clube": "Colegio Efanor",
+       "tempo": "1:58.20",
+       "nome": "Diogo Borges, PORTELA"
+      },
+      {
+       "clube": "Clube Naval Povoense",
+       "tempo": "1:58.55",
+       "nome": "Goncalo Zamith, PASSOS"
+      },
+      {
+       "clube": "Clube Desportivo Nacional",
+       "tempo": "1:58.81",
+       "nome": "Guilherme Corte, COSTA"
+      },
+      {
+       "clube": "Leixoes Sport Clube",
+       "tempo": "1:59.26",
+       "nome": "Pedro Santos, PEREIRA"
+      },
+      {
+       "clube": "Academico Viseu Futebol Clube",
+       "tempo": "2:00.24",
+       "nome": "Guilherme Martins, SILVA"
+      },
+      {
+       "clube": "Clube de Natacao de Valongo",
+       "tempo": "2:11.76",
+       "nome": "Rui Pedro, CORREIA"
+      }
+     ],
+     "4x100m Estilos": [
+      {
+       "clube": "Gesloures - Gestão Equipamentos E.M.",
+       "tempo": "3:44.40",
+       "nome": "Gesloures 1"
+      },
+      {
+       "clube": "Clube Nautico de Leiria - VOID",
+       "tempo": "3:45.83",
+       "nome": "CNLeiria - VOID 1"
+      },
+      {
+       "clube": "Palmela Desporto, E.M.",
+       "tempo": "3:46.83",
+       "nome": "Palmela Desporto 1"
+      },
+      {
+       "clube": "Clube Nacional de Natação",
+       "tempo": "3:51.12",
+       "nome": "Nacional de Natação 1"
+      },
+      {
+       "clube": "Portinado-Assoc Natacao de Portimao",
+       "tempo": "3:51.51",
+       "nome": "Portinado 1"
+      },
+      {
+       "clube": "Clube Desportivo Nacional",
+       "tempo": "3:51.71",
+       "nome": "Clube Desportivo Nacional 1"
+      },
+      {
+       "clube": "Clube Aquatico Pacense",
+       "tempo": "3:51.97",
+       "nome": "Aquatico Pacense 1"
+      },
+      {
+       "clube": "Associacao Academica de Coimbra",
+       "tempo": "3:52.03",
+       "nome": "Aac 2"
+      },
+      {
+       "clube": "Leixoes Sport Clube",
+       "tempo": "3:52.55",
+       "nome": "Leixoes Sport Clube 1"
+      },
+      {
+       "clube": "Clube Naval Povoense",
+       "tempo": "3:52.74",
+       "nome": "Clube Naval Povoense 1"
+      },
+      {
+       "clube": "Colegio Efanor",
+       "tempo": "3:54.46",
+       "nome": "Colegio Efanor 1"
+      },
+      {
+       "clube": "Clube Natacao Olhao",
+       "tempo": "3:56.51",
+       "nome": "Clube Nataco Olhao"
+      },
+      {
+       "clube": "Soc Instrucao e Recreio Os Pimpoes/Cimai",
+       "tempo": "3:56.82",
+       "nome": "Pimpoes/Cimai 1"
+      },
+      {
+       "clube": "Clube Desportivo Sao Roque",
+       "tempo": "3:56.93",
+       "nome": "Clube Desportivo Sao Roque 1"
+      },
+      {
+       "clube": "Condeixa Aqua Clube",
+       "tempo": "3:57.70",
+       "nome": "Condeixa Aqua Clube 1"
+      },
+      {
+       "clube": "Academico Viseu Futebol Clube",
+       "tempo": "3:57.83",
+       "nome": "Academico Viseu Futebol Clube 1"
+      },
+      {
+       "clube": "Assoc Desp Rec Cult Colegio Int Monte Maior",
+       "tempo": "3:59.22",
+       "nome": "Adrcimm 1"
+      },
+      {
+       "clube": "Clube de Natacao de Valongo",
+       "tempo": "3:59.29",
+       "nome": "Natacao de Valongo 1"
+      },
+      {
+       "clube": "Clube Desportivo de Estarreja",
+       "tempo": "4:00.32",
+       "nome": "Clube Desportivo de Estarreja 1"
+      },
+      {
+       "clube": "Desportivo Nautico da Marinha Grande",
+       "tempo": "4:00.51",
+       "nome": "Nautico Marinha Grande 1"
+      },
+      {
+       "clube": "Clube Fluvial Portuense",
+       "tempo": "4:00.70",
+       "nome": "Fluvial Portuense 1"
+      },
+      {
+       "clube": "Clube de Natacao de Torres Novas",
+       "tempo": "4:00.79",
+       "nome": "Torres Novas 1"
+      },
+      {
+       "clube": "Clube de Instrucao e Recreio do Laranjeiro",
+       "tempo": "4:03.02",
+       "nome": "Laranjeiro 1"
+      }
+     ],
+     "1500m Livres": [
+      {
+       "clube": "Condeixa Aqua Clube",
+       "tempo": "15:32.25",
+       "nome": "Duarte Cachulo, MARQUES"
+      },
+      {
+       "clube": "Desportivo Nautico da Marinha Grande",
+       "tempo": "16:20.64",
+       "nome": "Paulo, KOT"
+      },
+      {
+       "clube": "Palmela Desporto, E.M.",
+       "tempo": "16:23.30",
+       "nome": "Rafael Lin, MONIZ"
+      },
+      {
+       "clube": "Assoc Desp Rec Cult Colegio Int Monte Maior",
+       "tempo": "16:39.44",
+       "nome": "Martim Chambel, PINTO"
+      },
+      {
+       "clube": "Gesloures - Gestão Equipamentos E.M.",
+       "tempo": "16:40.92",
+       "nome": "Joao Miguel, CARDOSO"
+      },
+      {
+       "clube": "Clube Naval Povoense",
+       "tempo": "16:54.62",
+       "nome": "Martim Machado, SILVA"
+      },
+      {
+       "clube": "Academico Viseu Futebol Clube",
+       "tempo": "16:59.34",
+       "nome": "Andre Ferreira, SANTOS"
+      },
+      {
+       "clube": "Leixoes Sport Clube",
+       "tempo": "17:01.27",
+       "nome": "Bernardo Sousa, ROCHA"
+      },
+      {
+       "clube": "Clube Fluvial Portuense",
+       "tempo": "17:03.61",
+       "nome": "Andre Bernardes, FERREIRA"
+      },
+      {
+       "clube": "Associacao Academica de Coimbra",
+       "tempo": "17:05.82",
+       "nome": "Guilherme Simoes, SOUSA"
+      },
+      {
+       "clube": "Clube Nautico de Leiria - VOID",
+       "tempo": "17:07.56",
+       "nome": "Afonso Dinis, ROQUE"
+      },
+      {
+       "clube": "Clube Desportivo Nacional",
+       "tempo": "17:19.79",
+       "nome": "Mateus Medeiros, RAPOSO"
+      },
+      {
+       "clube": "Clube Desportivo de Estarreja",
+       "tempo": "17:20.65",
+       "nome": "Gabriel Silva, TAVARES"
+      },
+      {
+       "clube": "Clube Aquatico Pacense",
+       "tempo": "17:21.55",
+       "nome": "Francisco Bentes, SANTOS"
+      },
+      {
+       "clube": "Clube de Natacao de Valongo",
+       "tempo": "17:35.54",
+       "nome": "Marco Santos, SOARES"
+      },
+      {
+       "clube": "Clube Nacional de Natação",
+       "tempo": "17:36.32",
+       "nome": "David Alexandre, FERNANDES"
+      },
+      {
+       "clube": "Soc Instrucao e Recreio Os Pimpoes/Cimai",
+       "tempo": "17:50.60",
+       "nome": "Guilherme Rodrigues, CABRAL"
+      },
+      {
+       "clube": "Colegio Efanor",
+       "tempo": "17:51.41",
+       "nome": "Gustavo Rolim, FERNANDES"
+      },
+      {
+       "clube": "Clube de Natacao de Torres Novas",
+       "tempo": "17:55.32",
+       "nome": "Afonso Formigo, PINHO"
+      },
+      {
+       "clube": "Clube Natacao Olhao",
+       "tempo": "17:55.45",
+       "nome": "Diogo Filipe, CARDOSO"
+      },
+      {
+       "clube": "Portinado-Assoc Natacao de Portimao",
+       "tempo": "17:56.31",
+       "nome": "Guilherme Salvador, CHAVECA"
+      },
+      {
+       "clube": "Clube de Instrucao e Recreio do Laranjeiro",
+       "tempo": "17:58.31",
+       "nome": "Simao Verissimo, AIRES"
+      },
+      {
+       "clube": "Clube Desportivo Sao Roque",
+       "tempo": "17:59.22",
+       "nome": "Tiago Daniel, PENSO"
+      }
+     ],
+     "50m Livres": [
+      {
+       "clube": "Clube de Natacao de Torres Novas",
+       "tempo": "22.63",
+       "nome": "Paulo, VAKULYUK"
+      },
+      {
+       "clube": "Desportivo Nautico da Marinha Grande",
+       "tempo": "22.92",
+       "nome": "Miguel Vicente, SILVA"
+      },
+      {
+       "clube": "Clube Nautico de Leiria - VOID",
+       "tempo": "23.06",
+       "nome": "Rodolfo Junior, ALECRIM"
+      },
+      {
+       "clube": "Soc Instrucao e Recreio Os Pimpoes/Cimai",
+       "tempo": "23.31",
+       "nome": "Santiago Agostinho, PARREIRA"
+      },
+      {
+       "clube": "Clube Natacao Olhao",
+       "tempo": "23.35",
+       "nome": "Joao Duarte, SANTOS"
+      },
+      {
+       "clube": "Gesloures - Gestão Equipamentos E.M.",
+       "tempo": "23.41",
+       "nome": "Afonso Amaro, SANTOS"
+      },
+      {
+       "clube": "Clube Desportivo Nacional",
+       "tempo": "23.54",
+       "nome": "B., MACHADO"
+      },
+      {
+       "clube": "Leixoes Sport Clube",
+       "tempo": "23.60",
+       "nome": "Gaspar Pinheiro, LIMA"
+      },
+      {
+       "clube": "Palmela Desporto, E.M.",
+       "tempo": "23.66",
+       "nome": "Bernardo Antunes, AUGUSTO"
+      },
+      {
+       "clube": "Colegio Efanor",
+       "tempo": "23.67",
+       "nome": "Bruno Rafael, MACHADO"
+      },
+      {
+       "clube": "Clube de Natacao de Valongo",
+       "tempo": "23.68",
+       "nome": "Tiago Campos, LOURENCO"
+      },
+      {
+       "clube": "Assoc Desp Rec Cult Colegio Int Monte Maior",
+       "tempo": "23.94",
+       "nome": "Afonso Rodrigues, CALHELHA"
+      },
+      {
+       "clube": "Condeixa Aqua Clube",
+       "tempo": "23.94",
+       "nome": "R., TRAVASSOS"
+      },
+      {
+       "clube": "Clube Desportivo Sao Roque",
+       "tempo": "24.08",
+       "nome": "Miguel Freitas, MARQUES"
+      },
+      {
+       "clube": "Academico Viseu Futebol Clube",
+       "tempo": "24.11",
+       "nome": "Andre Magalhaes, MOURA"
+      },
+      {
+       "clube": "Portinado-Assoc Natacao de Portimao",
+       "tempo": "24.17",
+       "nome": "Dario Rafael, OLIVEIRA"
+      },
+      {
+       "clube": "Clube Nacional de Natação",
+       "tempo": "24.26",
+       "nome": "Ricardo Saraiva, PIRES"
+      },
+      {
+       "clube": "Clube Naval Povoense",
+       "tempo": "24.66",
+       "nome": "Sergio Daniel, ARAUJO"
+      },
+      {
+       "clube": "Clube Fluvial Portuense",
+       "tempo": "24.66",
+       "nome": "Erik Anthony, HOWLAND"
+      },
+      {
+       "clube": "Associacao Academica de Coimbra",
+       "tempo": "24.83",
+       "nome": "Afonso Martim, GOUVEIA"
+      },
+      {
+       "clube": "Clube Desportivo de Estarreja",
+       "tempo": "24.99",
+       "nome": "Gabriel Silva, TAVARES"
+      },
+      {
+       "clube": "Clube Aquatico Pacense",
+       "tempo": "25.24",
+       "nome": "Rafael Dinis, PACHECO"
+      },
+      {
+       "clube": "Clube de Instrucao e Recreio do Laranjeiro",
+       "tempo": "26.38",
+       "nome": "Dehnis Miguel, CRUZ"
+      }
+     ],
+     "200m Bruços": [
+      {
+       "clube": "Gesloures - Gestão Equipamentos E.M.",
+       "tempo": "2:17.37",
+       "nome": "Andre Tavares, GRENHO"
+      },
+      {
+       "clube": "Clube Naval Povoense",
+       "tempo": "2:17.93",
+       "nome": "Alexandre Moreira, DOURADO"
+      },
+      {
+       "clube": "Associacao Academica de Coimbra",
+       "tempo": "2:21.11",
+       "nome": "Joaquim Agra, MERUJE"
+      },
+      {
+       "clube": "Clube Fluvial Portuense",
+       "tempo": "2:22.03",
+       "nome": "Gil Afonso, RODRIGUES"
+      },
+      {
+       "clube": "Clube Nautico de Leiria - VOID",
+       "tempo": "2:22.04",
+       "nome": "Filipe Miguel, GOMES"
+      },
+      {
+       "clube": "Portinado-Assoc Natacao de Portimao",
+       "tempo": "2:23.16",
+       "nome": "Joao Pedro, ANTONIO"
+      },
+      {
+       "clube": "Colegio Efanor",
+       "tempo": "2:25.33",
+       "nome": "Guilherme Simao, BESSA"
+      },
+      {
+       "clube": "Clube Aquatico Pacense",
+       "tempo": "2:25.71",
+       "nome": "Nuno Rafael, ALVES"
+      },
+      {
+       "clube": "Condeixa Aqua Clube",
+       "tempo": "2:25.93",
+       "nome": "Jose Miguel, MARQUES"
+      },
+      {
+       "clube": "Assoc Desp Rec Cult Colegio Int Monte Maior",
+       "tempo": "2:27.60",
+       "nome": "Pedro Miguel, SILVA"
+      },
+      {
+       "clube": "Clube de Instrucao e Recreio do Laranjeiro",
+       "tempo": "2:28.32",
+       "nome": "Andre Filipe, MAGALHAES"
+      },
+      {
+       "clube": "Leixoes Sport Clube",
+       "tempo": "2:28.40",
+       "nome": "Joao Simons, CUNHA"
+      },
+      {
+       "clube": "Clube Desportivo Nacional",
+       "tempo": "2:28.47",
+       "nome": "Joao Miguel, MARTINHO"
+      },
+      {
+       "clube": "Palmela Desporto, E.M.",
+       "tempo": "2:28.78",
+       "nome": "Miguel Loucao, CAXARIA"
+      },
+      {
+       "clube": "Clube de Natacao de Torres Novas",
+       "tempo": "2:28.87",
+       "nome": "Duarte Moura, MENDES"
+      },
+      {
+       "clube": "Clube Desportivo Sao Roque",
+       "tempo": "2:29.65",
+       "nome": "Paulo Rodrigues, ALVES"
+      },
+      {
+       "clube": "Academico Viseu Futebol Clube",
+       "tempo": "2:31.30",
+       "nome": "Tomas Alexandre, SOUSA"
+      },
+      {
+       "clube": "Clube Natacao Olhao",
+       "tempo": "2:31.77",
+       "nome": "Vicente Henriques, VAZ"
+      },
+      {
+       "clube": "Desportivo Nautico da Marinha Grande",
+       "tempo": "2:32.73",
+       "nome": "Afonso Ferreira, REIS"
+      },
+      {
+       "clube": "Clube Desportivo de Estarreja",
+       "tempo": "2:35.71",
+       "nome": "Joao Miguel, SANTOS"
+      },
+      {
+       "clube": "Soc Instrucao e Recreio Os Pimpoes/Cimai",
+       "tempo": "2:36.24",
+       "nome": "Hugo Miguel, SANTOS"
+      },
+      {
+       "clube": "Clube de Natacao de Valongo",
+       "tempo": "2:36.35",
+       "nome": "Bruno Miguel, CAVADAS"
+      },
+      {
+       "clube": "Clube Nacional de Natação",
+       "tempo": "2:40.69",
+       "nome": "Jose Pedro, SALVADINHO"
+      }
+     ],
+     "50m Costas": [
+      {
+       "clube": "Clube Nautico de Leiria - VOID",
+       "tempo": "24.96",
+       "nome": "Francisco Ribeiro, VIEIRA"
+      },
+      {
+       "clube": "Palmela Desporto, E.M.",
+       "tempo": "25.46",
+       "nome": "Andre Azevedo, BARAONA"
+      },
+      {
+       "clube": "Soc Instrucao e Recreio Os Pimpoes/Cimai",
+       "tempo": "25.57",
+       "nome": "Mikhael, ONUTSKYY"
+      },
+      {
+       "clube": "Clube Nacional de Natação",
+       "tempo": "26.06",
+       "nome": "Timothy, DONOVAN JOHNSON"
+      },
+      {
+       "clube": "Clube Desportivo de Estarreja",
+       "tempo": "26.71",
+       "nome": "Tiago Diniz, LIMA"
+      },
+      {
+       "clube": "Leixoes Sport Clube",
+       "tempo": "26.73",
+       "nome": "Gaspar Pinheiro, LIMA"
+      },
+      {
+       "clube": "Assoc Desp Rec Cult Colegio Int Monte Maior",
+       "tempo": "26.99",
+       "nome": "R., FERNANDES"
+      },
+      {
+       "clube": "Colegio Efanor",
+       "tempo": "27.03",
+       "nome": "Pedro Pereira, ALMEIDA"
+      },
+      {
+       "clube": "Clube Naval Povoense",
+       "tempo": "27.07",
+       "nome": "Porfirio Braga, NUNES"
+      },
+      {
+       "clube": "Clube Aquatico Pacense",
+       "tempo": "27.09",
+       "nome": "Vitor Samuel, ROCHA"
+      },
+      {
+       "clube": "Clube de Natacao de Valongo",
+       "tempo": "27.10",
+       "nome": "Tiago Campos, LOURENCO"
+      },
+      {
+       "clube": "Gesloures - Gestão Equipamentos E.M.",
+       "tempo": "27.16",
+       "nome": "David Emanuel, TOME"
+      },
+      {
+       "clube": "Clube Desportivo Sao Roque",
+       "tempo": "27.22",
+       "nome": "Rui Afonso, FERNANDES"
+      },
+      {
+       "clube": "Condeixa Aqua Clube",
+       "tempo": "27.39",
+       "nome": "Gustavo Pires, MARQUES"
+      },
+      {
+       "clube": "Portinado-Assoc Natacao de Portimao",
+       "tempo": "27.43",
+       "nome": "Dario Rafael, OLIVEIRA"
+      },
+      {
+       "clube": "Academico Viseu Futebol Clube",
+       "tempo": "28.02",
+       "nome": "Joao Miguel, VITORIA"
+      },
+      {
+       "clube": "Clube de Natacao de Torres Novas",
+       "tempo": "28.14",
+       "nome": "Afonso Bernardo, EVARISTO"
+      },
+      {
+       "clube": "Associacao Academica de Coimbra",
+       "tempo": "28.56",
+       "nome": "Francisco Fernandes, PEREIRA"
+      },
+      {
+       "clube": "Clube Fluvial Portuense",
+       "tempo": "28.56",
+       "nome": "Salvador Miguel, VIEIRA"
+      },
+      {
+       "clube": "Clube Natacao Olhao",
+       "tempo": "28.65",
+       "nome": "Hugo Miguel, VIEGAS"
+      },
+      {
+       "clube": "Clube Desportivo Nacional",
+       "tempo": "28.83",
+       "nome": "Joao Bernardo, SILVA"
+      },
+      {
+       "clube": "Desportivo Nautico da Marinha Grande",
+       "tempo": "28.85",
+       "nome": "Tomas Manuel, PALMEIRO"
+      },
+      {
+       "clube": "Clube de Instrucao e Recreio do Laranjeiro",
+       "tempo": "29.65",
+       "nome": "Simao Verissimo, AIRES"
+      }
+     ],
+     "100m Mariposa": [
+      {
+       "clube": "Associacao Academica de Coimbra",
+       "tempo": "53.77",
+       "nome": "Miguel Freitas, OVIEDO"
+      },
+      {
+       "clube": "Clube Nautico de Leiria - VOID",
+       "tempo": "54.55",
+       "nome": "Francisco Ribeiro, VIEIRA"
+      },
+      {
+       "clube": "Gesloures - Gestão Equipamentos E.M.",
+       "tempo": "54.79",
+       "nome": "Joao Peres, COSTA"
+      },
+      {
+       "clube": "Clube Nacional de Natação",
+       "tempo": "55.06",
+       "nome": "Fernando Souza, SILVA"
+      },
+      {
+       "clube": "Clube Desportivo Nacional",
+       "tempo": "55.87",
+       "nome": "Luis Galvao, GOUVEIA"
+      },
+      {
+       "clube": "Palmela Desporto, E.M.",
+       "tempo": "56.15",
+       "nome": "Rodrigo Beja, LOPES"
+      },
+      {
+       "clube": "Condeixa Aqua Clube",
+       "tempo": "56.61",
+       "nome": "R., TRAVASSOS"
+      },
+      {
+       "clube": "Leixoes Sport Clube",
+       "tempo": "57.14",
+       "nome": "David Alexandre, ANTUNES"
+      },
+      {
+       "clube": "Clube Natacao Olhao",
+       "tempo": "57.28",
+       "nome": "Joao Tomas, NUNES"
+      },
+      {
+       "clube": "Colegio Efanor",
+       "tempo": "57.93",
+       "nome": "Bruno Rafael, MACHADO"
+      },
+      {
+       "clube": "Portinado-Assoc Natacao de Portimao",
+       "tempo": "58.01",
+       "nome": "Rodrigo Malia, SANTOS"
+      },
+      {
+       "clube": "Clube Desportivo Sao Roque",
+       "tempo": "58.46",
+       "nome": "Joao Cruz, CASTRO"
+      },
+      {
+       "clube": "Clube Naval Povoense",
+       "tempo": "58.51",
+       "nome": "Luis Filipe, CARVALHO"
+      },
+      {
+       "clube": "Clube Aquatico Pacense",
+       "tempo": "59.04",
+       "nome": "Dinis Barros, LEAL"
+      },
+      {
+       "clube": "Desportivo Nautico da Marinha Grande",
+       "tempo": "59.23",
+       "nome": "G., MARRAZES"
+      },
+      {
+       "clube": "Academico Viseu Futebol Clube",
+       "tempo": "59.28",
+       "nome": "Tiberius Sebastian, NEAGU"
+      },
+      {
+       "clube": "Clube Fluvial Portuense",
+       "tempo": "59.50",
+       "nome": "Matias Barros, REIS"
+      },
+      {
+       "clube": "Soc Instrucao e Recreio Os Pimpoes/Cimai",
+       "tempo": "59.61",
+       "nome": "Gil Santos, LEMOS"
+      },
+      {
+       "clube": "Clube Desportivo de Estarreja",
+       "tempo": "1:00.19",
+       "nome": "Ricardo Gabriel, OLIVEIRA"
+      },
+      {
+       "clube": "Clube de Natacao de Torres Novas",
+       "tempo": "1:00.82",
+       "nome": "Joao Antonio, PIRES"
+      },
+      {
+       "clube": "Clube de Instrucao e Recreio do Laranjeiro",
+       "tempo": "1:01.24",
+       "nome": "Jose Tomas, SIMEAO"
+      },
+      {
+       "clube": "Assoc Desp Rec Cult Colegio Int Monte Maior",
+       "tempo": "1:02.02",
+       "nome": "Vasco Alexandre, MARTINS"
+      },
+      {
+       "clube": "Clube de Natacao de Valongo",
+       "tempo": "1:02.07",
+       "nome": "Diogo Severino, NUNES"
+      }
+     ],
+     "400m Estilos": [
+      {
+       "clube": "Gesloures - Gestão Equipamentos E.M.",
+       "tempo": "4:25.58",
+       "nome": "Joao Peres, COSTA"
+      },
+      {
+       "clube": "Assoc Desp Rec Cult Colegio Int Monte Maior",
+       "tempo": "4:31.30",
+       "nome": "Rui Silva, PEREIRA"
+      },
+      {
+       "clube": "Clube Fluvial Portuense",
+       "tempo": "4:34.84",
+       "nome": "Gil Afonso, RODRIGUES"
+      },
+      {
+       "clube": "Clube Desportivo Nacional",
+       "tempo": "4:37.61",
+       "nome": "Luis Galvao, GOUVEIA"
+      },
+      {
+       "clube": "Desportivo Nautico da Marinha Grande",
+       "tempo": "4:38.87",
+       "nome": "David Ferreira, RELVAS"
+      },
+      {
+       "clube": "Portinado-Assoc Natacao de Portimao",
+       "tempo": "4:38.95",
+       "nome": "Miguel Salomao, TRISTAO"
+      },
+      {
+       "clube": "Clube Nautico de Leiria - VOID",
+       "tempo": "4:39.10",
+       "nome": "Francisco Marques, SIMOES"
+      },
+      {
+       "clube": "Colegio Efanor",
+       "tempo": "4:39.25",
+       "nome": "Tomas Rocha, DORES"
+      },
+      {
+       "clube": "Clube Naval Povoense",
+       "tempo": "4:39.25",
+       "nome": "Martim Machado, SILVA"
+      },
+      {
+       "clube": "Condeixa Aqua Clube",
+       "tempo": "4:40.99",
+       "nome": "Rafael Pereira, RODRIGUES"
+      },
+      {
+       "clube": "Palmela Desporto, E.M.",
+       "tempo": "4:42.34",
+       "nome": "Rafael Lin, MONIZ"
+      },
+      {
+       "clube": "Clube Aquatico Pacense",
+       "tempo": "4:43.13",
+       "nome": "Rafael Dinis, PACHECO"
+      },
+      {
+       "clube": "Associacao Academica de Coimbra",
+       "tempo": "4:44.83",
+       "nome": "Joaquim Agra, MERUJE"
+      },
+      {
+       "clube": "Clube Nacional de Natação",
+       "tempo": "4:47.25",
+       "nome": "Joao Almeida, GOMES"
+      },
+      {
+       "clube": "Academico Viseu Futebol Clube",
+       "tempo": "4:48.04",
+       "nome": "Guilherme Martins, SILVA"
+      },
+      {
+       "clube": "Leixoes Sport Clube",
+       "tempo": "4:48.32",
+       "nome": "Diogo Filipe, RIBEIRO"
+      },
+      {
+       "clube": "Clube de Instrucao e Recreio do Laranjeiro",
+       "tempo": "4:52.63",
+       "nome": "Rafael Filipe, NUNES"
+      },
+      {
+       "clube": "Clube Desportivo Sao Roque",
+       "tempo": "4:55.09",
+       "nome": "Rodrigo Reis, RODRIGUES"
+      },
+      {
+       "clube": "Clube de Natacao de Torres Novas",
+       "tempo": "4:56.73",
+       "nome": "Duarte Moura, MENDES"
+      },
+      {
+       "clube": "Clube Desportivo de Estarreja",
+       "tempo": "4:57.13",
+       "nome": "Gabriel Silva, TAVARES"
+      },
+      {
+       "clube": "Clube de Natacao de Valongo",
+       "tempo": "4:57.44",
+       "nome": "F., LOURENCO"
+      }
+     ],
+     "100m Livres": [
+      {
+       "clube": "Clube Nautico de Leiria - VOID",
+       "tempo": "50.55",
+       "nome": "Rodolfo Junior, ALECRIM"
+      },
+      {
+       "clube": "Soc Instrucao e Recreio Os Pimpoes/Cimai",
+       "tempo": "50.61",
+       "nome": "Santiago Agostinho, PARREIRA"
+      },
+      {
+       "clube": "Desportivo Nautico da Marinha Grande",
+       "tempo": "50.85",
+       "nome": "Miguel Vicente, SILVA"
+      },
+      {
+       "clube": "Palmela Desporto, E.M.",
+       "tempo": "51.16",
+       "nome": "Rodrigo Beja, LOPES"
+      },
+      {
+       "clube": "Clube Nacional de Natação",
+       "tempo": "51.60",
+       "nome": "Timothy, DONOVAN JOHNSON"
+      },
+      {
+       "clube": "Gesloures - Gestão Equipamentos E.M.",
+       "tempo": "51.79",
+       "nome": "Luis Pedro, FIGUEIREDO"
+      },
+      {
+       "clube": "Clube de Natacao de Torres Novas",
+       "tempo": "52.18",
+       "nome": "Joao Antonio, PIRES"
+      },
+      {
+       "clube": "Clube Desportivo Sao Roque",
+       "tempo": "52.20",
+       "nome": "Joao Cruz, CASTRO"
+      },
+      {
+       "clube": "Assoc Desp Rec Cult Colegio Int Monte Maior",
+       "tempo": "52.20",
+       "nome": "Afonso Rodrigues, CALHELHA"
+      },
+      {
+       "clube": "Clube Desportivo de Estarreja",
+       "tempo": "52.32",
+       "nome": "Tiago Diniz, LIMA"
+      },
+      {
+       "clube": "Clube Natacao Olhao",
+       "tempo": "52.46",
+       "nome": "Hugo Miguel, VIEGAS"
+      },
+      {
+       "clube": "Leixoes Sport Clube",
+       "tempo": "52.69",
+       "nome": "Mario Felix, FILHO"
+      },
+      {
+       "clube": "Colegio Efanor",
+       "tempo": "52.95",
+       "nome": "Diogo Borges, PORTELA"
+      },
+      {
+       "clube": "Associacao Academica de Coimbra",
+       "tempo": "53.22",
+       "nome": "Joao Ferreira, MARQUES"
+      },
+      {
+       "clube": "Clube Naval Povoense",
+       "tempo": "53.63",
+       "nome": "Luis Filipe, CARVALHO"
+      },
+      {
+       "clube": "Clube de Instrucao e Recreio do Laranjeiro",
+       "tempo": "53.67",
+       "nome": "Xavier Rosa, MADEIRA"
+      },
+      {
+       "clube": "Portinado-Assoc Natacao de Portimao",
+       "tempo": "53.81",
+       "nome": "Joao Terceiro, LOPES"
+      },
+      {
+       "clube": "Condeixa Aqua Clube",
+       "tempo": "53.82",
+       "nome": "Tomas Rafael, PEREIRA"
+      },
+      {
+       "clube": "Clube Fluvial Portuense",
+       "tempo": "54.34",
+       "nome": "Erik Anthony, HOWLAND"
+      },
+      {
+       "clube": "Clube de Natacao de Valongo",
+       "tempo": "55.34",
+       "nome": "Diogo Severino, NUNES"
+      },
+      {
+       "clube": "Clube Desportivo Nacional",
+       "tempo": "55.55",
+       "nome": "Joao Bernardo, SILVA"
+      },
+      {
+       "clube": "Academico Viseu Futebol Clube",
+       "tempo": "56.02",
+       "nome": "Guilherme Martins, SILVA"
+      },
+      {
+       "clube": "Clube Aquatico Pacense",
+       "tempo": "56.14",
+       "nome": "Francisco Bentes, SANTOS"
+      }
+     ],
+     "200m Costas": [
+      {
+       "clube": "Clube Aquatico Pacense",
+       "tempo": "2:01.49",
+       "nome": "Ricardo Filipe, ROCHA"
+      },
+      {
+       "clube": "Clube Nacional de Natação",
+       "tempo": "2:01.93",
+       "nome": "Afonso Bjork, FREITAS"
+      },
+      {
+       "clube": "Portinado-Assoc Natacao de Portimao",
+       "tempo": "2:03.23",
+       "nome": "Marin, CEPELEAGA"
+      },
+      {
+       "clube": "Assoc Desp Rec Cult Colegio Int Monte Maior",
+       "tempo": "2:04.22",
+       "nome": "Martim Chambel, PINTO"
+      },
+      {
+       "clube": "Palmela Desporto, E.M.",
+       "tempo": "2:04.51",
+       "nome": "Lourenco Lopes, SILVA"
+      },
+      {
+       "clube": "Clube Desportivo Nacional",
+       "tempo": "2:05.03",
+       "nome": "B., MACHADO"
+      },
+      {
+       "clube": "Soc Instrucao e Recreio Os Pimpoes/Cimai",
+       "tempo": "2:05.22",
+       "nome": "Mikhael, ONUTSKYY"
+      },
+      {
+       "clube": "Leixoes Sport Clube",
+       "tempo": "2:07.40",
+       "nome": "Pedro Santos, PEREIRA"
+      },
+      {
+       "clube": "Clube Naval Povoense",
+       "tempo": "2:08.56",
+       "nome": "David Dourado, GOMES"
+      },
+      {
+       "clube": "Clube Natacao Olhao",
+       "tempo": "2:08.65",
+       "nome": "Ivan Vazquez, MACIAS"
+      },
+      {
+       "clube": "Clube Fluvial Portuense",
+       "tempo": "2:09.93",
+       "nome": "Jose Moutinho, VALENTE"
+      },
+      {
+       "clube": "Academico Viseu Futebol Clube",
+       "tempo": "2:10.12",
+       "nome": "Joao Miguel, VITORIA"
+      },
+      {
+       "clube": "Associacao Academica de Coimbra",
+       "tempo": "2:10.33",
+       "nome": "Francisco Fernandes, PEREIRA"
+      },
+      {
+       "clube": "Condeixa Aqua Clube",
+       "tempo": "2:10.54",
+       "nome": "Gustavo Pires, MARQUES"
+      },
+      {
+       "clube": "Colegio Efanor",
+       "tempo": "2:11.15",
+       "nome": "Antonio Pedro, MOREIRA"
+      },
+      {
+       "clube": "Clube Nautico de Leiria - VOID",
+       "tempo": "2:11.83",
+       "nome": "Francisco Marques, SIMOES"
+      },
+      {
+       "clube": "Clube de Natacao de Torres Novas",
+       "tempo": "2:13.26",
+       "nome": "Afonso Bernardo, EVARISTO"
+      },
+      {
+       "clube": "Clube Desportivo de Estarreja",
+       "tempo": "2:13.47",
+       "nome": "Paulo Jorge, OLIVEIRA"
+      },
+      {
+       "clube": "Clube Desportivo Sao Roque",
+       "tempo": "2:13.61",
+       "nome": "Rui Afonso, FERNANDES"
+      },
+      {
+       "clube": "Clube de Instrucao e Recreio do Laranjeiro",
+       "tempo": "2:14.37",
+       "nome": "Jose Tomas, SIMEAO"
+      },
+      {
+       "clube": "Desportivo Nautico da Marinha Grande",
+       "tempo": "2:15.28",
+       "nome": "Tomas Manuel, PALMEIRO"
+      },
+      {
+       "clube": "Gesloures - Gestão Equipamentos E.M.",
+       "tempo": "2:16.74",
+       "nome": "Afonso Mendonca, ORNELAS"
+      },
+      {
+       "clube": "Clube de Natacao de Valongo",
+       "tempo": "2:24.09",
+       "nome": "Bruno Miguel, CAVADAS"
+      }
+     ],
+     "50m Bruços": [
+      {
+       "clube": "Clube Nautico de Leiria - VOID",
+       "tempo": "28.68",
+       "nome": "Filipe Miguel, GOMES"
+      },
+      {
+       "clube": "Palmela Desporto, E.M.",
+       "tempo": "28.81",
+       "nome": "Diogo Garcez, MATEUS"
+      },
+      {
+       "clube": "Gesloures - Gestão Equipamentos E.M.",
+       "tempo": "28.93",
+       "nome": "Afonso Amaro, SANTOS"
+      },
+      {
+       "clube": "Clube Desportivo Sao Roque",
+       "tempo": "29.14",
+       "nome": "Miguel Freitas, MARQUES"
+      },
+      {
+       "clube": "Clube de Instrucao e Recreio do Laranjeiro",
+       "tempo": "29.19",
+       "nome": "Andre Filipe, MAGALHAES"
+      },
+      {
+       "clube": "Academico Viseu Futebol Clube",
+       "tempo": "29.22",
+       "nome": "Andre Magalhaes, MOURA"
+      },
+      {
+       "clube": "Clube de Natacao de Valongo",
+       "tempo": "29.26",
+       "nome": "F., LOURENCO"
+      },
+      {
+       "clube": "Associacao Academica de Coimbra",
+       "tempo": "29.42",
+       "nome": "Afonso Martim, GOUVEIA"
+      },
+      {
+       "clube": "Clube Desportivo Nacional",
+       "tempo": "29.42",
+       "nome": "Euan, WEIR"
+      },
+      {
+       "clube": "Clube Naval Povoense",
+       "tempo": "29.48",
+       "nome": "Alexandre Moreira, DOURADO"
+      },
+      {
+       "clube": "Clube Aquatico Pacense",
+       "tempo": "29.50",
+       "nome": "Vitor Samuel, ROCHA"
+      },
+      {
+       "clube": "Clube Natacao Olhao",
+       "tempo": "29.62",
+       "nome": "Vicente Henriques, VAZ"
+      },
+      {
+       "clube": "Colegio Efanor",
+       "tempo": "29.68",
+       "nome": "Joao Pedro, MOREIRA"
+      },
+      {
+       "clube": "Leixoes Sport Clube",
+       "tempo": "29.98",
+       "nome": "Rui Pedro, SILVA"
+      },
+      {
+       "clube": "Portinado-Assoc Natacao de Portimao",
+       "tempo": "30.24",
+       "nome": "Vasco Andre, BARROSAO"
+      },
+      {
+       "clube": "Clube Fluvial Portuense",
+       "tempo": "30.27",
+       "nome": "Rodrigo Gil, CANCELA"
+      },
+      {
+       "clube": "Clube Nacional de Natação",
+       "tempo": "30.47",
+       "nome": "Fernando Souza, SILVA"
+      },
+      {
+       "clube": "Desportivo Nautico da Marinha Grande",
+       "tempo": "30.65",
+       "nome": "Pedro Domingues, DUARTE"
+      },
+      {
+       "clube": "Clube de Natacao de Torres Novas",
+       "tempo": "31.01",
+       "nome": "Guilherme Antonio, REIS"
+      },
+      {
+       "clube": "Clube Desportivo de Estarreja",
+       "tempo": "31.06",
+       "nome": "Joao Miguel, SANTOS"
+      },
+      {
+       "clube": "Assoc Desp Rec Cult Colegio Int Monte Maior",
+       "tempo": "31.19",
+       "nome": "Pedro Miguel, SILVA"
+      },
+      {
+       "clube": "Condeixa Aqua Clube",
+       "tempo": "31.62",
+       "nome": "Ivan Manuel, RABECA"
+      },
+      {
+       "clube": "Soc Instrucao e Recreio Os Pimpoes/Cimai",
+       "tempo": "31.92",
+       "nome": "Hugo Miguel, SANTOS"
+      }
+     ],
+     "4x200m Livres": [
+      {
+       "clube": "Clube Nautico de Leiria - VOID",
+       "tempo": "7:36.15",
+       "nome": "CNLeiria - VOID 1"
+      },
+      {
+       "clube": "Gesloures - Gestão Equipamentos E.M.",
+       "tempo": "7:40.17",
+       "nome": "Gesloures 1"
+      },
+      {
+       "clube": "Condeixa Aqua Clube",
+       "tempo": "7:43.45",
+       "nome": "Condeixa Aqua Clube 1"
+      },
+      {
+       "clube": "Palmela Desporto, E.M.",
+       "tempo": "7:43.51",
+       "nome": "Palmela Desporto 1"
+      },
+      {
+       "clube": "Clube Nacional de Natação",
+       "tempo": "7:43.55",
+       "nome": "Nacional de Natação 1"
+      },
+      {
+       "clube": "Desportivo Nautico da Marinha Grande",
+       "tempo": "7:46.87",
+       "nome": "Nautico Marinha Grande 1"
+      },
+      {
+       "clube": "Assoc Desp Rec Cult Colegio Int Monte Maior",
+       "tempo": "7:48.22",
+       "nome": "Adrcimm 1"
+      },
+      {
+       "clube": "Associacao Academica de Coimbra",
+       "tempo": "7:49.17",
+       "nome": "Aac 3"
+      },
+      {
+       "clube": "Soc Instrucao e Recreio Os Pimpoes/Cimai",
+       "tempo": "7:50.14",
+       "nome": "Pimpoes/Cimai 1"
+      },
+      {
+       "clube": "Leixoes Sport Clube",
+       "tempo": "7:50.96",
+       "nome": "Leixoes Sport Clube 1"
+      },
+      {
+       "clube": "Colegio Efanor",
+       "tempo": "7:53.39",
+       "nome": "Colegio Efanor 1"
+      },
+      {
+       "clube": "Clube Desportivo Nacional",
+       "tempo": "7:54.48",
+       "nome": "Clube Desportivo Nacional 1"
+      },
+      {
+       "clube": "Portinado-Assoc Natacao de Portimao",
+       "tempo": "7:55.33",
+       "nome": "Portinado 1"
+      },
+      {
+       "clube": "Clube Fluvial Portuense",
+       "tempo": "7:55.94",
+       "nome": "Fluvial Portuense 1"
+      },
+      {
+       "clube": "Clube Aquatico Pacense",
+       "tempo": "7:56.85",
+       "nome": "Aquatico Pacense 1"
+      },
+      {
+       "clube": "Clube Naval Povoense",
+       "tempo": "7:57.76",
+       "nome": "Clube Naval Povoense 1"
+      },
+      {
+       "clube": "Clube Natacao Olhao",
+       "tempo": "8:00.73",
+       "nome": "Clube Nataco Olhao"
+      },
+      {
+       "clube": "Clube Desportivo de Estarreja",
+       "tempo": "8:03.93",
+       "nome": "Clube Desportivo de Estarreja 1"
+      },
+      {
+       "clube": "Academico Viseu Futebol Clube",
+       "tempo": "8:04.53",
+       "nome": "Academico Viseu Futebol Clube 1"
+      },
+      {
+       "clube": "Clube Desportivo Sao Roque",
+       "tempo": "8:08.59",
+       "nome": "Clube Desportivo Sao Roque 1"
+      },
+      {
+       "clube": "Clube de Instrucao e Recreio do Laranjeiro",
+       "tempo": "8:10.23",
+       "nome": "Laranjeiro 1"
+      },
+      {
+       "clube": "Clube de Natacao de Torres Novas",
+       "tempo": "8:15.25",
+       "nome": "Torres Novas 1"
+      },
+      {
+       "clube": "Clube de Natacao de Valongo",
+       "tempo": "8:21.51",
+       "nome": "Natacao de Valongo 1"
+      }
+     ]
+    },
+    "classificacao": [
+     {
+      "clube": "Clube Nautico de Leiria - VOID",
+      "sigla": "CNL",
+      "pts": 376.0
+     },
+     {
+      "clube": "Palmela Desporto, E.M.",
+      "sigla": "PDEM",
+      "pts": 366.0
+     },
+     {
+      "clube": "Gesloures - Gestão Equipamentos E.M.",
+      "sigla": "GESL",
+      "pts": 361.0
+     },
+     {
+      "clube": "Associacao Academica de Coimbra",
+      "sigla": "AAC",
+      "pts": 300.0
+     },
+     {
+      "clube": "Clube Nacional de Natação",
+      "sigla": "CNN",
+      "pts": 299.0
+     },
+     {
+      "clube": "Assoc Desp Rec Cult Colegio Int Monte Maior",
+      "sigla": "ADRCIMM",
+      "pts": 289.0
+     },
+     {
+      "clube": "FOCA - Clube de Natacao de Felgueiras",
+      "sigla": "FOCA",
+      "pts": 269.0
+     },
+     {
+      "clube": "Clube Naval Povoense",
+      "sigla": "CNPO",
+      "pts": 263.0
+     },
+     {
+      "clube": "Portinado-Assoc Natacao de Portimao",
+      "sigla": "PORTIN",
+      "pts": 262.0
+     },
+     {
+      "clube": "Desportivo Nautico da Marinha Grande",
+      "sigla": "DNMG",
+      "pts": 255.0
+     },
+     {
+      "clube": "Condeixa Aqua Clube",
+      "sigla": "CAQC",
+      "pts": 253.0
+     },
+     {
+      "clube": "Colegio Efanor",
+      "sigla": "CE",
+      "pts": 245.0
+     },
+     {
+      "clube": "Leixoes Sport Clube",
+      "sigla": "LSC",
+      "pts": 244.0
+     },
+     {
+      "clube": "Clube Desportivo Nacional",
+      "sigla": "CDN",
+      "pts": 234.0
+     },
+     {
+      "clube": "Soc Instrucao e Recreio Os Pimpoes/Cimai",
+      "sigla": "PIMP",
+      "pts": 233.0
+     },
+     {
+      "clube": "Clube Aquatico Pacense",
+      "sigla": "CAP",
+      "pts": 227.0
+     },
+     {
+      "clube": "Clube Natacao Olhao",
+      "sigla": "CNOL",
+      "pts": 189.0
+     },
+     {
+      "clube": "Clube Fluvial Portuense",
+      "sigla": "CFP",
+      "pts": 188.0
+     },
+     {
+      "clube": "Clube Desportivo Sao Roque",
+      "sigla": "CDSR",
+      "pts": 175.0
+     },
+     {
+      "clube": "Academico Viseu Futebol Clube",
+      "sigla": "AVFC",
+      "pts": 164.0
+     },
+     {
+      "clube": "Clube de Natacao de Torres Novas",
+      "sigla": "CNTN",
+      "pts": 149.0
+     },
+     {
+      "clube": "Clube Desportivo de Estarreja",
+      "sigla": "CDE",
+      "pts": 148.0
+     },
+     {
+      "clube": "Clube de Instrucao e Recreio do Laranjeiro",
+      "sigla": "CIRL",
+      "pts": 121.0
+     },
+     {
+      "clube": "Clube de Natacao de Valongo",
+      "sigla": "CNV",
+      "pts": 113.0
+     }
+    ],
+    "foca": {
+     "400m Livres": [
+      {
+       "lugar": 10,
+       "tempo": "4:10.94",
+       "pts": 15.0,
+       "nome": "Eduardo Miguel, LIMA"
+      }
+     ],
+     "50m Mariposa": [
+      {
+       "lugar": 1,
+       "tempo": "23.81",
+       "pts": 25.0,
+       "nome": "Glauber, SILVA"
+      }
+     ],
+     "100m Costas": [
+      {
+       "lugar": 12,
+       "tempo": "59.13",
+       "pts": 13.0,
+       "nome": "Filipe Assuncao, TEIXEIRA"
+      }
+     ],
+     "200m Estilos": [
+      {
+       "lugar": 14,
+       "tempo": "2:12.21",
+       "pts": 11.0,
+       "nome": "Guilherme Pereira, NOVAIS"
+      }
+     ],
+     "4x100m Livres": [
+      {
+       "lugar": 9,
+       "tempo": "3:31.94",
+       "pts": 16.0,
+       "nome": "FOCA Quinta Da Lixa - Cnf 1"
+      }
+     ],
+     "200m Mariposa": [
+      {
+       "lugar": 7,
+       "tempo": "2:08.24",
+       "pts": 18.0,
+       "nome": "Guilherme Pereira, NOVAIS"
+      }
+     ],
+     "100m Bruços": [
+      {
+       "lugar": 19,
+       "tempo": "1:08.48",
+       "pts": 6.0,
+       "nome": "Ruben Goncalo, ALONSO"
+      }
+     ],
+     "200m Livres": [
+      {
+       "lugar": 11,
+       "tempo": "1:55.84",
+       "pts": 14.0,
+       "nome": "Eduardo Miguel, LIMA"
+      }
+     ],
+     "4x100m Estilos": [
+      {
+       "lugar": 12,
+       "tempo": "3:54.64",
+       "pts": 13.0,
+       "nome": "FOCA Quinta Da Lixa - Cnf 1"
+      }
+     ],
+     "1500m Livres": [
+      {
+       "lugar": 7,
+       "tempo": "16:55.60",
+       "pts": 18.0,
+       "nome": "Afonso Martim, LEITE"
+      }
+     ],
+     "50m Livres": [
+      {
+       "lugar": 3,
+       "tempo": "22.99",
+       "pts": 22.0,
+       "nome": "Glauber, SILVA"
+      }
+     ],
+     "200m Bruços": [
+      {
+       "lugar": 16,
+       "tempo": "2:28.96",
+       "pts": 9.0,
+       "nome": "Ruben Goncalo, ALONSO"
+      }
+     ],
+     "50m Costas": [
+      {
+       "lugar": 4,
+       "tempo": "25.66",
+       "pts": 21.0,
+       "nome": "Glauber, SILVA"
+      }
+     ],
+     "100m Mariposa": [
+      {
+       "lugar": 19,
+       "tempo": "59.98",
+       "pts": 6.0,
+       "nome": "Leonardo Cunha, MOURA"
+      }
+     ],
+     "400m Estilos": [
+      {
+       "lugar": 10,
+       "tempo": "4:39.31",
+       "pts": 15.0,
+       "nome": "Guilherme Pereira, NOVAIS"
+      }
+     ],
+     "100m Livres": [
+      {
+       "lugar": 15,
+       "tempo": "53.45",
+       "pts": 10.0,
+       "nome": "Afonso Martim, LEITE"
+      }
+     ],
+     "200m Costas": [
+      {
+       "lugar": 9,
+       "tempo": "2:07.52",
+       "pts": 16.0,
+       "nome": "Filipe Assuncao, TEIXEIRA"
+      }
+     ],
+     "50m Bruços": [
+      {
+       "lugar": 22,
+       "tempo": "31.58",
+       "pts": 3.0,
+       "nome": "Ruben Goncalo, ALONSO"
+      }
+     ],
+     "4x200m Livres": [
+      {
+       "lugar": 7,
+       "tempo": "7:47.67",
+       "pts": 18.0,
+       "nome": "FOCA Quinta Da Lixa - Cnf 1"
+      }
+     ]
+    }
+   },
+   "entry": null
+  }
+ ]
+}
