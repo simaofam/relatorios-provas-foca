@@ -440,7 +440,6 @@ function vistaComp(id) {
   ${ESTADO.rec ? `<section class="sec"><h2>Recordes do clube</h2>${tabRecordesBatidos(ls)}</section>` : ''}
   ${ESTADO.tac ? `<section class="sec"><h2>TAC obtidos</h2>${tabTacObtidos(ls)}</section>` : ''}
   <section class="sec"><h2>Desclassificações</h2>${tabDesclass(ls)}</section>
-  <section class="sec"><h2>Pontos a confirmar</h2>${pontosConfirmar(ls)}</section>
   ${impRod(c.url)}`;
   const aplicar = () => {
     const q = document.getElementById('f-txt').value.trim().toLowerCase(), so = document.getElementById('f-rp').checked;
