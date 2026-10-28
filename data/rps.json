@@ -443,11 +443,17 @@
    "ano": 1998,
    "genero": "M",
    "rp": [
-    {"prova": "100m Costas", "pisc": 25, "tempo": "1:02.21"},
+    {"prova": "100m Livres", "pisc": 25, "tempo": "54.86"},
+    {"prova": "200m Livres", "pisc": 25, "tempo": "1:57.45"},
+    {"prova": "100m Costas", "pisc": 25, "tempo": "59.45"},
+    {"prova": "200m Costas", "pisc": 25, "tempo": "2:11.45"},
     {"prova": "100m Bruços", "pisc": 25, "tempo": "1:11.07"},
     {"prova": "50m Mariposa", "pisc": 25, "tempo": "27.03"},
-    {"prova": "100m Mariposa", "pisc": 25, "tempo": "1:00.24"}
-   ]
+    {"prova": "100m Mariposa", "pisc": 25, "tempo": "58.67"},
+    {"prova": "200m Mariposa", "pisc": 25, "tempo": "2:09.90"},
+    {"prova": "200m Estilos", "pisc": 25, "tempo": "2:09.45"}
+   ],
+   "obs": "RP de 200 Estilos, 200 Costas, 200 Mariposa, 200 Livres, 100 Livres, 100 Mariposa e 100 Costas indicados pelo Simão (28/10/2026), piscina curta."
   },
   {
    "nadador": "Laura Daniela Gomes",

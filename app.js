@@ -1108,7 +1108,7 @@ const PROPS = {
   A: { nome: 'Máxima pontuação', desc: 'A melhor distribuição possível dos nadadores pelas provas, com os resultados da edição anterior como referência.' },
   B: { nome: 'Alternativa', desc: 'Um plano diferente da proposta A com pontuação próxima: retira, uma de cada vez, cada uma das 3 escolhas individuais que mais pontos dão em A e fica com a melhor distribuição resultante.' },
   C: { nome: 'Prudente', desc: 'A melhor distribuição admitindo que os adversários nadam 1% mais rápido do que na edição anterior.' },
-  M: { nome: 'A minha versão', desc: 'Parte de uma proposta e aplica as tuas escolhas: nadadores fixados em provas e tempos previstos. O resto é recalculado para a melhor pontuação.' }
+  M: { nome: 'A minha versão', desc: 'Parte de uma proposta e aplica as tuas escolhas: nadadores fixados em provas e nas estafetas e tempos previstos (individuais e de estafeta). O resto é recalculado para a melhor pontuação.' }
 };
 const divAtual = () => (ESTADO.clubes?.divisoes || []).find(d => d.id === CN.div);
 const pernasEst = p => p === '4x100m Estilos' ? ['100m Costas', '100m Bruços', '100m Mariposa', '100m Livres'] : Array(4).fill(p.replace(/^4x/, ''));
@@ -1157,16 +1157,24 @@ function afetar(provas, nadadores, cap, valor) {
 }
 function melhorEstafeta(d, prova, plantel, ver, fator) {
   const pernas = pernasEst(prova), lap = ver?.lap ?? 0.4;
-  const cand = pernas.map(pr => plantel.map(n => ({ n, ...(tempoCN(d, n, pr, ver) || {}) })).filter(x => x.t != null).sort((a, b) => a.t - b.t).slice(0, 7));
+  const fx = ver?.estafetas?.[prova] || {};
+  const fixM = (fx.m || []).map(n => (n && plantel.includes(n) ? n : ''));
+  const usadosFix = new Set(fixM.filter(Boolean));
+  const cand = pernas.map((pr, i) => {
+    if (fixM[i]) { const tt = tempoCN(d, fixM[i], pr, ver); return [{ n: fixM[i], ...(tt || { t: null }), fixo: true }]; }
+    return plantel.filter(n => !usadosFix.has(n)).map(n => ({ n, ...(tempoCN(d, n, pr, ver) || {}) })).filter(x => x.t != null).sort((a, b) => a.t - b.t).slice(0, 7);
+  });
   let best = null;
-  const livres = new Set(pernas).size === 1;
-  if (livres) { const L = cand[0]; if (L.length >= 4) best = [L[1], L[2], L[3], L[0]]; }
-  else for (const a of cand[0]) for (const b of cand[1]) { if (b.n === a.n) continue; for (const c of cand[2]) { if (c.n === a.n || c.n === b.n) continue; for (const e of cand[3]) {
-    if (e.n === a.n || e.n === b.n || e.n === c.n) continue; const s = a.t + b.t + c.t + e.t; if (!best || s < best.s) best = Object.assign([a, b, c, e], { s }); } } }
+  const tv = x => (x.t == null ? 999 : x.t);
+  for (const a of cand[0]) for (const b of cand[1]) { if (b.n === a.n) continue; for (const c of cand[2]) { if (c.n === a.n || c.n === b.n) continue; for (const e of cand[3]) {
+    if (e.n === a.n || e.n === b.n || e.n === c.n) continue; const sm = tv(a) + tv(b) + tv(c) + tv(e); if (!best || sm < best.s) best = Object.assign([a, b, c, e], { s: sm }); } } }
   if (!best) return { prova, eq: null, pts: 0, lugar: null };
-  const soma = best.reduce((s, x) => s + x.t, 0), t = soma - 3 * lap;
+  const semT = best.some(x => x.t == null);
+  const soma = semT ? null : best.reduce((sm, x) => sm + x.t, 0);
+  const prev = fx.t && seg(fx.t) != null ? seg(fx.t) : null;
+  const t = prev != null ? prev : soma != null ? soma - 3 * lap : null;
   const L = lugarCN(d, prova, t, fator);
-  return { prova, eq: best.map((x, i) => ({ ...x, perna: pernas[i] })), soma, t, ...L };
+  return { prova, eq: best.map((x, i) => ({ ...x, perna: pernas[i] })), soma, t, previsto: prev != null, temFixo: fixM.some(Boolean), ...L };
 }
 function resolverPlano(d, plantel, opts) {
   const { fator = 1, fixos = {}, proib = new Set(), ver = null } = opts;
@@ -1192,7 +1200,7 @@ function resolverPlano(d, plantel, opts) {
 function otimizar(d, opts) {               // escolhe o plantel (≤ maxAtletas) que maximiza a pontuação
   const elig = ESTADO.nadadores.filter(n => generoDe(n) === d.genero && grupoNadador(n) === 'abs' && !(opts.fora || []).includes(n));
   let plantel = [...elig], sol = resolverPlano(d, plantel, opts);
-  const fixosN = new Set(Object.values(opts.fixos || {}));
+  const fixosN = new Set([...Object.values(opts.fixos || {}), ...Object.values(opts.ver?.estafetas || {}).flatMap(e => e.m || []).filter(Boolean)]);
   let guarda = 0;
   while (sol.usados.length > d.maxAtletas && guarda++ < 20) {
     let melhor = null;
@@ -1244,12 +1252,29 @@ function classificacaoPrevista(d, sol, fator) {
 }
 function cnGuardarRascunho() { try { localStorage.setItem('foca-cn-versao', JSON.stringify(CN.versao)); } catch (e) { /* sem armazenamento */ } }
 function cnVersao(d) {
-  if (!CN.versao[d.id]) CN.versao[d.id] = { base: CN.prop !== 'M' ? CN.prop : 'A', fixos: {}, tempos: {}, lap: 0.4 };
+  if (!CN.versao[d.id]) CN.versao[d.id] = { base: CN.prop !== 'M' ? CN.prop : 'A', fixos: {}, tempos: {}, estafetas: {}, lap: 0.4 };
   return CN.versao[d.id];
+}
+function cnCopiar(d, v) {
+  if (CN.prop === 'M') return;
+  v.base = CN.prop; const sol = proposta(d, CN.prop); v.fixos = {}; v.estafetas = v.estafetas || {};
+  sol.linhas.forEach(l => { if (!l.estafeta && l.n) v.fixos[l.prova] = l.n; });
+  CN.prop = 'M';
+}
+function cnEstafeta(prova, perna, nome) {
+  const d = divAtual(); const v = cnVersao(d); cnCopiar(d, v);
+  v.estafetas = v.estafetas || {}; const e = v.estafetas[prova] || { m: ['', '', '', ''], t: '' };
+  e.m = (e.m || ['', '', '', '']).map((x, i) => (i === perna ? nome : x === nome ? '' : x));
+  v.estafetas[prova] = e; cnGuardarRascunho(); vistaClubes();
+}
+function cnEstTempo(prova, valor) {
+  const d = divAtual(); const v = cnVersao(d); cnCopiar(d, v);
+  v.estafetas = v.estafetas || {}; const e = v.estafetas[prova] || { m: ['', '', '', ''], t: '' };
+  e.t = valor && seg(valor) != null ? fmt(seg(valor)) : ''; v.estafetas[prova] = e; cnGuardarRascunho(); vistaClubes();
 }
 function cnFixar(prova, nome) {
   const d = divAtual(); const v = cnVersao(d);
-  if (CN.prop !== 'M') { v.base = CN.prop; const sol = proposta(d, CN.prop); v.fixos = {}; sol.linhas.forEach(l => { if (!l.estafeta && l.n) v.fixos[l.prova] = l.n; }); CN.prop = 'M'; }
+  cnCopiar(d, v);
   if (nome) v.fixos[prova] = nome; else delete v.fixos[prova];
   cnGuardarRascunho(); vistaClubes();
 }
@@ -1293,8 +1318,15 @@ function vistaClubes() {
     if (l.estafeta) {
       const e = l.est;
       if (!e.eq) return `<tr class="est"><td class="n">${l.sessao}.ª</td><td><strong>${esc(l.prova)}</strong></td><td colspan="2" class="vazio">Sem nadadores suficientes</td><td class="n">—</td><td class="n">0</td><td></td></tr>`;
-      e.eq.forEach(x => { if (x.outra) alertas.push(`${x.n}: ${x.perna} (estafeta) com tempo de ${x.outra}m.`); });
-      return `<tr class="est"><td class="n">${l.sessao}.ª</td><td><strong>${esc(l.prova)}</strong></td><td>${e.eq.map(x => `${esc(x.n)} <span class="ref-lbl">${esc(x.perna.replace('100m ', '').replace('200m ', ''))} ${fmt(x.t)}${x.outra ? ' ⚠' + x.outra + 'm' : ''}</span>`).join('<br>')}</td><td class="t">${fmt(e.t)}<div class="ref-lbl">soma ${fmt(e.soma)} − LAP</div></td><td class="n">${e.lugar}.º</td><td class="n"><strong>${e.pts}</strong></td><td class="ref-lbl">${e.ganhar != null ? `−${e.ganhar.toFixed(2)} s para subir` : '1.º lugar'}${e.folga != null ? `<br>+${e.folga.toFixed(2)} s de folga` : ''}</td></tr>`;
+      const fx = ver?.estafetas?.[l.prova] || {};
+      e.eq.forEach(x => { if (x.outra) alertas.push(`${x.n}: ${x.perna} (estafeta) com tempo de ${x.outra}m.`); if (x.t == null && !e.previsto) alertas.push(`${x.n}: sem tempo de ${x.perna} — escreve um tempo previsto para a estafeta.`); });
+      const membros = e.eq.map((x, i) => {
+        const ops = elig.map(n => ({ n, tt: tempoCN(d, n, x.perna, ver) })).sort((a, b) => (a.tt?.t ?? 1e9) - (b.tt?.t ?? 1e9));
+        const sel = `<select class="nao-imp cn-sel cn-sel-est" onchange="cnEstafeta('${esc(l.prova)}', ${i}, this.value)"><option value="">automático</option>${ops.map(o => `<option value="${esc(o.n)}" ${o.n === x.n && (fx.m || [])[i] === x.n ? 'selected' : ''}>${esc(o.n)} · ${o.tt ? fmt(o.tt.t) + (o.tt.outra ? ' (' + o.tt.outra + 'm)' : '') : 'sem tempo'}</option>`).join('')}</select>`;
+        return `<div class="perna"><span class="ref-lbl">${i + 1}. ${esc(x.perna.replace(/^\d+m /, ''))}</span> <strong>${esc(x.n)}</strong> <span class="t ref-lbl">${x.t != null ? fmt(x.t) : 'sem tempo'}${x.outra ? ' ⚠' + x.outra + 'm' : ''}</span>${x.fixo ? ' <span class="chip rp nao-imp">fixado</span>' : ''}<br>${sel}</div>`;
+      }).join('');
+      const tempoEst = edit ? `<input class="cn-t nao-imp" value="${esc(fx.t || '')}" placeholder="${e.t != null ? fmt(e.t) : 'm:ss.cc'}" onchange="cnEstTempo('${esc(l.prova)}', this.value)"><span class="so-imp t">${e.t != null ? fmt(e.t) : '—'}</span>${e.previsto ? ' <span class="chip tac">previsto</span>' : ''}` : `<span class="t">${e.t != null ? fmt(e.t) : '—'}</span>`;
+      return `<tr class="est${e.temFixo || e.previsto ? ' fixo' : ''}"><td class="n">${l.sessao}.ª</td><td><strong>${esc(l.prova)}</strong></td><td>${membros}</td><td>${tempoEst}${e.soma != null ? `<div class="ref-lbl">soma ${fmt(e.soma)} − LAP</div>` : ''}</td><td class="n">${e.lugar}.º</td><td class="n"><strong>${e.pts}</strong></td><td class="ref-lbl">${e.ganhar != null ? `−${e.ganhar.toFixed(2)} s para subir` : '1.º lugar'}${e.folga != null ? `<br>+${e.folga.toFixed(2)} s de folga` : ''}</td></tr>`;
     }
     if (l.tt?.outra) alertas.push(`${l.n}: ${l.prova} com tempo de piscina ${l.tt.outra === 50 ? 'longa (50m)' : 'curta'} — sem marca em ${d.piscina}m.`);
     if (l.n && !l.tt) alertas.push(`${l.n}: sem tempo em ${l.prova} — contado como último lugar (1 ponto).`);
@@ -1346,7 +1378,7 @@ function cnProp(p) { CN.prop = p; if (p === 'M') cnVersao(divAtual()); vistaClub
 function cnGuardarIndisp() { try { localStorage.setItem('foca-cn-indisp', JSON.stringify(CN.indisp)); } catch (e) { /* sem armazenamento */ } }
 function cnFora(n, on) {
   const d = divAtual(); const l = (CN.indisp[d.id] || []).filter(x => x !== n);
-  if (!on) { l.push(n); const v = CN.versao[d.id]; if (v) for (const k of Object.keys(v.fixos || {})) if (v.fixos[k] === n) delete v.fixos[k]; cnGuardarRascunho(); }
+  if (!on) { l.push(n); const v = CN.versao[d.id]; if (v) { for (const k of Object.keys(v.fixos || {})) if (v.fixos[k] === n) delete v.fixos[k]; for (const e of Object.values(v.estafetas || {})) e.m = (e.m || []).map(x => (x === n ? '' : x)); } cnGuardarRascunho(); }
   CN.indisp[d.id] = l; cnGuardarIndisp(); vistaClubes();
 }
 function cnTodos(on) {
@@ -1356,7 +1388,7 @@ function cnTodos(on) {
 }
 function cnBase(b) { const v = cnVersao(divAtual()); v.base = b; cnGuardarRascunho(); vistaClubes(); }
 function cnLap(x) { const v = cnVersao(divAtual()); v.lap = Math.max(0, +x || 0); cnGuardarRascunho(); vistaClubes(); }
-function cnLimpar() { const d = divAtual(); const b = CN.versao[d.id]?.base || 'A'; CN.versao[d.id] = { base: b, fixos: {}, tempos: {}, lap: 0.4 }; cnGuardarRascunho(); vistaClubes(); }
+function cnLimpar() { const d = divAtual(); const b = CN.versao[d.id]?.base || 'A'; CN.versao[d.id] = { base: b, fixos: {}, tempos: {}, estafetas: {}, lap: 0.4 }; cnGuardarRascunho(); vistaClubes(); }
 async function excelClubes() {
   try {
     const X = await carregarExcel(), wb = new X.Workbook(), D = ESTADO.clubes;

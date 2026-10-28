@@ -107,6 +107,8 @@ td.n,th.n{text-align:right}
 .tab-cn tr.est td{background:#F3F7FC}
 .tab-cn tr.fixo td:first-child{box-shadow:inset 4px 0 0 var(--amarelo)}
 .cn-sel{max-width:290px;font-size:13px;padding:5px 6px}
+.perna{margin:0 0 6px}
+.cn-sel-est{max-width:250px;font-size:12px;padding:3px 4px;margin-top:2px}
 .cn-t{width:92px;font-family:var(--mono);font-size:13px;padding:5px 6px;border:1px solid var(--linha);border-radius:6px}
 tr.nosso td{background:#FFF6C7!important;font-weight:700}
 .desc-prop{margin:0 0 14px;font-size:14px}
