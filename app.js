@@ -53,21 +53,22 @@ async function carregar() {
   try { const k = await fetch('data/calendario.json', { cache: 'no-store' }); if (k.ok) cal = await k.json(); } catch (e) { cal = null; }
   ESTADO.calRaw = cal;
   ESTADO.calTodo = juntarCalendario(cal); ESTADO.calendario = ESTADO.calTodo;
-  try { const g = localStorage.getItem('foca-grupo'); if (g === 'inf' || g === 'abs') ESTADO.grupo = g; } catch (e) { /* sem armazenamento */ }
+  try { const g = localStorage.getItem('foca-grupo'); if (['abs', 'inf', 'cad'].includes(g)) ESTADO.grupo = g; } catch (e) { /* sem armazenamento */ }
   calcular();
 }
 
 /* ---------- Grupos: Equipa Absoluta e Infantis ---------- */
 const GRUPOS = [
   { id: 'abs', nome: 'Equipa Absoluta', sub: 'Juvenis · Juniores · Seniores', menu: ['epoca', 'comp', 'atleta', 'marcas', 'estafetas', 'tac', 'recordes'] },
-  { id: 'inf', nome: 'Infantis', sub: 'Infantis A · Infantis B', menu: ['epoca', 'comp', 'atleta', 'tac'] }
+  { id: 'inf', nome: 'Infantis', sub: 'Infantis A · Infantis B', menu: ['epoca', 'comp', 'atleta', 'tac'] },
+  { id: 'cad', nome: 'Cadetes', sub: 'Cadetes A · Cadetes B', menu: ['epoca', 'comp', 'atleta'] }
 ];
 const MENU_NOMES = { epoca: 'Época', comp: 'Competições', atleta: 'Atletas', marcas: 'Melhores marcas', estafetas: 'Estafetas', tac: 'TAC', recordes: 'Recordes' };
 const grupoAtual = () => GRUPOS.find(g => g.id === ESTADO.grupo) || GRUPOS[0];
 function grupoDe(ano, escalao) {                 // pelo ano de nascimento (categorias do tac.json); se faltar, pelo escalão
   const i = catDe(ano, escalao), c = catsTAC()[i];
   if (c) return c.grupo || 'abs';
-  return /infant/i.test(escalao || '') ? 'inf' : 'abs';
+  return /infant/i.test(escalao || '') ? 'inf' : /cadet/i.test(escalao || '') ? 'cad' : 'abs';
 }
 const grupoNadador = nome => { const l = ESTADO.linhasTodas.find(x => x.nadador === nome); return l ? l.grupo : grupoDe(ESTADO.rpBase[nome]?.ano, ''); };
 function aplicarGrupo() {
@@ -135,7 +136,7 @@ function calcular() {
       let ePR = false, prim = false, p = null, melh = null, nt = false;
       const grupo = grupoDe(r.ano, r.escalao);
       if (res != null) {
-        if (ref == null && grupo === 'inf') { nt = true; tipo = 'NT · sem RP (não contabilizado)'; }
+        if (ref == null && grupo !== 'abs') { nt = true; tipo = 'NT · sem RP (não contabilizado)'; }
         else if (ref == null) { ePR = true; prim = true; tipo = 'RP · 1.º tempo'; }
         else { p = res / ref * 100; ePR = res < ref; if (ePR) melh = 100 - p; }
         if (!ant || res < ant.t) melhor[k] = { t: res, local: c.local, data: c.inicio };
@@ -180,7 +181,7 @@ function catDe(ano, escalao) {          // índice da categoria de acesso (pelo 
 }
 function colunasCat(i) {                // próprias + das categorias seguintes (sup: true)
   const cs = catsTAC();
-  if (i < 0) return [];
+  if (i < 0 || cs[i].semTAC) return [];
   return cs.slice(i).flatMap((c, k) => c.colunas.map(id => ({ id, sup: k > 0, cat: c, col: colTAC(id) })));
 }
 const tacTabela = (pisc, gen, prova) => ESTADO.tac?.tempos?.[String(pisc)]?.[gen]?.[prova] || null;
@@ -249,7 +250,7 @@ function kpis(s) {
   return `<div class="kpis">
     <div class="kpi"><div class="v">${s.nad}</div><div class="l">Nadadores</div></div>
     <div class="kpi"><div class="v">${s.provas}</div><div class="l">Provas nadadas</div>${s.dsq || s.ausentes ? `<div class="d">${[s.dsq ? s.dsq + ' DSQ' : '', s.ausentes ? s.ausentes + ' DNS/WDR não contadas' : ''].filter(Boolean).join(' · ')}</div>` : ''}</div>
-    <div class="kpi"><div class="v">${s.rp}</div><div class="l">RP</div><div class="d">${s.melh} melhorias${ESTADO.grupo === 'inf' ? '' : ` + ${s.prim} 1.º tempo`}</div></div>
+    <div class="kpi"><div class="v">${s.rp}</div><div class="l">RP</div><div class="d">${s.melh} melhorias${ESTADO.grupo !== 'abs' ? '' : ` + ${s.prim} 1.º tempo`}</div></div>
     <div class="kpi"><div class="v">${pct0(s.taxa)}</div><div class="l">Provas com RP</div>${s.nt ? `<div class="d">${s.nt} prova${s.nt === 1 ? '' : 's'} com NT não contabilizada${s.nt === 1 ? '' : 's'}</div>` : ''}</div>
     <div class="kpi"><div class="v">${s.media == null ? '—' : s.media.toFixed(1).replace('.', ',') + '%'}</div><div class="l">Média face ao RP</div></div>
     <div class="kpi"><div class="v">${s.p1 + s.p2 + s.p3}</div><div class="l">Pódios</div><div class="d">${s.p1} × 1.º · ${s.p2} × 2.º · ${s.p3} × 3.º</div></div>
@@ -263,9 +264,9 @@ function tabRelacao(ls, chave, rot) {
     const s = resumo(g[k]);
     const nome = chave === 'nadador' ? `<a href="#atleta/${slug(k)}">${esc(k)}</a>` : esc(k);
     const extra = chave === 'nadador' ? `<td>${esc(g[k][g[k].length - 1].escalao)}${g[k][0].ano ? ` <span class="ref-lbl">${g[k][0].ano}</span>` : ''}</td>` : `<td class="n">${s.nad}</td>`;
-    return `<tr><td>${nome}</td>${extra}<td class="n">${s.provas}</td><td class="n">${s.rp}</td><td class="n">${s.melh}</td><td class="n">${ESTADO.grupo === 'inf' ? s.nt : s.prim}</td><td class="n">${pct0(s.taxa)}</td><td class="n">${s.p1 + s.p2 + s.p3}</td></tr>`;
+    return `<tr><td>${nome}</td>${extra}<td class="n">${s.provas}</td><td class="n">${s.rp}</td><td class="n">${s.melh}</td><td class="n">${ESTADO.grupo !== 'abs' ? s.nt : s.prim}</td><td class="n">${pct0(s.taxa)}</td><td class="n">${s.p1 + s.p2 + s.p3}</td></tr>`;
   }).join('');
-  return `<div class="tab-wrap"><table><thead><tr><th>${rot}</th>${chave === 'nadador' ? '<th>Escalão</th>' : '<th class="n">Nadadores</th>'}<th class="n">Provas</th><th class="n">RP</th><th class="n">Melhorias</th><th class="n">${ESTADO.grupo === 'inf' ? 'NT (não contab.)' : '1.º tempo'}</th><th class="n">Provas/RP</th><th class="n">Pódios</th></tr></thead><tbody>${linhas}</tbody></table></div>`;
+  return `<div class="tab-wrap"><table><thead><tr><th>${rot}</th>${chave === 'nadador' ? '<th>Escalão</th>' : '<th class="n">Nadadores</th>'}<th class="n">Provas</th><th class="n">RP</th><th class="n">Melhorias</th><th class="n">${ESTADO.grupo !== 'abs' ? 'NT (não contab.)' : '1.º tempo'}</th><th class="n">Provas/RP</th><th class="n">Pódios</th></tr></thead><tbody>${linhas}</tbody></table></div>`;
 }
 function celSituacao(l) {
   if (l.estado !== 'OK') return `<span class="chip est" title="${esc(l.motivo || '')}">${esc(l.estado)}</span>${l.motivo ? `<div class="ref-lbl">${esc(l.motivo)}</div>` : ''}`;
@@ -329,7 +330,7 @@ const TIPOS_INF = [
   { id: 'meeting', nome: 'Meetings' },
   { id: 'nacional', nome: 'Campeonatos Nacionais' }
 ];
-const tipos = () => ESTADO.grupo === 'inf' ? TIPOS_INF : TIPOS_ABS;
+const tipos = () => ESTADO.grupo !== 'abs' ? TIPOS_INF : TIPOS_ABS;
 const TIPOS = TIPOS_ABS;
 const nomeTipo = id => (tipos().find(t => t.id === id) || TIPOS_ABS.find(t => t.id === id) || {}).nome || 'Todas as competições';
 let filtroTipo = '';
@@ -372,7 +373,7 @@ function tabCalendario(t) {
     const dt = e.inicio === e.fim ? dataPT(e.inicio) : `${dataPT(e.inicio)} a ${dataPT(e.fim)}`;
     if (e.comp) {
       const x = resumo(ESTADO.linhas.filter(l => l.comp === e.comp.id));
-      return `<tr><td>${dt}</td><td><a href="#comp/${e.comp.id}">${esc(e.nome)}</a></td><td>${esc(e.local)}</td><td class="n">${e.piscina}m</td><td>${esc(nomeTipo(e.tipo))}</td><td class="n">${x.nad}</td><td class="n">${x.provas}</td><td class="n">${x.rp} <span class="ref-lbl">${ESTADO.grupo === 'inf' ? (x.nt ? `(${x.nt} NT)` : '') : `(${x.melh}+${x.prim})`}</span></td><td class="n">${pct0(x.taxa)}</td><td class="n">${x.p1 + x.p2 + x.p3}</td><td><span class="chip rp">Realizada</span></td></tr>`;
+      return `<tr><td>${dt}</td><td><a href="#comp/${e.comp.id}">${esc(e.nome)}</a></td><td>${esc(e.local)}</td><td class="n">${e.piscina}m</td><td>${esc(nomeTipo(e.tipo))}</td><td class="n">${x.nad}</td><td class="n">${x.provas}</td><td class="n">${x.rp} <span class="ref-lbl">${ESTADO.grupo !== 'abs' ? (x.nt ? `(${x.nt} NT)` : '') : `(${x.melh}+${x.prim})`}</span></td><td class="n">${pct0(x.taxa)}</td><td class="n">${x.p1 + x.p2 + x.p3}</td><td><span class="chip rp">Realizada</span></td></tr>`;
     }
     const est = e.fim < hojeISO ? '<span class="chip est">Falta carregar resultados</span>' : '<span class="chip tac">Por realizar</span>';
     return `<tr class="futura"><td>${dt}</td><td>${e.url ? `<a href="${esc(e.url)}" target="_blank" rel="noopener">${esc(e.nome)}</a>` : esc(e.nome)}${e.obs ? `<div class="ref-lbl">${esc(e.obs)}</div>` : ''}</td><td>${esc(e.local || '')}</td><td class="n">${e.piscina ? e.piscina + 'm' : '—'}</td><td>${esc(nomeTipo(e.tipo))}</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td>${est}</td></tr>`;
@@ -412,7 +413,7 @@ function relatorioConjunto(t, titulo, sub) {
 
 /* ---------- Vistas ---------- */
 function vistaEpoca() {
-  app.innerHTML = relatorioConjunto('', 'Época ' + ESTADO.epoca + (ESTADO.grupo === 'inf' ? ' · Infantis' : ''), `Relatório da época · ${grupoAtual().nome} · Direção · FOCA Quinta da Lixa - CNF`);
+  app.innerHTML = relatorioConjunto('', 'Época ' + ESTADO.epoca + (ESTADO.grupo !== 'abs' ? ' · ' + grupoAtual().nome : ''), `Relatório da época · ${grupoAtual().nome} · Direção · FOCA Quinta da Lixa - CNF`);
 }
 
 function vistaListaComps() {
@@ -734,7 +735,7 @@ function vistaGerir() {
   const opt = (v, t, sel) => `<option value="${esc(v)}" ${String(v) === String(sel ?? '') ? 'selected' : ''}>${esc(t)}</option>`;
   const linhas = raw.map(x => {
     const lg = ligada(x.id);
-    return `<tr><td>${dataPT(x.inicio)}${x.fim && x.fim !== x.inicio ? ' a ' + dataPT(x.fim) : ''}</td><td>${esc(x.nome)}${x.obs ? `<div class="ref-lbl">${esc(x.obs)}</div>` : ''}</td><td>${esc(x.local || '')}</td><td class="n">${x.piscina ? x.piscina + 'm' : '—'}</td><td>${esc(nomeTipo(x.tipo))}${x.grupo === 'inf' ? ' <span class="chip tac">Infantis</span>' : ''}</td>
+    return `<tr><td>${dataPT(x.inicio)}${x.fim && x.fim !== x.inicio ? ' a ' + dataPT(x.fim) : ''}</td><td>${esc(x.nome)}${x.obs ? `<div class="ref-lbl">${esc(x.obs)}</div>` : ''}</td><td>${esc(x.local || '')}</td><td class="n">${x.piscina ? x.piscina + 'm' : '—'}</td><td>${esc(nomeTipo(x.tipo))}${x.grupo && x.grupo !== 'abs' ? ` <span class="chip tac">${esc((GRUPOS.find(g => g.id === x.grupo) || {}).nome || '')}</span>` : ''}</td>
       <td>${lg ? '<span class="chip rp">Com resultados</span>' : '<span class="chip tac">Sem resultados</span>'}</td>
       <td class="n" style="white-space:nowrap"><button class="btn sec mini" onclick="gEdit='${esc(x.id)}';vistaGerir()">Editar</button> <button class="btn sec mini perigo" onclick="apagarComp('${esc(x.id)}')">Apagar</button></td></tr>`;
   }).join('');

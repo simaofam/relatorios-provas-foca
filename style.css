@@ -39,7 +39,7 @@ a{color:var(--azul)}
   .lateral{position:static;flex-direction:row;padding:12px 16px 0;gap:6px}
   .lat-t{display:none}
   .grp{flex:1;padding:8px 10px}
-  .grp .grp-n{font-size:16px}
+  .grp .grp-n{font-size:15px}
   .grp .grp-s{display:none}
 }
 .aviso{padding:20px;background:#fff;border:1px solid var(--linha);border-radius:8px}
