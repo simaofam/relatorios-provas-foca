@@ -50,8 +50,9 @@ async function carregar() {
   prepararRPs();
   try { const r2 = await fetch('data/recordes.json', { cache: 'no-store' }); if (r2.ok) ESTADO.rec = await r2.json(); } catch (e) { ESTADO.rec = null; }
   try { const c2 = await fetch('data/clubes.json', { cache: 'no-store' }); if (c2.ok) ESTADO.clubes = await c2.json(); } catch (e) { ESTADO.clubes = null; }
-  try { const c3 = await fetch('data/clubes-versao.json', { cache: 'no-store' }); if (c3.ok) CN.versao = (await c3.json()).versoes || {}; } catch (e) { /* sem versão gravada */ }
+  try { const c3 = await fetch('data/clubes-versao.json', { cache: 'no-store' }); if (c3.ok) { const j = await c3.json(); CN.versao = j.versoes || {}; CN.indisp = j.indisponiveis || {}; } } catch (e) { /* sem versão gravada */ }
   try { const r = localStorage.getItem('foca-cn-versao'); if (r) CN.versao = { ...CN.versao, ...JSON.parse(r) }; } catch (e) { /* sem armazenamento */ }
+  try { const r = localStorage.getItem('foca-cn-indisp'); if (r) CN.indisp = { ...CN.indisp, ...JSON.parse(r) }; } catch (e) { /* sem armazenamento */ }
   let cal = null;
   try { const k = await fetch('data/calendario.json', { cache: 'no-store' }); if (k.ok) cal = await k.json(); } catch (e) { cal = null; }
   ESTADO.calRaw = cal;
@@ -1101,13 +1102,13 @@ function vistaEstafetas() {
 }
 
 /* ---------- Campeonato Nacional de Clubes: previsão e otimização ---------- */
-const CN = { div: '1div', modo: 'base', prop: 'A', cache: {}, versao: {}, sha: null };
+const CN = { div: '1div', modo: 'base', prop: 'A', cache: {}, versao: {}, indisp: {}, sha: null };
 const NOME_FOCA = 'FOCA - Clube de Natacao de Felgueiras';
 const PROPS = {
   A: { nome: 'Máxima pontuação', desc: 'A melhor distribuição possível dos nadadores pelas provas, com os resultados da edição anterior como referência.' },
   B: { nome: 'Alternativa', desc: 'Um plano diferente da proposta A com pontuação próxima: retira, uma de cada vez, cada uma das 3 escolhas individuais que mais pontos dão em A e fica com a melhor distribuição resultante.' },
   C: { nome: 'Prudente', desc: 'A melhor distribuição admitindo que os adversários nadam 1% mais rápido do que na edição anterior.' },
-  M: { nome: 'A minha versão', desc: 'Parte de uma proposta e aplica as tuas escolhas: nadadores fixados em provas, tempos previstos e indisponíveis. O resto é recalculado para a melhor pontuação.' }
+  M: { nome: 'A minha versão', desc: 'Parte de uma proposta e aplica as tuas escolhas: nadadores fixados em provas e tempos previstos. O resto é recalculado para a melhor pontuação.' }
 };
 const divAtual = () => (ESTADO.clubes?.divisoes || []).find(d => d.id === CN.div);
 const pernasEst = p => p === '4x100m Estilos' ? ['100m Costas', '100m Bruços', '100m Mariposa', '100m Livres'] : Array(4).fill(p.replace(/^4x/, ''));
@@ -1208,20 +1209,22 @@ function otimizar(d, opts) {               // escolhe o plantel (≤ maxAtletas)
   return { ...sol, plantel: sol.usados, elegiveis: elig };
 }
 function proposta(d, p) {
-  const k = `${d.id}|${CN.modo}|${p}|${JSON.stringify(p === 'M' ? CN.versao[d.id] || {} : {})}|${p === 'M' ? (CN.versao[d.id]?.base || 'A') : ''}`;
+  const fora = CN.indisp[d.id] || [];
+  const k = `${d.id}|${CN.modo}|${p}|${fora.join(',')}|${JSON.stringify(p === 'M' ? CN.versao[d.id] || {} : {})}`;
   if (CN.cache[k]) return CN.cache[k];
   let r;
-  if (p === 'A') r = otimizar(d, { fator: 1 });
-  else if (p === 'C') r = otimizar(d, { fator: 0.99 });
+  if (p === 'A') r = otimizar(d, { fator: 1, fora });
+  else if (p === 'C') r = otimizar(d, { fator: 0.99, fora });
   else if (p === 'B') {
     const a = proposta(d, 'A');
     const top = a.linhas.filter(l => !l.estafeta && l.n).sort((x, y) => y.pts - x.pts).slice(0, 3).map(l => `${l.n}|${l.prova}`);
     r = null;
-    for (const t of top) { const s2 = otimizar(d, { fator: 1, proib: new Set([t]) }); if (!r || s2.total > r.total) { r = s2; r.proib = [t]; } }
+    for (const t of top) { const s2 = otimizar(d, { fator: 1, proib: new Set([t]), fora }); if (!r || s2.total > r.total) { r = s2; r.proib = [t]; } }
     if (!r) r = a;
   } else {
     const v = CN.versao[d.id] || {};
-    r = otimizar(d, { fator: v.base === 'C' ? 0.99 : 1, fixos: v.fixos || {}, ver: v, fora: v.fora || [] });
+    const fixos = Object.fromEntries(Object.entries(v.fixos || {}).filter(([, n]) => !fora.includes(n)));
+    r = otimizar(d, { fator: v.base === 'C' ? 0.99 : 1, fixos, ver: v, fora });
   }
   return (CN.cache[k] = r);
 }
@@ -1241,7 +1244,7 @@ function classificacaoPrevista(d, sol, fator) {
 }
 function cnGuardarRascunho() { try { localStorage.setItem('foca-cn-versao', JSON.stringify(CN.versao)); } catch (e) { /* sem armazenamento */ } }
 function cnVersao(d) {
-  if (!CN.versao[d.id]) CN.versao[d.id] = { base: CN.prop !== 'M' ? CN.prop : 'A', fixos: {}, tempos: {}, fora: [], lap: 0.4 };
+  if (!CN.versao[d.id]) CN.versao[d.id] = { base: CN.prop !== 'M' ? CN.prop : 'A', fixos: {}, tempos: {}, lap: 0.4 };
   return CN.versao[d.id];
 }
 function cnFixar(prova, nome) {
@@ -1262,7 +1265,7 @@ async function cnGravarGH() {
   try {
     let sha;
     try { const j = await ghPedido('GET', `contents/data/clubes-versao.json?ref=${GH.ramo}`); sha = j.sha; } catch (e) { sha = undefined; }
-    const dados = { atualizado: new Date().toISOString(), versoes: CN.versao };
+    const dados = { atualizado: new Date().toISOString(), indisponiveis: CN.indisp, versoes: CN.versao };
     await ghPedido('PUT', 'contents/data/clubes-versao.json', { message: 'Nacional de Clubes: guardar a minha versão', content: b64(JSON.stringify(dados, null, 1) + '\n'), sha, branch: GH.ramo });
     set('Gravado no site. Fica disponível em qualquer equipamento dentro de 1 a 2 minutos.');
   } catch (e) { set(e.message + (chaveGH.ler() ? '' : ' Guarda a chave em Competições → Gerir calendário.'), true); }
@@ -1304,9 +1307,15 @@ function vistaClubes() {
   const ant = d.base.classificacao.findIndex(c => /FOCA/.test(c.clube)) + 1;
   const clH = cl.map((c, i) => `<tr class="${c.clube === NOME_FOCA ? 'nosso' : ''}"><td class="n">${i + 1}.º</td><td>${esc(c.clube)}</td><td class="n">${c.pts}</td></tr>`).join('');
   const carga = sol.plantel.map(n => { const ind = sol.linhas.filter(l => l.n === n).map(l => l.prova); const est = sol.linhas.filter(l => l.est?.eq?.some(x => x.n === n)).map(l => l.prova); return `<tr><td>${esc(n)}</td><td class="n">${ind.length}</td><td>${ind.map(esc).join(', ') || '—'}</td><td>${est.map(esc).join(', ') || '—'}</td></tr>`; }).join('');
-  const fora = edit ? `<section class="sec nao-imp"><h2>Disponíveis <span class="ref-lbl">(desmarca quem não pode ir)</span></h2><div class="lista-disp">${ESTADO.nadadores.filter(n => generoDe(n) === d.genero && grupoNadador(n) === 'abs').map(n => { const on = !(v?.fora || []).includes(n); return `<label class="disp ${on ? '' : 'off'}"><input type="checkbox" ${on ? 'checked' : ''} onchange="cnFora('${esc(n)}', this.checked)"> ${esc(n)}</label>`; }).join('')}</div>
-    <div class="filtros" style="margin-top:12px"><label>Proposta de partida <select onchange="cnBase(this.value)">${['A', 'B', 'C'].map(x => opt(x, `${x} · ${PROPS[x].nome}`, v?.base || 'A')).join('')}</select></label><label>LAP estafetas (s) <input type="number" step="0.05" min="0" max="2" value="${v?.lap ?? 0.4}" style="width:80px" onchange="cnLap(this.value)"></label>
-    <button class="btn sec mini" onclick="cnLimpar()">Recomeçar a partir da proposta</button><button class="btn mini" onclick="cnGravarGH()">Gravar no site</button></div><div id="cn-msg" class="ref-lbl"></div></section>` : '';
+  const todosG = ESTADO.nadadores.filter(n => generoDe(n) === d.genero && grupoNadador(n) === 'abs');
+  const indisp = CN.indisp[d.id] || [];
+  const dispH = `<section class="sec nao-imp"><h2>Atletas disponíveis para a competição <span class="ref-lbl">(${todosG.length - indisp.length} de ${todosG.length})</span></h2>
+    <p class="ref-lbl" style="margin-top:-6px">Desmarca quem não vai ao campeonato: as propostas A, B, C e a tua versão são todas recalculadas. <button class="btn sec mini" onclick="cnTodos(true)">Marcar todos</button> <button class="btn sec mini" onclick="cnTodos(false)">Desmarcar todos</button></p>
+    <div class="lista-disp">${todosG.map(n => { const on = !indisp.includes(n); const usado = sol.plantel.includes(n); return `<label class="disp ${on ? '' : 'off'}"><input type="checkbox" ${on ? 'checked' : ''} onchange="cnFora('${esc(n)}', this.checked)"> ${esc(n)} <span class="ref-lbl">${anoDe(n) || ''}${on && usado ? ' · no plano' : ''}</span></label>`; }).join('')}</div>
+    <div class="filtros" style="margin-top:10px"><button class="btn mini" onclick="cnGravarGH()">Gravar no site</button><span class="ref-lbl">Guarda os disponíveis${CN.versao[d.id] ? ' e a tua versão' : ''} para veres o mesmo em qualquer equipamento.</span></div><div id="cn-msg" class="ref-lbl"></div></section>`;
+  const fora = edit ? `<section class="sec nao-imp"><h2>A minha versão · opções</h2>
+    <div class="filtros"><label>Proposta de partida <select onchange="cnBase(this.value)">${['A', 'B', 'C'].map(x => opt(x, `${x} · ${PROPS[x].nome}`, v?.base || 'A')).join('')}</select></label><label>LAP estafetas (s) <input type="number" step="0.05" min="0" max="2" value="${v?.lap ?? 0.4}" style="width:80px" onchange="cnLap(this.value)"></label>
+    <button class="btn sec mini" onclick="cnLimpar()">Recomeçar a partir da proposta</button></div></section>` : '';
   app.innerHTML = cab + `
   ${impCab(`Nacional de Clubes · ${d.nome} · Proposta ${CN.prop === 'M' ? '(versão do treinador)' : CN.prop}`, `${d.genero === 'F' ? 'Femininos' : 'Masculinos'} · ${d.local} · ${d.datas} · Referência: ${CN.modo === 'entry' ? 'Entry List' : d.base.fonte}`)}
   <div class="cab"><div><h1>Nacional de Clubes · ${esc(d.nome)}</h1><div class="meta">${d.genero === 'F' ? 'Femininos' : 'Masculinos'} · ${esc(d.local)} · ${esc(d.datas)} · ${d.clubes} clubes · referência: ${esc(CN.modo === 'entry' ? 'Entry List' : d.base.fonte)}</div></div>
@@ -1319,6 +1328,7 @@ function vistaClubes() {
     <div class="kpi"><div class="v">${sol.plantel.length}</div><div class="l">Nadadores usados</div><div class="d">máximo ${d.maxAtletas}</div></div>
     <div class="kpi"><div class="v">${sol.linhas.filter(l => !l.estafeta && l.lugar <= 3).length + sol.linhas.filter(l => l.estafeta && l.est.lugar && l.est.lugar <= 3).length}</div><div class="l">Pódios previstos</div></div>
   </div>
+  ${dispH}
   ${alertas.length ? `<div class="aviso alerta"><strong>⚠ Atenção:</strong><ul>${[...new Set(alertas)].map(a => `<li>${esc(a)}</li>`).join('')}</ul></div>` : ''}
   ${!sol.completo ? '<p class="aviso erro">Não há nadadores suficientes para preencher todas as provas individuais com o limite de 3 provas por nadador.</p>' : ''}
   <section class="sec"><h2>Provas</h2><div class="tab-wrap"><table class="tab-cn"><thead><tr><th class="n">Sessão</th><th>Prova</th><th>Nadador(es)</th><th>Tempo</th><th class="n">Lugar</th><th class="n">Pontos</th><th>Margem</th></tr></thead><tbody>${linhas}</tbody></table></div>
@@ -1333,10 +1343,20 @@ function vistaClubes() {
 function cnDiv(id) { CN.div = id; vistaClubes(); }
 function cnModo(m) { CN.modo = m; vistaClubes(); }
 function cnProp(p) { CN.prop = p; if (p === 'M') cnVersao(divAtual()); vistaClubes(); }
-function cnFora(n, on) { const v = cnVersao(divAtual()); v.fora = (v.fora || []).filter(x => x !== n); if (!on) { v.fora.push(n); for (const k of Object.keys(v.fixos || {})) if (v.fixos[k] === n) delete v.fixos[k]; } CN.prop = 'M'; cnGuardarRascunho(); vistaClubes(); }
+function cnGuardarIndisp() { try { localStorage.setItem('foca-cn-indisp', JSON.stringify(CN.indisp)); } catch (e) { /* sem armazenamento */ } }
+function cnFora(n, on) {
+  const d = divAtual(); const l = (CN.indisp[d.id] || []).filter(x => x !== n);
+  if (!on) { l.push(n); const v = CN.versao[d.id]; if (v) for (const k of Object.keys(v.fixos || {})) if (v.fixos[k] === n) delete v.fixos[k]; cnGuardarRascunho(); }
+  CN.indisp[d.id] = l; cnGuardarIndisp(); vistaClubes();
+}
+function cnTodos(on) {
+  const d = divAtual();
+  CN.indisp[d.id] = on ? [] : ESTADO.nadadores.filter(n => generoDe(n) === d.genero && grupoNadador(n) === 'abs');
+  cnGuardarIndisp(); vistaClubes();
+}
 function cnBase(b) { const v = cnVersao(divAtual()); v.base = b; cnGuardarRascunho(); vistaClubes(); }
 function cnLap(x) { const v = cnVersao(divAtual()); v.lap = Math.max(0, +x || 0); cnGuardarRascunho(); vistaClubes(); }
-function cnLimpar() { const d = divAtual(); const b = CN.versao[d.id]?.base || 'A'; CN.versao[d.id] = { base: b, fixos: {}, tempos: {}, fora: [], lap: 0.4 }; cnGuardarRascunho(); vistaClubes(); }
+function cnLimpar() { const d = divAtual(); const b = CN.versao[d.id]?.base || 'A'; CN.versao[d.id] = { base: b, fixos: {}, tempos: {}, lap: 0.4 }; cnGuardarRascunho(); vistaClubes(); }
 async function excelClubes() {
   try {
     const X = await carregarExcel(), wb = new X.Workbook(), D = ESTADO.clubes;
