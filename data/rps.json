@@ -488,11 +488,14 @@
    "ano": 2007,
    "genero": "M",
    "rp": [
-    {"prova": "50m Livres", "pisc": 25, "tempo": "25.33"},
+    {"prova": "50m Livres", "pisc": 25, "tempo": "24.45"},
+    {"prova": "100m Livres", "pisc": 25, "tempo": "54.95"},
+    {"prova": "200m Livres", "pisc": 25, "tempo": "2:06.75"},
     {"prova": "50m Costas", "pisc": 25, "tempo": "29.15"},
     {"prova": "50m Mariposa", "pisc": 25, "tempo": "26.08"},
-    {"prova": "100m Mariposa", "pisc": 25, "tempo": "59.98"}
-   ]
+    {"prova": "100m Mariposa", "pisc": 25, "tempo": "59.65"}
+   ],
+   "obs": "RP de piscina curta indicados pelo Simão (28/10/2026): 50 Livres, 100 Livres, 200 Livres, 100 Mariposa (os de 50 Mariposa e 50 Costas indicados eram mais lentos do que os da tabela e não substituíram)."
   },
   {
    "nadador": "Maria João Ferreira",
