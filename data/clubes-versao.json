@@ -1,0 +1,66 @@
+{
+ "atualizado": "2026-10-29T14:11:01.265Z",
+ "indisponiveis": {
+  "1div": [
+   "Alice Miranda Cunha",
+   "Clarisse Pereira Sampaio",
+   "Mariana Pinto Ferreira",
+   "Ana Francisca Teixeira",
+   "Ana Rita Martins",
+   "Inês Teixeira Sousa"
+  ]
+ },
+ "versoes": {
+  "1div": {
+   "base": "A",
+   "fixos": {
+    "200m Mariposa": "Francisca Soares Martins",
+    "100m Bruços": "Teresa Isabel Rodrigues",
+    "200m Livres": "Ana Beatriz Vieira",
+    "50m Livres": "Ana Beatriz Vieira",
+    "200m Bruços": "Teresa Isabel Rodrigues",
+    "100m Mariposa": "Isilda Raquel Gomes",
+    "50m Bruços": "Isilda Raquel Gomes"
+   },
+   "tempos": {
+    "Isilda Raquel Gomes|50m Mariposa": "29.45",
+    "Teresa Isabel Rodrigues|100m Bruços": "1:21.30",
+    "Ana Beatriz Vieira|200m Livres": "2:05.50",
+    "Ana Beatriz Vieira|50m Livres": "27.21",
+    "Teresa Isabel Rodrigues|200m Bruços": "2:55.65",
+    "Isilda Raquel Gomes|100m Mariposa": "1:06.75",
+    "Isilda Raquel Gomes|50m Bruços": "36.95"
+   },
+   "estafetas": {
+    "4x100m Livres": {
+     "m": [
+      "Ana Beatriz Vieira",
+      "Isilda Raquel Gomes",
+      "Mariana Fernandes Cunha",
+      ""
+     ],
+     "t": "3:53.56"
+    },
+    "4x100m Estilos": {
+     "m": [
+      "",
+      "Isilda Raquel Gomes",
+      "",
+      ""
+     ],
+     "t": "4:24.76"
+    },
+    "4x200m Livres": {
+     "m": [
+      "",
+      "",
+      "",
+      ""
+     ],
+     "t": "8:19.15"
+    }
+   },
+   "lap": 0.4
+  }
+ }
+}
