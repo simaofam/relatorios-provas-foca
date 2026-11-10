@@ -1,5 +1,5 @@
 {
- "atualizado": "2026-10-29T14:11:01.265Z",
+ "atualizado": "2026-11-10T14:40:07.406Z",
  "indisponiveis": {
   "1div": [
    "Alice Miranda Cunha",
@@ -7,7 +7,14 @@
    "Mariana Pinto Ferreira",
    "Ana Francisca Teixeira",
    "Ana Rita Martins",
-   "Inês Teixeira Sousa"
+   "Inês Teixeira Sousa",
+   "Francisca Teixeira Costa"
+  ],
+  "2div": [
+   "Diogo Teixeira Peixoto",
+   "Glauber Silva",
+   "Francisco Teixeira Pinto",
+   "Renato Gouveia Teixeira"
   ]
  },
  "versoes": {
@@ -60,6 +67,33 @@
      "t": "8:19.15"
     }
    },
+   "lap": 0.4
+  },
+  "2div": {
+   "base": "A",
+   "fixos": {
+    "400m Livres": "Eduardo Miguel Lima",
+    "50m Mariposa": "Leonardo Cunha Moura",
+    "100m Costas": "Filipe Assunção Teixeira",
+    "200m Estilos": "José Pedro Sampaio",
+    "200m Mariposa": "Guilherme Pereira Novais",
+    "100m Bruços": "Rúben Gonçalo Alonso",
+    "200m Livres": "Eduardo Miguel Lima",
+    "1500m Livres": "Rodrigo Teixeira Pinto",
+    "50m Livres": "Leonardo Cunha Moura",
+    "200m Bruços": "Rúben Gonçalo Alonso",
+    "50m Costas": "Filipe Assunção Teixeira",
+    "100m Mariposa": "José Pedro Sampaio",
+    "400m Estilos": "Guilherme Pereira Novais",
+    "100m Livres": "Eduardo Miguel Lima",
+    "200m Costas": "Filipe Assunção Teixeira",
+    "50m Bruços": "Rúben Gonçalo Alonso"
+   },
+   "tempos": {
+    "Rodrigo Teixeira Pinto|1500m Livres": "17:00.10",
+    "Eduardo Miguel Lima|100m Livres": "53.42"
+   },
+   "estafetas": {},
    "lap": 0.4
   }
  }
