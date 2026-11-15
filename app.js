@@ -3,7 +3,7 @@
    Regras de RP: ver CONTEXTO_RELATORIOS.md, secção 2. */
 'use strict';
 
-const ESTADO = { epoca: '', comps: [], linhas: [], nadadores: [], tac: null, calendario: [], calRaw: null, rec: null, recAtual: {}, rps: null, rpBase: {}, clubes: null, grupo: 'abs', compsTodas: [], linhasTodas: [], nadadoresTodos: [], calTodo: [] };
+const ESTADO = { epoca: '', comps: [], linhas: [], nadadores: [], tac: null, calendario: [], calRaw: null, rec: null, recAtual: {}, rps: null, rpBase: {}, clubes: null, est: [], estTodas: [], grupo: 'abs', compsTodas: [], linhasTodas: [], nadadoresTodos: [], calTodo: [] };
 const app = document.getElementById('app');
 
 /* ---------- Utilitários ---------- */
@@ -78,6 +78,7 @@ const grupoNadador = nome => { const l = ESTADO.linhasTodas.find(x => x.nadador 
 function aplicarGrupo() {
   const g = ESTADO.grupo;
   ESTADO.linhas = ESTADO.linhasTodas.filter(l => l.grupo === g);
+  ESTADO.est = ESTADO.estTodas.filter(e => e.grupo === g);
   const ids = new Set(ESTADO.linhas.map(l => l.comp));
   ESTADO.comps = ESTADO.compsTodas.filter(c => ids.has(c.id));
   ESTADO.nadadores = ESTADO.nadadoresTodos.filter(n => grupoNadador(n) === g);
@@ -151,6 +152,7 @@ function calcular() {
     }
   }
   ESTADO.linhas = linhas; ESTADO.linhasTodas = linhas;
+  ESTADO.estTodas = ESTADO.compsTodas.flatMap(c => (c.estafetas || []).map(e => ({ ...e, comp: c.id, c, grupo: /infant/i.test(e.categoria) ? 'inf' : /cadet/i.test(e.categoria) ? 'cad' : 'abs' })));
   ESTADO.nadadoresTodos = [...new Set([...linhas.map(l => l.nadador), ...Object.keys(ESTADO.rpBase)])].sort((a, b) => a.localeCompare(b, 'pt'));
   ESTADO.nadadores = ESTADO.nadadoresTodos;
   calcularRecordes();
@@ -250,14 +252,17 @@ function agrupar(ls, chave) {
 }
 
 /* ---------- Blocos de HTML ---------- */
-function kpis(s) {
+const medEst = es => ({ e1: es.filter(e => e.lugar === 1).length, e2: es.filter(e => e.lugar === 2).length, e3: es.filter(e => e.lugar === 3).length });
+const estDe = (comps, cat) => ESTADO.est.filter(e => comps.has(e.comp) && (!cat || e.categoria === cat));
+function kpis(s, es = []) {
+  const m = medEst(es), o = s.p1 + m.e1, pr = s.p2 + m.e2, br = s.p3 + m.e3, ne = m.e1 + m.e2 + m.e3;
   return `<div class="kpis">
     <div class="kpi"><div class="v">${s.nad}</div><div class="l">Nadadores</div></div>
     <div class="kpi"><div class="v">${s.provas}</div><div class="l">Provas nadadas</div>${s.dsq || s.ausentes ? `<div class="d">${[s.dsq ? s.dsq + ' DSQ' : '', s.ausentes ? s.ausentes + ' DNS/WDR não contadas' : ''].filter(Boolean).join(' · ')}</div>` : ''}</div>
     <div class="kpi"><div class="v">${s.rp}</div><div class="l">RP</div><div class="d">${s.melh} melhorias${ESTADO.grupo !== 'abs' ? '' : ` + ${s.prim} 1.º tempo`}</div></div>
     <div class="kpi"><div class="v">${pct0(s.taxa)}</div><div class="l">Provas com RP</div>${s.nt ? `<div class="d">${s.nt} prova${s.nt === 1 ? '' : 's'} com NT não contabilizada${s.nt === 1 ? '' : 's'}</div>` : ''}</div>
     <div class="kpi"><div class="v">${s.media == null ? '—' : s.media.toFixed(1).replace('.', ',') + '%'}</div><div class="l">Média face ao RP</div></div>
-    <div class="kpi"><div class="v">${s.p1 + s.p2 + s.p3}</div><div class="l">Pódios</div><div class="d">${s.p1} × 1.º · ${s.p2} × 2.º · ${s.p3} × 3.º</div></div>
+    <div class="kpi"><div class="v">${o + pr + br}</div><div class="l">Medalhas</div><div class="d">${o} ouro · ${pr} prata · ${br} bronze${ne ? `<br>${s.p1 + s.p2 + s.p3} individuais + ${ne} estafetas` : ''}</div></div>
     ${ESTADO.rec ? `<div class="kpi"><div class="v">${s.rec}</div><div class="l">Recordes do clube</div><div class="d">${s.recProvas} prova${s.recProvas === 1 ? '' : 's'}</div></div>` : ''}
   </div>`;
 }
@@ -292,14 +297,17 @@ function tabDetalhe(ls, comComp) {
     <td>${chipsTac(l)}</td></tr>`).join('');
   return `<div class="tab-wrap"><table><thead><tr>${comComp ? '<th>Competição</th>' : '<th>Nadador</th><th>Escalão</th>'}<th>Prova</th><th>Inscrição</th><th>Referência</th><th>Resultado</th><th class="n">% do RP</th><th>Situação</th><th class="n">Lugar</th><th>TAC</th></tr></thead><tbody>${linhas || '<tr><td colspan="10" class="vazio">Sem provas.</td></tr>'}</tbody></table></div>`;
 }
-function classificacoes(c, ls) {
+function classificacoes(c, ls, es = []) {
   const est = c.estrutura && c.estrutura.length ? c.estrutura : [{ grupo: 'Geral', categorias: [...new Set(ls.map(l => l.categoria))].sort(porEscalao) }];
   return est.map(g => `<h3>${esc(g.grupo)}</h3><div class="grelha2">${g.categorias.map(cat => {
     const xs = ls.filter(l => l.categoria === cat).sort((a, b) => (a.lugar ?? 999) - (b.lugar ?? 999) || porProva(a.prova, b.prova));
     const s = resumo(xs);
+    const ee = es.filter(e => e.categoria === cat).sort((a, b) => (a.lugar ?? 999) - (b.lugar ?? 999) || a.nprova - b.nprova), m = medEst(ee);
     const corpo = xs.map(l => `<tr><td class="n">${chipLugar(l.lugar)}</td><td>${esc(l.nadador)}</td><td>${esc(l.prova)}</td><td class="t">${l.res != null ? fmt(l.res) : esc(l.estado)}</td></tr>`).join('');
-    return `<div><div class="ref-lbl" style="margin-bottom:4px"><strong>${esc(cat)}</strong> · ${xs.length} provas · pódios: ${s.p1} × 1.º, ${s.p2} × 2.º, ${s.p3} × 3.º</div>
-      <div class="tab-wrap"><table><thead><tr><th class="n">Lugar</th><th>Nadador</th><th>Prova</th><th>Tempo</th></tr></thead><tbody>${corpo || '<tr><td colspan="4" class="vazio">Sem nadadores do clube.</td></tr>'}</tbody></table></div></div>`;
+    const corpoE = ee.map(e => `<tr><td class="n">${chipLugar(e.lugar)}</td><td>${esc(e.prova)} <span class="ref-lbl">${e.genero === 'X' ? 'Mista' : e.genero === 'F' ? 'Fem.' : 'Masc.'} · ${esc(e.equipa)}</span><div class="ref-lbl">${esc((e.nadadores || []).join(', '))}</div></td><td class="t">${e.tempo ? esc(e.tempo) : esc(e.estado)}</td></tr>`).join('');
+    return `<div><div class="ref-lbl" style="margin-bottom:4px"><strong>${esc(cat)}</strong> · ${xs.length} provas · medalhas: ${s.p1 + m.e1} ouro, ${s.p2 + m.e2} prata, ${s.p3 + m.e3} bronze${ee.length ? ` (inclui ${m.e1 + m.e2 + m.e3} de estafetas)` : ''}</div>
+      <div class="tab-wrap"><table><thead><tr><th class="n">Lugar</th><th>Nadador</th><th>Prova</th><th>Tempo</th></tr></thead><tbody>${corpo || '<tr><td colspan="4" class="vazio">Sem nadadores do clube.</td></tr>'}</tbody></table></div>
+      ${ee.length ? `<div class="tab-wrap" style="margin-top:8px"><table><thead><tr><th class="n">Lugar</th><th>Estafeta</th><th>Tempo</th></tr></thead><tbody>${corpoE}</tbody></table></div>` : ''}</div>`;
   }).join('')}</div>`).join('');
 }
 function tabDesclass(ls) {
@@ -395,20 +403,22 @@ function relatorioConjunto(t, titulo, sub) {
   const top = ls.filter(l => l.melh != null).sort((a, b) => b.melh - a.melh).slice(0, 10);
   const topH = top.map((l, i) => `<tr><td class="n">${i + 1}</td><td><a href="#atleta/${slug(l.nadador)}">${esc(l.nadador)}</a></td><td>${esc(l.escalao)}</td><td>${esc(l.prova)} <span class="ref-lbl">${l.piscina}m</span></td><td class="t">${fmt(l.refS)}</td><td class="t rp">${fmt(l.res)}</td><td class="n t">−${pct(l.melh)}</td><td>${esc(l.c.local)}</td></tr>`).join('');
   const cats = agrupar(ls, 'categoria');
-  const podH = Object.keys(cats).sort(porEscalao).map(k => { const x = resumo(cats[k]); return `<tr><td>${esc(k)}</td><td class="n">${x.p1}</td><td class="n">${x.p2}</td><td class="n">${x.p3}</td><td class="n"><strong>${x.p1 + x.p2 + x.p3}</strong></td></tr>`; }).join('');
+  const idsC = new Set(comps.map(c => c.id)), esT = estDe(idsC);
+  const catsAll = [...new Set([...Object.keys(cats), ...esT.map(e => e.categoria)])].sort(porEscalao);
+  const podH = catsAll.map(k => { const x = resumo(cats[k] || []), m = medEst(esT.filter(e => e.categoria === k)); const t1 = x.p1 + m.e1, t2 = x.p2 + m.e2, t3 = x.p3 + m.e3; return `<tr><td>${esc(k)}</td><td class="n">${t1}</td><td class="n">${t2}</td><td class="n">${t3}</td><td class="n"><strong>${t1 + t2 + t3}</strong></td><td class="n ref-lbl">${m.e1 + m.e2 + m.e3}</td></tr>`; }).join('');
   const cab = `${impCab(titulo, sub)}
   <div class="cab"><div><h1>${esc(titulo)}</h1><div class="meta">${esc(sub)} · ${comps.length} ${comps.length === 1 ? 'competição' : 'competições'} com resultados · atualizado em ${hoje()}</div></div>
     <div class="acoes"><button class="btn" onclick="window.print()">PDF (A4)</button><button class="btn amar" onclick="excelConjunto('${t}')">Excel</button></div></div>`;
   const cal = `<section class="sec"><h2>Calendário</h2>${tabCalendario(t)}</section>`;
   if (!ls.length) return `${cab}${cal}<p class="aviso">Ainda não há resultados de ${esc(nomeTipo(t))}.</p>`;
   return `${cab}
-  ${kpis(s)}
+  ${kpis(s, esT)}
   ${cal}
   <section class="sec"><h2>Evolução da % de provas com RP</h2><div class="barras">${barras}</div></section>
   <section class="sec"><h2>RP por escalão</h2>${tabRelacao(ls, 'escalao', 'Escalão')}</section>
   <section class="sec quebra"><h2>RP por nadador</h2>${tabRelacao(ls, 'nadador', 'Nadador')}</section>
   <section class="sec"><h2>Maiores melhorias</h2><div class="tab-wrap"><table><thead><tr><th class="n">#</th><th>Nadador</th><th>Escalão</th><th>Prova</th><th>Referência</th><th>Resultado</th><th class="n">Melhoria</th><th>Local</th></tr></thead><tbody>${topH || '<tr><td colspan="8" class="vazio">Sem melhorias.</td></tr>'}</tbody></table></div></section>
-  <section class="sec"><h2>Pódios por categoria</h2><div class="tab-wrap"><table><thead><tr><th>Categoria</th><th class="n">1.º</th><th class="n">2.º</th><th class="n">3.º</th><th class="n">Total</th></tr></thead><tbody>${podH}</tbody></table></div></section>
+  <section class="sec"><h2>Medalhas por categoria</h2><div class="tab-wrap"><table><thead><tr><th>Categoria</th><th class="n">Ouro</th><th class="n">Prata</th><th class="n">Bronze</th><th class="n">Total</th><th class="n">das quais estafetas</th></tr></thead><tbody>${podH}</tbody></table></div></section>
   ${ESTADO.rec ? `<section class="sec"><h2>Recordes do clube batidos</h2>${tabRecordesBatidos(ls)}</section>` : ''}
   ${ESTADO.tac ? `<section class="sec quebra"><h2>TAC obtidos</h2>${tabTacObtidos(ls)}</section>` : ''}
   ${ls.some(l => l.estado === 'DSQ') ? `<section class="sec"><h2>Desclassificações</h2>${tabDesclass(ls)}</section>` : ''}
@@ -434,10 +444,10 @@ function vistaComp(id) {
   ${impCab(c.nome, `${c.local} · ${datas(c)} · Piscina de ${c.piscina}m`)}
   <div class="cab"><div><h1>${esc(c.nome)}</h1><div class="meta">${esc(nomeTipo(c.tipo))} · ${esc(c.local)} · ${datas(c)} · Piscina de ${c.piscina}m · ${esc(c.organizador || '')} · <a href="${esc(c.url)}" target="_blank" rel="noopener">página da prova</a></div></div>
     <div class="acoes"><button class="btn" onclick="window.print()">PDF (A4)</button><button class="btn amar" onclick="excelComp('${c.id}')">Excel</button><a class="btn sec" href="#fichas/${c.id}">Fichas dos atletas</a></div></div>
-  <section class="sec"><h2>Resumo</h2>${kpis(resumo(ls))}</section>
+  <section class="sec"><h2>Resumo</h2>${kpis(resumo(ls), estDe(new Set([id])))}</section>
   <section class="sec"><h2>Provas nadadas / RP por escalão</h2>${tabRelacao(ls, 'escalao', 'Escalão')}</section>
   <section class="sec"><h2>Provas nadadas / RP por nadador</h2>${tabRelacao(ls, 'nadador', 'Nadador')}</section>
-  <section class="sec quebra"><h2>Classificações por categoria</h2>${classificacoes(c, ls)}</section>
+  <section class="sec quebra"><h2>Classificações por categoria</h2>${classificacoes(c, ls, estDe(new Set([id])))}</section>
   <section class="sec quebra"><h2>Detalhe</h2>
     <div class="filtros"><input type="search" id="f-txt" placeholder="Filtrar por nadador ou prova"><label><input type="checkbox" id="f-rp"> Só RP</label></div>
     <div id="det">${tabDetalhe(ord)}</div></section>
