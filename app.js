@@ -49,6 +49,7 @@ async function carregar() {
   try { const r3 = await fetch('data/rps.json', { cache: 'no-store' }); if (r3.ok) ESTADO.rps = await r3.json(); } catch (e) { ESTADO.rps = null; }
   prepararRPs();
   try { const r2 = await fetch('data/recordes.json', { cache: 'no-store' }); if (r2.ok) ESTADO.rec = await r2.json(); } catch (e) { ESTADO.rec = null; }
+  try { const pm = await fetch('data/premios.json', { cache: 'no-store' }); if (pm.ok) ESTADO.premios = await pm.json(); } catch (e) { ESTADO.premios = null; }
   try { const c2 = await fetch('data/clubes.json', { cache: 'no-store' }); if (c2.ok) ESTADO.clubes = await c2.json(); } catch (e) { ESTADO.clubes = null; }
   try { const c3 = await fetch('data/clubes-versao.json', { cache: 'no-store' }); if (c3.ok) { const j = await c3.json(); CN.versao = j.versoes || {}; CN.indisp = j.indisponiveis || {}; } } catch (e) { /* sem versão gravada */ }
   try { const r = localStorage.getItem('foca-cn-versao'); if (r) CN.versao = { ...CN.versao, ...JSON.parse(r) }; } catch (e) { /* sem armazenamento */ }
@@ -90,7 +91,7 @@ function setGrupo(g) {
   try { localStorage.setItem('foca-grupo', g); } catch (e) { /* sem armazenamento */ }
   aplicarGrupo(); desenharMenu(); desenharLateral();
   const v = location.hash.replace(/^#/, '').split('/')[0] || 'epoca';
-  if (!grupoAtual().menu.includes(v) && !['fichas', 'gerir'].includes(v)) location.hash = '#epoca'; else rota();
+  if (!grupoAtual().menu.includes(v) && !['fichas', 'gerir', 'direcao'].includes(v)) location.hash = '#epoca'; else rota();
 }
 function desenharMenu() {
   const m = document.getElementById('menu');
@@ -435,16 +436,55 @@ function vistaListaComps() {
   app.innerHTML = `${chipsTipo(contar)}<div class="nao-imp" style="text-align:right;margin:-8px 0 8px"><a class="btn sec mini" href="#gerir">Gerir calendário</a></div>${relatorioConjunto(filtroTipo, filtroTipo ? nomeTipo(filtroTipo) : 'Competições', grupoAtual().nome + ' · Época ' + ESTADO.epoca + (filtroTipo ? ' · ' + nomeTipo(filtroTipo) : ' · todas as competições'))}`;
 }
 
-function vistaComp(id) {
+/* ---------- Mérito desportivo (prémios do município) ---------- */
+const eur = v => v.toLocaleString('pt-PT') + ' €';
+function premiosComp(c, ls, es) {
+  const P = ESTADO.premios; if (!P) return null;
+  const nivel = (P.tipos || {})[c.tipo] || null, tab = nivel ? P[nivel] : null;
+  const itens = [], avisos = [];
+  const rnLista = x => Array.isArray(x.rn) ? x.rn : x.rn ? [x.rn] : [];
+  for (const l of ls) {
+    if (tab && l.estado === 'OK' && l.lugar >= 1 && l.lugar <= 3) itens.push({ tipo: 'Individual', cat: l.categoria, quem: l.nadador, prova: l.prova, lugar: l.lugar, valor: tab.individual[l.lugar - 1] });
+    for (const r of rnLista(l)) itens.push({ tipo: 'Recorde nacional', cat: l.categoria, quem: l.nadador, prova: l.prova, det: r, valor: P.rn });
+  }
+  for (const e of es) {
+    const g = e.genero === 'X' ? 'Mista' : e.genero === 'F' ? 'Fem.' : 'Masc.';
+    if (tab && e.lugar >= 1 && e.lugar <= 3) {
+      if (tab.estafeta) itens.push({ tipo: 'Estafeta', cat: e.categoria, quem: `${e.equipa} · ${(e.nadadores || []).join(', ')}`, prova: `${e.prova} ${g}`, lugar: e.lugar, valor: tab.estafeta[e.lugar - 1] });
+      else avisos.push(`${e.prova} ${g} (${e.lugar}.º): sem valor de estafeta na tabela para provas internacionais.`);
+    }
+    for (const r of rnLista(e)) itens.push({ tipo: 'Recorde nacional', cat: e.categoria, quem: `${e.equipa} · ${(e.nadadores || []).join(', ')}`, prova: `${e.prova} ${g}`, det: r, valor: P.rn });
+  }
+  return { nivel, itens, avisos, total: itens.reduce((a, x) => a + x.valor, 0) };
+}
+function secPremios(c, ls, es) {
+  const R = premiosComp(c, ls, es);
+  if (!R) return '<p class="aviso">Tabela de prémios (data/premios.json) não carregada.</p>';
+  const P = ESTADO.premios, nomeN = { territorial: 'Territorial', nacional: 'Nacional', internacional: 'Internacional' }[R.nivel];
+  const cab = `<p class="ref-lbl" style="margin-bottom:8px">Coluna aplicada: <strong>${nomeN || 'nenhuma'}</strong>${nomeN ? '' : ` (${esc(nomeTipo(c.tipo))} não dá prémio por classificação)`} · RN: ${eur(P.rn)} por recorde (absoluto conta como absoluto + categoria) · ${esc(P.fonte || '')}</p>`;
+  if (!R.itens.length) return cab + `<p class="vazio">Sem prémios nesta competição.</p>${R.avisos.map(a => `<p class="aviso">${esc(a)}</p>`).join('')}`;
+  const cats = [...new Set(R.itens.map(x => x.cat))].sort(porEscalao);
+  const soma = f => R.itens.filter(f).reduce((a, x) => a + x.valor, 0), conta = f => R.itens.filter(f).length;
+  const linhaCat = k => { const f = t => x => x.cat === k && x.tipo === t; return `<tr><td>${esc(k)}</td><td class="n">${conta(f('Individual'))}</td><td class="n">${eur(soma(f('Individual')))}</td><td class="n">${conta(f('Estafeta'))}</td><td class="n">${eur(soma(f('Estafeta')))}</td><td class="n">${conta(f('Recorde nacional'))}</td><td class="n">${eur(soma(f('Recorde nacional')))}</td><td class="n"><strong>${eur(soma(x => x.cat === k))}</strong></td></tr>`; };
+  const tt = t => x => x.tipo === t;
+  const resumoT = `<div class="tab-wrap"><table><thead><tr><th>Categoria</th><th class="n">Pódios ind.</th><th class="n">Valor</th><th class="n">Pódios estaf.</th><th class="n">Valor</th><th class="n">RN</th><th class="n">Valor</th><th class="n">Total</th></tr></thead><tbody>${cats.map(linhaCat).join('')}
+    <tr class="tot"><td><strong>Total</strong></td><td class="n"><strong>${conta(tt('Individual'))}</strong></td><td class="n"><strong>${eur(soma(tt('Individual')))}</strong></td><td class="n"><strong>${conta(tt('Estafeta'))}</strong></td><td class="n"><strong>${eur(soma(tt('Estafeta')))}</strong></td><td class="n"><strong>${conta(tt('Recorde nacional'))}</strong></td><td class="n"><strong>${eur(soma(tt('Recorde nacional')))}</strong></td><td class="n"><strong>${eur(R.total)}</strong></td></tr></tbody></table></div>`;
+  const ord = [...R.itens].sort((a, b) => porEscalao(a.cat, b.cat) || a.tipo.localeCompare(b.tipo) || (a.lugar || 0) - (b.lugar || 0));
+  const det = `<details style="margin-top:10px"><summary>Detalhe dos ${R.itens.length} prémios</summary><div class="tab-wrap"><table><thead><tr><th>Categoria</th><th>Tipo</th><th>Prova</th><th>Nadador / equipa</th><th class="n">Lugar</th><th class="n">Valor</th></tr></thead><tbody>${ord.map(x => `<tr><td>${esc(x.cat)}</td><td>${esc(x.tipo)}</td><td>${esc(x.prova)}</td><td>${esc(x.quem)}</td><td class="n">${x.lugar ? chipLugar(x.lugar) : esc(x.det || 'RN')}</td><td class="n">${eur(x.valor)}</td></tr>`).join('')}</tbody></table></div></details>`;
+  return `${cab}<div class="kpis" style="margin-bottom:10px"><div class="kpi"><div class="v">${eur(R.total)}</div><div class="l">Valor total RADA</div><div class="d">${R.itens.length} prémios</div></div></div>${resumoT}${det}${R.avisos.map(a => `<p class="aviso">${esc(a)}</p>`).join('')}`;
+}
+
+function vistaComp(id, direcao = false) {
   const c = ESTADO.comps.find(x => x.id === id);
   if (!c) return vistaListaComps();
   const ls = ESTADO.linhas.filter(l => l.comp === id);
   const ord = [...ls].sort((a, b) => a.nadador.localeCompare(b.nadador, 'pt') || a.nprova - b.nprova);
   app.innerHTML = `
-  ${impCab(c.nome, `${c.local} · ${datas(c)} · Piscina de ${c.piscina}m`)}
-  <div class="cab"><div><h1>${esc(c.nome)}</h1><div class="meta">${esc(nomeTipo(c.tipo))} · ${esc(c.local)} · ${datas(c)} · Piscina de ${c.piscina}m · ${esc(c.organizador || '')} · <a href="${esc(c.url)}" target="_blank" rel="noopener">página da prova</a></div></div>
-    <div class="acoes"><button class="btn" onclick="window.print()">PDF (A4)</button><button class="btn amar" onclick="excelComp('${c.id}')">Excel</button><a class="btn sec" href="#fichas/${c.id}">Fichas dos atletas</a></div></div>
+  ${impCab(c.nome, `${direcao ? 'Relatório Direção' : 'Relatório Geral'} · ${c.local} · ${datas(c)} · Piscina de ${c.piscina}m`)}
+  <div class="cab"><div><div class="ref-lbl" style="font-weight:700;letter-spacing:.05em">${direcao ? 'RELATÓRIO DIREÇÃO' : 'RELATÓRIO GERAL'}</div><h1>${esc(c.nome)}</h1><div class="meta">${esc(nomeTipo(c.tipo))} · ${esc(c.local)} · ${datas(c)} · Piscina de ${c.piscina}m · ${esc(c.organizador || '')} · <a href="${esc(c.url)}" target="_blank" rel="noopener">página da prova</a></div></div>
+    <div class="acoes"><button class="btn" onclick="window.print()">PDF (A4)</button><button class="btn amar" onclick="excelComp('${c.id}')">Excel</button>${direcao ? `<a class="btn sec" href="#comp/${c.id}">Relatório geral</a>` : `<a class="btn sec" href="#direcao/${c.id}">Relatório direção</a>`}<a class="btn sec" href="#fichas/${c.id}">Fichas dos atletas</a></div></div>
   <section class="sec"><h2>Resumo</h2>${kpis(resumo(ls), estDe(new Set([id])))}</section>
+  ${direcao ? `<section class="sec"><h2>Mérito desportivo · prémios do município (RADA)</h2>${secPremios(c, ls, estDe(new Set([id])))}</section>` : ''}
   <section class="sec"><h2>Provas nadadas / RP por escalão</h2>${tabRelacao(ls, 'escalao', 'Escalão')}</section>
   <section class="sec"><h2>Provas nadadas / RP por nadador</h2>${tabRelacao(ls, 'nadador', 'Nadador')}</section>
   <section class="sec quebra"><h2>Classificações por categoria</h2>${classificacoes(c, ls, estDe(new Set([id])))}</section>
@@ -1418,10 +1458,11 @@ async function excelClubes() {
 function rota() {
   let [v, arg] = location.hash.replace(/^#/, '').split('/');
   const a = arg ? decodeURIComponent(arg) : '';
-  if (v && !grupoAtual().menu.includes(v) && !['fichas', 'gerir'].includes(v)) v = 'epoca';
+  if (v && !grupoAtual().menu.includes(v) && !['fichas', 'gerir', 'direcao'].includes(v)) v = 'epoca';
   desenharLateral();
-  document.querySelectorAll('#menu a').forEach(x => x.classList.toggle('ativo', x.dataset.v === (v === 'fichas' || v === 'gerir' ? 'comp' : (v || 'epoca'))));
+  document.querySelectorAll('#menu a').forEach(x => x.classList.toggle('ativo', x.dataset.v === (v === 'fichas' || v === 'gerir' || v === 'direcao' ? 'comp' : (v || 'epoca'))));
   if (v === 'comp') a ? vistaComp(a) : vistaListaComps();
+  else if (v === 'direcao') vistaComp(a, true);
   else if (v === 'atleta') vistaAtleta(a);
   else if (v === 'fichas') vistaFichas(a);
   else if (v === 'tac') vistaTac();

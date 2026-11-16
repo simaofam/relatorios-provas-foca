@@ -1,0 +1,9 @@
+{
+  "fonte": "Méritos desportivos NP - Época 2025-2026 (Município de Felgueiras)",
+  "nota": "Valores por lugar (1.º, 2.º, 3.º). Estafeta = valor por estafeta. RN = por recorde nacional (absoluto conta duas vezes: absoluto + categoria).",
+  "territorial": { "individual": [50, 30, 20], "estafeta": [150, 100, 75] },
+  "nacional": { "individual": [100, 75, 50], "estafeta": [250, 175, 100] },
+  "internacional": { "individual": [300, 250, 200], "estafeta": null },
+  "rn": 200,
+  "tipos": { "territorial": "territorial", "nacional": "nacional", "meeting": "internacional", "internacional": "internacional" }
+}
