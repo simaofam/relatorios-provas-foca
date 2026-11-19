@@ -197,3 +197,4 @@ tr.nosso td{background:#FFF6C7!important;font-weight:700}
   .ficha + .ficha{margin-top:0;break-before:page}
   .tab-wrap{overflow:visible}
 }
+label.btn{display:inline-flex;align-items:center;cursor:pointer}

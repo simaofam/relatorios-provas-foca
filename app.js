@@ -51,8 +51,9 @@ async function carregar() {
   try { const r2 = await fetch('data/recordes.json', { cache: 'no-store' }); if (r2.ok) ESTADO.rec = await r2.json(); } catch (e) { ESTADO.rec = null; }
   try { const pm = await fetch('data/premios.json', { cache: 'no-store' }); if (pm.ok) ESTADO.premios = await pm.json(); } catch (e) { ESTADO.premios = null; }
   try { const c2 = await fetch('data/clubes.json', { cache: 'no-store' }); if (c2.ok) ESTADO.clubes = await c2.json(); } catch (e) { ESTADO.clubes = null; }
-  try { const c3 = await fetch('data/clubes-versao.json', { cache: 'no-store' }); if (c3.ok) { const j = await c3.json(); CN.versao = j.versoes || {}; CN.indisp = j.indisponiveis || {}; } } catch (e) { /* sem versão gravada */ }
+  try { const c3 = await fetch('data/clubes-versao.json', { cache: 'no-store' }); if (c3.ok) { const j = await c3.json(); CN.versao = j.versoes || {}; CN.indisp = j.indisponiveis || {}; CN.aovivo = j.aovivo || {}; } } catch (e) { /* sem versão gravada */ }
   try { const r = localStorage.getItem('foca-cn-versao'); if (r) CN.versao = { ...CN.versao, ...JSON.parse(r) }; } catch (e) { /* sem armazenamento */ }
+  try { const r = localStorage.getItem('foca-cn-aovivo'); if (r) { const lv = JSON.parse(r); for (const k of Object.keys(lv)) CN.aovivo[k] = { ...(CN.aovivo[k] || {}), ...lv[k] }; } } catch (e) { /* sem armazenamento */ }
   try { const r = localStorage.getItem('foca-cn-indisp'); if (r) CN.indisp = { ...CN.indisp, ...JSON.parse(r) }; } catch (e) { /* sem armazenamento */ }
   let cal = null;
   try { const k = await fetch('data/calendario.json', { cache: 'no-store' }); if (k.ok) cal = await k.json(); } catch (e) { cal = null; }
@@ -1152,7 +1153,7 @@ function vistaEstafetas() {
 }
 
 /* ---------- Campeonato Nacional de Clubes: previsão e otimização ---------- */
-const CN = { div: '1div', modo: 'base', prop: 'A', cache: {}, versao: {}, indisp: {}, sha: null };
+const CN = { div: '1div', modo: 'base', prop: 'A', cache: {}, versao: {}, indisp: {}, aovivo: {}, prev: null, sha: null };
 const NOME_FOCA = 'FOCA - Clube de Natacao de Felgueiras';
 const PROPS = {
   A: { nome: 'Máxima pontuação', desc: 'A melhor distribuição possível dos nadadores pelas provas, com os resultados da edição anterior como referência.' },
@@ -1164,7 +1165,7 @@ const divAtual = () => (ESTADO.clubes?.divisoes || []).find(d => d.id === CN.div
 const pernasEst = p => p === '4x100m Estilos' ? ['100m Costas', '100m Bruços', '100m Mariposa', '100m Livres'] : Array(4).fill(p.replace(/^4x/, ''));
 const ptsLugar = (lugar, N) => lugar === 1 ? N + 1 : Math.max(1, N - lugar + 1);
 function adversarios(d, prova, fator) {
-  const fonte = CN.modo === 'entry' ? d.entry?.adversarios : d.base.adversarios;
+  const fonte = CN.modo === 'entry' || (CN.modo === 'vivo' && d.entry) ? d.entry?.adversarios : d.base.adversarios;
   return (fonte?.[prova] || []).map(a => ({ ...a, t: seg(a.tempo) * fator }));
 }
 function tempoCN(d, nome, prova, ver) {          // tempo usado na previsão: previsto > RP 25m > RP 50m (alerta)
@@ -1340,11 +1341,214 @@ async function cnGravarGH() {
   try {
     let sha;
     try { const j = await ghPedido('GET', `contents/data/clubes-versao.json?ref=${GH.ramo}`); sha = j.sha; } catch (e) { sha = undefined; }
-    const dados = { atualizado: new Date().toISOString(), indisponiveis: CN.indisp, versoes: CN.versao };
+    const dados = { atualizado: new Date().toISOString(), indisponiveis: CN.indisp, versoes: CN.versao, aovivo: CN.aovivo };
     await ghPedido('PUT', 'contents/data/clubes-versao.json', { message: 'Nacional de Clubes: guardar a minha versão', content: b64(JSON.stringify(dados, null, 1) + '\n'), sha, branch: GH.ramo });
     set('Gravado no site. Fica disponível em qualquer equipamento dentro de 1 a 2 minutos.');
   } catch (e) { set(e.message + (chaveGH.ler() ? '' : ' Guarda a chave em Competições → Gerir calendário.'), true); }
 }
+/* ---------- Nacional de Clubes · ao vivo: leitura de resultados (PDF / print) ---------- */
+const ESTILOS_CN = { livres: 'Livres', costas: 'Costas', brucos: 'Bruços', 'bruços': 'Bruços', mariposa: 'Mariposa', estilos: 'Estilos' };
+const semAc = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+function linhasDeItens(itens) {          // itens pdf.js → linhas de texto com colunas separadas por 2+ espaços
+  const grupos = [];
+  for (const it of itens) {
+    if (!it.str || !it.str.trim()) continue;
+    const x = it.transform[4], y = it.transform[5], h = Math.abs(it.transform[3]) || 8;
+    let g = grupos.find(g => Math.abs(g.y - y) < Math.max(2, h * 0.35));
+    if (!g) grupos.push(g = { y, h, itens: [] });
+    g.itens.push({ x, w: it.width, s: it.str, h });
+  }
+  grupos.sort((a, b) => b.y - a.y);
+  return grupos.map(g => {
+    g.itens.sort((a, b) => a.x - b.x);
+    let txt = '', fim = null;
+    for (const it of g.itens) {
+      const cw = (it.w && it.s.length ? it.w / it.s.length : it.h * 0.5) || 4;
+      if (fim != null) { const gap = it.x - fim; txt += gap > cw * 1.6 ? '   ' : gap > cw * 0.2 ? ' ' : ''; }
+      txt += it.s; fim = it.x + (it.w || it.s.length * cw);
+    }
+    return txt;
+  });
+}
+async function carregarScript(url) {
+  if ([...document.scripts].some(s => s.src === url)) return;
+  await new Promise((ok, erro) => { const s = document.createElement('script'); s.src = url; s.onload = ok; s.onerror = () => erro(new Error('Não foi possível carregar ' + url)); document.head.appendChild(s); });
+}
+const PDFJS_V = '3.11.174';
+async function pdfTexto(buf) {
+  if (typeof pdfjsLib === 'undefined') {
+    await carregarScript(`https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${PDFJS_V}/pdf.min.js`);
+    pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${PDFJS_V}/pdf.worker.min.js`;
+  }
+  const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+  const out = [];
+  for (let i = 1; i <= pdf.numPages; i++) { const pg = await pdf.getPage(i); const tc = await pg.getTextContent(); out.push(...linhasDeItens(tc.items)); }
+  return out.join('\n');
+}
+async function ocrTexto(ficheiro, progresso) {
+  if (typeof Tesseract === 'undefined') await carregarScript('https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js');
+  const r = await Tesseract.recognize(ficheiro, 'por', { logger: m => { if (progresso && m.status === 'recognizing text') progresso(Math.round(m.progress * 100)); } });
+  return r.data.text;
+}
+function cabecalhoProva(ln) {           // "Prova 9   Femin., 4 x 100m Livres" (PDF ou OCR)
+  const m = semAc(ln).match(/prova\s*(\d+)\s*[,.]?\s*(femin|fem|masc)[a-z.]*\s*[,.]?\s*(4\s*[x×]\s*)?(\d{2,4})\s*m\s*(livres|costas|brucos|mariposa|estilos)/);
+  if (!m) return null;
+  return { n: +m[1], genero: m[2].startsWith('f') ? 'F' : 'M', prova: `${m[3] ? '4x' : ''}${m[4]}m ${ESTILOS_CN[m[5]]}` };
+}
+const reTempo = '((?:\\d{1,2}[:.])?\\d{2}[.,]\\d{2})';
+function lerResultados(texto, genero) {
+  const out = {}; let ev = null;
+  for (const ln0 of texto.split(/\r?\n/)) {
+    const ln = ln0.replace(/\u00a0/g, ' ');
+    const h = cabecalhoProva(ln);
+    if (h) { ev = h.genero === genero ? h.prova : null; if (ev && !out[ev]) out[ev] = { n: h.n, linhas: [] }; continue; }
+    if (!ev) continue;
+    if (/^\s*(RN|RP|Lugar|Recorde|Splash|Registered)/i.test(ln) || /\d{2}m:\s/.test(ln)) continue;
+    let m = ln.match(new RegExp(`^\\s*(?:(\\d{1,2})\\s*[.,]?\\s+)?(.+?)\\s+(?:[+-]\\s?\\d[.,]\\d\\d\\s+)?${reTempo}\\s*(?:[+-]\\s?\\d[.,]\\d\\d\\s*)?(\\d{1,3}[.,]\\d\\d)?\\s*-?\\s*$`));
+    if (m && !m[1] && !(/\s\d\d\s+\d{5,7}\s/.test(m[2]) && m[4] != null)) m = null;   // empate (sem lugar): só com ano + licença + pontos
+    if (m) {
+      if (!m[1]) m[1] = String(out[ev].linhas.filter(x => x.lugar).slice(-1)[0]?.lugar ?? '');
+      const mid = m[2].trim(); let nome, clube;
+      const mi = mid.match(/^(.+?)\s+(\d\d)\s+(\d{5,7})\s+(.+)$/) || mid.match(/^(.+?)\s+(\d\d)\s+(.+)$/);
+      if (mi) { nome = mi[1].trim(); clube = mi[mi.length - 1].trim(); }
+      else { const mr = mid.match(/^(.+?\s\d)\s{1,}(.+)$/) || mid.match(/^(.+?)\s{2,}(.+)$/); if (mr) { nome = mr[1].trim(); clube = mr[2].trim(); } else { nome = mid; clube = mid.replace(/\s\d$/, ''); } }
+      clube = clube.replace(/^[^A-Za-zÀ-ÿ]+/, '').trim(); nome = nome.replace(/^[^A-Za-zÀ-ÿ]+/, '').trim();
+      const tempo = m[3].replace(',', '.').replace(/^(\d{1,2})\.(\d{2}\.\d{2})$/, '$1:$2');
+      out[ev].linhas.push({ lugar: +m[1], nome, clube, tempo, pts: m[4] != null ? +m[4].replace(',', '.') : null, estado: 'OK' });
+      continue;
+    }
+    m = ln.match(/^\s*(DSQ|DNS|DNF|WDR|NC|DQ|DESC)\b\.?\s+(.+?)(?:\s*-)*\s*$/i);
+    if (m) {
+      const mid = m[2].trim(); const mi = mid.match(/^(.+?)\s+(\d\d)\s+(\d{5,7})\s+(.+)$/) || mid.match(/^(.+?)\s{2,}(.+)$/);
+      out[ev].linhas.push({ lugar: null, nome: mi ? mi[1].trim() : mid, clube: mi ? mi[mi.length - 1].trim() : mid, tempo: null, pts: 0, estado: m[1].toUpperCase() });
+    }
+  }
+  for (const k of Object.keys(out)) if (!out[k].linhas.length) delete out[k];
+  return out;
+}
+function eFoca(c) { return /foca/i.test(c || '') && !/leiria/i.test(c || ''); }
+
+/* ---------- Nacional de Clubes · ao vivo: vista ---------- */
+function cnGuardarVivo() { try { localStorage.setItem('foca-cn-aovivo', JSON.stringify(CN.aovivo)); } catch (e) { /* sem armazenamento */ } }
+const ptsRes = (x, d) => x.estado !== 'OK' ? 0 : x.pts != null ? x.pts : x.lugar ? ptsLugar(x.lugar, d.clubes) : 0;
+function mapaClubes(d) {                 // nome curto dos resultados → nome completo usado nas previsões
+  const pessoa = {}, equipa = {}, longos = new Set();
+  for (const fonte of [d.base?.adversarios, d.entry?.adversarios]) for (const xs of Object.values(fonte || {})) for (const a of xs) {
+    longos.add(a.clube);
+    if (/\s\d$/.test(a.nome || '')) equipa[semAc(a.nome.replace(/\s\d$/, ''))] = a.clube; else if (a.nome) pessoa[semAc(a.nome)] = a.clube;
+  }
+  const votos = {};
+  for (const r of Object.values(CN.aovivo[d.id] || {})) for (const x of r.linhas) {
+    if (eFoca(x.clube)) continue;
+    const c = pessoa[semAc(x.nome)] || equipa[semAc(x.clube)] || equipa[semAc(x.nome.replace(/\s\d$/, ''))];
+    if (c) { (votos[x.clube] ||= {}); votos[x.clube][c] = (votos[x.clube][c] || 0) + 1; }
+  }
+  const lista = [...longos];
+  return c => {
+    if (eFoca(c)) return NOME_FOCA;
+    if (votos[c]) return Object.entries(votos[c]).sort((a, b) => b[1] - a[1])[0][0];
+    if (longos.has(c)) return c;
+    const s = semAc(c), cand = lista.filter(l => semAc(l).includes(s));
+    return cand.length === 1 ? cand[0] : c;
+  };
+}
+function vistaAoVivo(d, cab) {
+  const v = CN.versao[d.id], pBase = v ? 'M' : 'A';
+  const sol = proposta(d, pBase), fator = v?.base === 'C' ? 0.99 : 1;
+  const feitos = CN.aovivo[d.id] || {}, mapa = mapaClubes(d);
+  let real = 0, prevResto = 0, prevFeitas = 0, nFeitas = 0;
+  const reais = {}, prev = {};
+  const linhas = sol.linhas.map(l => {
+    const pPrev = l.estafeta ? l.est.pts : l.pts, r = feitos[l.prova];
+    const quemPrev = l.estafeta ? (l.est.eq ? l.est.eq.map(x => x.n).join(', ') : '—') : (l.n || '—');
+    const tPrev = l.estafeta ? l.est.t : l.tt?.t, lugPrev = l.estafeta ? l.est.lugar : l.lugar;
+    if (r) {
+      nFeitas++; prevFeitas += pPrev;
+      for (const x of r.linhas) { const k = mapa(x.clube); reais[k] = (reais[k] || 0) + ptsRes(x, d); }
+      const f = r.linhas.find(x => eFoca(x.clube)), pts = f ? ptsRes(f, d) : 0; real += pts;
+      const dif = pts - pPrev;
+      return `<tr class="${l.estafeta ? 'est ' : ''}feita"><td class="n">${l.sessao}.ª</td><td><strong>${esc(l.prova)}</strong></td><td>${f ? esc(f.nome) : '<span class="vazio">sem resultado do FOCA</span>'}${!l.estafeta && f && l.n && semAc(f.nome).split(/[ ,]+/).filter(w => w.length > 2).every(w => !semAc(l.n).includes(w)) ? `<div class="ref-lbl">previsto: ${esc(l.n)}</div>` : ''}</td>
+        <td class="t">${f ? (f.tempo || esc(f.estado)) : '—'}${tPrev != null ? `<div class="ref-lbl">prev. ${fmt(tPrev)}</div>` : ''}</td><td class="n">${f?.lugar ? chipLugar(f.lugar) : esc(f?.estado || '—')}<div class="ref-lbl">prev. ${lugPrev ?? '—'}.º</div></td>
+        <td class="n"><strong>${pts}</strong><div class="ref-lbl">prev. ${pPrev}</div></td><td class="n ${dif > 0 ? 'rp' : dif < 0 ? 'nrp' : ''}"><strong>${dif > 0 ? '+' : ''}${dif}</strong></td>
+        <td><span class="chip rp">Realizada</span><div class="ref-lbl">${esc(r.fonte || '')} <button class="btn sec mini nao-imp" onclick="cnVivoApagar('${esc(l.prova)}')">remover</button></div></td></tr>`;
+    }
+    prevResto += pPrev;
+    const ops = adversarios(d, l.prova, fator).map(o => ({ clube: o.clube, t: o.t }));
+    if (tPrev != null) ops.push({ clube: NOME_FOCA, t: tPrev });
+    ops.sort((a, b) => a.t - b.t).forEach(o => { const lug = ops.findIndex(x => Math.abs(x.t - o.t) < 1e-6) + 1; prev[o.clube] = (prev[o.clube] || 0) + ptsLugar(lug, d.clubes); });
+    if (tPrev == null && !l.estafeta && l.n) prev[NOME_FOCA] = (prev[NOME_FOCA] || 0) + 1;
+    return `<tr class="${l.estafeta ? 'est' : ''}"><td class="n">${l.sessao}.ª</td><td><strong>${esc(l.prova)}</strong></td><td>${esc(quemPrev)}</td><td class="t">${tPrev != null ? fmt(tPrev) : '—'}</td><td class="n">${lugPrev ?? '—'}.º</td><td class="n">${pPrev}</td><td class="n">—</td><td><span class="chip">Por realizar</span></td></tr>`;
+  }).join('');
+  const clubes = new Set([...Object.keys(reais), ...Object.keys(prev), ...d.base.classificacao.map(c => c.clube), NOME_FOCA]);
+  const clAtual = [...clubes].map(c => ({ clube: c, pts: reais[c] || 0 })).sort((a, b) => b.pts - a.pts);
+  const clFinal = [...clubes].map(c => ({ clube: c, real: reais[c] || 0, pts: (reais[c] || 0) + (prev[c] || 0) })).sort((a, b) => b.pts - a.pts);
+  const posA = clAtual.findIndex(c => c.clube === NOME_FOCA) + 1, posF = clFinal.findIndex(c => c.clube === NOME_FOCA) + 1;
+  const tabCl = (xs, comReal) => `<div class="tab-wrap"><table><thead><tr><th class="n">#</th><th>Clube</th>${comReal ? '<th class="n">Já feitos</th>' : ''}<th class="n">Pontos</th></tr></thead><tbody>${xs.map((c, i) => `<tr class="${c.clube === NOME_FOCA ? 'nosso' : ''}"><td class="n">${i + 1}.º</td><td>${esc(c.clube)}</td>${comReal ? `<td class="n">${c.real}</td>` : ''}<td class="n">${Math.round(c.pts * 10) / 10}</td></tr>`).join('')}</tbody></table></div>`;
+  const P = CN.prev;
+  const prevH = !P ? '' : `<div class="aviso" style="margin-top:10px"><strong>Pré-visualização · ${esc(P.fonte)}</strong>
+    ${P.ocr ? `<p class="ref-lbl">Texto lido do print. Corrige o que estiver mal (sobretudo a linha do FOCA, o lugar, o tempo e os pontos) e carrega em "Ler de novo".</p><textarea id="cn-ocr" rows="10" style="width:100%;font-family:var(--mono,monospace);font-size:12px">${esc(P.texto)}</textarea>
+      <div class="filtros"><button class="btn sec mini" onclick="cnVivoReler()">Ler de novo</button>${!Object.keys(P.provas).length ? `<label>Prova do print <select id="cn-ocr-prova"><option value="">— escolher —</option>${d.provas.map(p => `<option>${esc(p.prova)}</option>`).join('')}</select></label><button class="btn sec mini" onclick="cnVivoReler(true)">Ler como esta prova</button>` : ''}</div>` : ''}
+    ${Object.keys(P.provas).length ? `<div class="tab-wrap"><table><thead><tr><th>Prova</th><th class="n">Clubes</th><th>FOCA</th><th class="n">Lugar</th><th>Tempo</th><th class="n">Pontos</th><th></th></tr></thead><tbody>${Object.entries(P.provas).map(([k, r]) => { const f = r.linhas.find(x => eFoca(x.clube)); return `<tr><td><strong>${esc(k)}</strong></td><td class="n">${r.linhas.length}</td><td>${f ? esc(f.nome) : '<span class="nrp">não encontrado (conta 0)</span>'}</td><td class="n">${f?.lugar ? f.lugar + '.º' : esc(f?.estado || '—')}</td><td class="t">${f?.tempo || '—'}</td><td class="n"><strong>${f ? ptsRes(f, d) : 0}</strong>${f && f.pts == null && f.estado === 'OK' ? ' <span class="ref-lbl">(pelo lugar)</span>' : ''}</td><td>${feitos[k] ? '<span class="chip tac">substitui</span>' : ''}</td></tr>`; }).join('')}</tbody></table></div>
+      <div class="filtros"><button class="btn mini" onclick="cnVivoAplicar()">Aplicar ${Object.keys(P.provas).length} prova(s)</button><button class="btn sec mini" onclick="CN.prev=null;vistaClubes()">Cancelar</button></div>`
+      : `<p class="ref-lbl">${P.ocr ? 'Ainda não reconheci nenhuma prova desta divisão.' : `Não encontrei provas de ${d.genero === 'F' ? 'femininos' : 'masculinos'} desta divisão no ficheiro.`}</p><div class="filtros"><button class="btn sec mini" onclick="CN.prev=null;vistaClubes()">Fechar</button></div>`}</div>`;
+  app.innerHTML = cab + `
+  ${impCab(`Nacional de Clubes · ${d.nome} · Ao vivo`, `${d.genero === 'F' ? 'Femininos' : 'Masculinos'} · ${d.local} · ${d.datas} · ${nFeitas} de ${d.provas.length} provas realizadas`)}
+  <div class="cab"><div><h1>Nacional de Clubes · ${esc(d.nome)} · ao vivo</h1><div class="meta">${d.genero === 'F' ? 'Femininos' : 'Masculinos'} · ${esc(d.local)} · ${esc(d.datas)} · plano: ${v ? `A minha versão (partiu da proposta ${esc(v.base || 'A')})` : 'Proposta A (ainda não há "A minha versão")'} · provas por realizar com os tempos ${d.entry ? 'da Entry List' : 'da edição anterior'}</div></div>
+    <div class="acoes"><button class="btn" onclick="window.print()">PDF (A4)</button></div></div>
+  <div class="kpis">
+    <div class="kpi"><div class="v">${Math.round(real * 10) / 10}</div><div class="l">Pontos já feitos</div><div class="d">${nFeitas} de ${d.provas.length} provas · previstos nessas: ${prevFeitas} (${real - prevFeitas >= 0 ? '+' : ''}${Math.round((real - prevFeitas) * 10) / 10})</div></div>
+    <div class="kpi"><div class="v">${Math.round((real + prevResto) * 10) / 10}</div><div class="l">Total projetado</div><div class="d">plano inicial: ${sol.total} · faltam ${prevResto} previstos</div></div>
+    <div class="kpi"><div class="v">${nFeitas ? posA + '.º' : '—'}</div><div class="l">Classificação atual</div><div class="d">só provas realizadas</div></div>
+    <div class="kpi"><div class="v">${posF}.º</div><div class="l">Classificação final prevista</div><div class="d">de ${clFinal.length} clubes</div></div>
+  </div>
+  <section class="sec nao-imp"><h2>Carregar resultados</h2>
+    <div class="filtros">
+      <label class="btn sec mini">PDF de uma prova ou da sessão<input type="file" accept="application/pdf,.pdf" multiple hidden onchange="cnVivoPDF(this.files)"></label>
+      <label class="btn sec mini">Print dos resultados (imagem)<input type="file" accept="image/*" multiple hidden onchange="cnVivoPrint(this.files)"></label>
+      <button class="btn mini" onclick="cnGravarGH()">Gravar no site</button>
+    </div>
+    <p class="ref-lbl">Os PDF são lidos diretamente (resultados da Splash, uma prova ou a sessão inteira). Os prints passam por reconhecimento de texto e têm de ser confirmados. Fica guardado neste equipamento; "Gravar no site" passa para os outros.</p>
+    <div id="cn-msg" class="ref-lbl"></div>${prevH}</section>
+  <section class="sec"><h2>Provas</h2><div class="tab-wrap"><table class="tab-cn"><thead><tr><th class="n">Sessão</th><th>Prova</th><th>Nadador(es)</th><th>Tempo</th><th class="n">Lugar</th><th class="n">Pontos</th><th class="n">Dif.</th><th>Estado</th></tr></thead><tbody>${linhas}</tbody></table></div>
+    <p class="ref-lbl nota-tac">Provas realizadas: pontos oficiais (coluna Pts dos resultados; sem ela, pelo lugar). DSQ ou sem resultado = 0. Provas por realizar: previsão do plano, que se mantém fixo. Pontos: 1.º = ${d.clubes + 1}; 2.º = ${d.clubes - 1}; … último = 1.</p></section>
+  <div class="grelha2">
+    <section class="sec"><h2>Classificação atual</h2>${nFeitas ? tabCl(clAtual) : '<p class="vazio">Ainda sem provas realizadas.</p>'}</section>
+    <section class="sec"><h2>Classificação final prevista</h2>${tabCl(clFinal, true)}</section>
+  </div>
+  ${impRod('Resultados oficiais (provas realizadas) + previsão')}`;
+}
+async function cnVivoPDF(files) {
+  const d = divAtual(), msg = document.getElementById('cn-msg'); const provas = {}, nomes = [];
+  try {
+    for (const f of files) { if (msg) msg.textContent = `A ler ${f.name}…`; const tx = await pdfTexto(await f.arrayBuffer()); Object.assign(provas, lerResultados(tx, d.genero)); nomes.push(f.name); }
+    CN.prev = { fonte: 'PDF · ' + nomes.join(', '), provas: filtrarProvasDiv(d, provas) };
+  } catch (e) { CN.prev = null; if (msg) { msg.textContent = 'Erro a ler o PDF: ' + e.message; msg.style.color = 'var(--verm)'; } return; }
+  vistaClubes();
+}
+async function cnVivoPrint(files) {
+  const d = divAtual(), msg = document.getElementById('cn-msg'); let texto = '';
+  try {
+    for (const f of files) { texto += await ocrTexto(f, p => { if (msg) msg.textContent = `A reconhecer ${f.name}… ${p}%`; }) + '\n'; }
+  } catch (e) { if (msg) { msg.textContent = 'Erro no reconhecimento: ' + e.message; msg.style.color = 'var(--verm)'; } return; }
+  CN.prev = { fonte: 'Print · ' + [...files].map(f => f.name).join(', '), ocr: true, texto, provas: filtrarProvasDiv(d, lerResultados(texto, d.genero)) };
+  vistaClubes();
+}
+function cnVivoReler(comProva) {
+  const d = divAtual(), P = CN.prev; if (!P) return;
+  P.texto = document.getElementById('cn-ocr').value;
+  let tx = P.texto;
+  if (comProva) { const p = document.getElementById('cn-ocr-prova').value; if (!p) return; tx = `Prova 0 ${d.genero === 'F' ? 'Femin.' : 'Masc.'}, ${p.replace(/^4x/, '4 x ')}\n` + tx; }
+  P.provas = filtrarProvasDiv(d, lerResultados(tx, d.genero)); vistaClubes();
+}
+function filtrarProvasDiv(d, provas) { const ok = new Set(d.provas.map(p => p.prova)); return Object.fromEntries(Object.entries(provas).filter(([k]) => ok.has(k))); }
+function cnVivoAplicar() {
+  const d = divAtual(), P = CN.prev; if (!P) return;
+  CN.aovivo[d.id] = CN.aovivo[d.id] || {};
+  for (const [k, r] of Object.entries(P.provas)) CN.aovivo[d.id][k] = { linhas: r.linhas, fonte: P.ocr ? 'print' : 'PDF', em: new Date().toISOString() };
+  CN.prev = null; cnGuardarVivo(); vistaClubes();
+}
+function cnVivoApagar(prova) { const d = divAtual(); if (CN.aovivo[d.id]) delete CN.aovivo[d.id][prova]; cnGuardarVivo(); vistaClubes(); }
+
 function vistaClubes() {
   const D = ESTADO.clubes;
   if (!D) { app.innerHTML = '<p class="aviso erro">Falta o ficheiro data/clubes.json.</p>'; return; }
@@ -1353,7 +1557,8 @@ function vistaClubes() {
   const botoes = (arr, atual, fn) => arr.map(([id, t]) => `<button class="tipo ${id === atual ? 'ativo' : ''}" onclick="${fn}('${id}')">${esc(t)}</button>`).join('');
   const cab = `
   <div class="tipos nao-imp">${botoes(D.divisoes.map(x => [x.id, `${x.nome} · ${x.genero === 'F' ? 'Femininos' : 'Masculinos'}`]), d.id, 'cnDiv')}</div>
-  <div class="tipos nao-imp">${botoes([['base', 'Base de trabalho (edição anterior)'], ['entry', 'Pela Entry List']], CN.modo, 'cnModo')}</div>`;
+  <div class="tipos nao-imp">${botoes([['base', 'Base de trabalho (edição anterior)'], ['entry', 'Pela Entry List'], ['vivo', 'Ao vivo (resultados)']], CN.modo, 'cnModo')}</div>`;
+  if (CN.modo === 'vivo') { vistaAoVivo(d, cab); return; }
   if (CN.modo === 'entry' && !d.entry) {
     app.innerHTML = cab + `<div class="cab"><div><h1>Nacional de Clubes · ${esc(d.nome)}</h1><div class="meta">${esc(d.local)} · ${esc(d.datas)}</div></div></div><p class="aviso">A Entry List desta divisão ainda não foi carregada. Quando sair, envia-a e a previsão passa a usar os tempos de inscrição dos adversários.</p>`;
     return;
