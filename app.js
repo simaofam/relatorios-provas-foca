@@ -1164,8 +1164,9 @@ const PROPS = {
 const divAtual = () => (ESTADO.clubes?.divisoes || []).find(d => d.id === CN.div);
 const pernasEst = p => p === '4x100m Estilos' ? ['100m Costas', '100m Bruços', '100m Mariposa', '100m Livres'] : Array(4).fill(p.replace(/^4x/, ''));
 const ptsLugar = (lugar, N) => lugar === 1 ? N + 1 : Math.max(1, N - lugar + 1);
+const usaEntry = d => CN.modo === 'entry' || (CN.modo === 'vivo' && !!d.entry);
 function adversarios(d, prova, fator) {
-  const fonte = CN.modo === 'entry' || (CN.modo === 'vivo' && d.entry) ? d.entry?.adversarios : d.base.adversarios;
+  const fonte = usaEntry(d) ? d.entry?.adversarios : d.base.adversarios;
   return (fonte?.[prova] || []).map(a => ({ ...a, t: seg(a.tempo) * fator }));
 }
 function tempoCN(d, nome, prova, ver) {          // tempo usado na previsão: previsto > RP 25m > RP 50m (alerta)
@@ -1289,7 +1290,7 @@ function proposta(d, p) {
 }
 function classificacaoPrevista(d, sol, fator) {
   const tot = {};
-  const nomes = new Set(d.base.classificacao.map(c => c.clube));
+  const nomes = new Set(usaEntry(d) ? Object.values(d.entry.adversarios).flat().map(a => a.clube) : d.base.classificacao.map(c => c.clube));
   nomes.forEach(n => { tot[n] = 0; }); tot[NOME_FOCA] = 0;
   for (const l of sol.linhas) {
     const ops = adversarios(d, l.prova, fator).map(o => ({ clube: o.clube, t: o.t }));
@@ -1479,7 +1480,7 @@ function vistaAoVivo(d, cab) {
     if (tPrev == null && !l.estafeta && l.n) prev[NOME_FOCA] = (prev[NOME_FOCA] || 0) + 1;
     return `<tr class="${l.estafeta ? 'est' : ''}"><td class="n">${l.sessao}.ª</td><td><strong>${esc(l.prova)}</strong></td><td>${esc(quemPrev)}</td><td class="t">${tPrev != null ? fmt(tPrev) : '—'}</td><td class="n">${lugPrev ?? '—'}.º</td><td class="n">${pPrev}</td><td class="n">—</td><td><span class="chip">Por realizar</span></td></tr>`;
   }).join('');
-  const clubes = new Set([...Object.keys(reais), ...Object.keys(prev), ...d.base.classificacao.map(c => c.clube), NOME_FOCA]);
+  const clubes = new Set([...Object.keys(reais), ...Object.keys(prev), ...(d.entry ? [] : d.base.classificacao.map(c => c.clube)), NOME_FOCA]);
   const clAtual = [...clubes].map(c => ({ clube: c, pts: reais[c] || 0 })).sort((a, b) => b.pts - a.pts);
   const clFinal = [...clubes].map(c => ({ clube: c, real: reais[c] || 0, pts: (reais[c] || 0) + (prev[c] || 0) })).sort((a, b) => b.pts - a.pts);
   const posA = clAtual.findIndex(c => c.clube === NOME_FOCA) + 1, posF = clFinal.findIndex(c => c.clube === NOME_FOCA) + 1;
