@@ -475,20 +475,46 @@ function secPremios(c, ls, es) {
   return `${cab}<div class="kpis" style="margin-bottom:10px"><div class="kpi"><div class="v">${eur(R.total)}</div><div class="l">Valor total RADA</div><div class="d">${R.itens.length} prémios</div></div></div>${resumoT}${det}${R.avisos.map(a => `<p class="aviso">${esc(a)}</p>`).join('')}`;
 }
 
+/* ---------- Classificação combinada (ex.: Nadador Completo) ---------- */
+function combDe(c) {
+  const k = c.combinado; if (!k) return [];
+  const gs = new Set(ESTADO.linhas.filter(l => l.comp === c.id).map(l => l.nadador));   // só os nadadores do grupo atual
+  return (k.classificacoes || []).filter(e => gs.has(e.nadador));
+}
+function secCombinado(c) {
+  const xs = combDe(c); if (!xs.length) return '';
+  const blocos = [];
+  for (const [g, gn] of [['F', 'Femininos'], ['M', 'Masculinos']]) {
+    const cats = [...new Set(xs.filter(e => e.genero === g).map(e => e.categoria))].sort(porEscalao);
+    if (!cats.length) continue;
+    blocos.push(`<h3>${gn}</h3><div class="grelha2">${cats.map(cat => {
+      const ys = xs.filter(e => e.genero === g && e.categoria === cat).sort((a, b) => (a.lugar ?? 999) - (b.lugar ?? 999) || a.nadador.localeCompare(b.nadador, 'pt'));
+      const n = ys.find(e => e.classificados)?.classificados;
+      const corpo = ys.map(e => `<tr><td class="n">${e.lugar ? chipLugar(e.lugar) : '—'}</td><td>${esc(e.nadador)} <span class="ref-lbl">${e.ano || ''}</span>${e.obs ? `<div class="ref-lbl">${esc(e.obs)}</div>` : ''}</td><td class="n t">${e.pontos != null ? e.pontos.toLocaleString('pt-PT') : `<span class="chip est">${esc(e.estado)}</span>`}</td><td class="n">${e.lugarAbs ? e.lugarAbs + '.º' : '—'}</td></tr>`).join('');
+      return `<div><div class="ref-lbl" style="margin-bottom:4px"><strong>${esc(cat)}</strong>${n ? ` · ${n} classificados` : ''}</div>
+        <div class="tab-wrap"><table><thead><tr><th class="n">Lugar</th><th>Nadador</th><th class="n">Pontos</th><th class="n">Lugar Infantis${ys.find(e => e.classificadosAbs) ? ` (de ${ys.find(e => e.classificadosAbs).classificadosAbs})` : ''}</th></tr></thead><tbody>${corpo}</tbody></table></div></div>`;
+    }).join('')}</div>`);
+  }
+  const sem = xs.filter(e => e.estado !== 'OK');
+  return `<p class="ref-lbl" style="margin-bottom:8px">${esc(c.combinado.descricao || '')}</p>${blocos.join('')}${sem.length ? `<p class="ref-lbl" style="margin-top:8px">Sem classificação: ${sem.map(e => `${esc(e.nadador)} (${e.estado === 'WDR' ? 'não nadou' : 'desclassificado numa prova'})`).join(' · ')}.</p>` : ''}`;
+}
+
 function vistaComp(id, direcao = false) {
   const c = ESTADO.comps.find(x => x.id === id);
   if (!c) return vistaListaComps();
+  if (c.semPremios) direcao = false;          // torneio sem prémios RADA: só o relatório geral
   const ls = ESTADO.linhas.filter(l => l.comp === id);
   const ord = [...ls].sort((a, b) => a.nadador.localeCompare(b.nadador, 'pt') || a.nprova - b.nprova);
   app.innerHTML = `
   ${impCab(c.nome, `${direcao ? 'Relatório Direção' : 'Relatório Geral'} · ${c.local} · ${datas(c)} · Piscina de ${c.piscina}m`)}
   <div class="cab"><div><div class="ref-lbl" style="font-weight:700;letter-spacing:.05em">${direcao ? 'RELATÓRIO DIREÇÃO' : 'RELATÓRIO GERAL'}</div><h1>${esc(c.nome)}</h1><div class="meta">${esc(nomeTipo(c.tipo))} · ${esc(c.local)} · ${datas(c)} · Piscina de ${c.piscina}m · ${esc(c.organizador || '')} · <a href="${esc(c.url)}" target="_blank" rel="noopener">página da prova</a></div></div>
-    <div class="acoes"><button class="btn" onclick="window.print()">PDF (A4)</button><button class="btn amar" onclick="excelComp('${c.id}')">Excel</button>${direcao ? `<a class="btn sec" href="#comp/${c.id}">Relatório geral</a>` : `<a class="btn sec" href="#direcao/${c.id}">Relatório direção</a>`}<a class="btn sec" href="#fichas/${c.id}">Fichas dos atletas</a></div></div>
+    <div class="acoes"><button class="btn" onclick="window.print()">PDF (A4)</button><button class="btn amar" onclick="excelComp('${c.id}')">Excel</button>${c.semPremios ? '' : direcao ? `<a class="btn sec" href="#comp/${c.id}">Relatório geral</a>` : `<a class="btn sec" href="#direcao/${c.id}">Relatório direção</a>`}<a class="btn sec" href="#fichas/${c.id}">Fichas dos atletas</a></div></div>
   <section class="sec"><h2>Resumo</h2>${kpis(resumo(ls), estDe(new Set([id])))}</section>
   ${direcao ? `<section class="sec"><h2>Mérito desportivo · prémios do município (RADA)</h2>${secPremios(c, ls, estDe(new Set([id])))}</section>` : ''}
+  ${combDe(c).length ? `<section class="sec"><h2>Classificação ${esc(c.combinado.nome || 'combinada')}</h2>${secCombinado(c)}</section>` : ''}
   <section class="sec"><h2>Provas nadadas / RP por escalão</h2>${tabRelacao(ls, 'escalao', 'Escalão')}</section>
   <section class="sec"><h2>Provas nadadas / RP por nadador</h2>${tabRelacao(ls, 'nadador', 'Nadador')}</section>
-  <section class="sec quebra"><h2>Classificações por categoria</h2>${classificacoes(c, ls, estDe(new Set([id])))}</section>
+  <section class="sec quebra"><h2>Classificações por prova e categoria</h2>${classificacoes(c, ls, estDe(new Set([id])))}</section>
   <section class="sec quebra"><h2>Detalhe</h2>
     <div class="filtros"><input type="search" id="f-txt" placeholder="Filtrar por nadador ou prova"><label><input type="checkbox" id="f-rp"> Só RP</label></div>
     <div id="det">${tabDetalhe(ord)}</div></section>
@@ -597,6 +623,8 @@ async function excelComp(id) {
     folha(wb, 'Resumo', ['Indicador', 'Valor'], [['Competição', c.nome], ['Local', c.local], ['Datas', datas(c)], ['Piscina', c.piscina + 'm'], ['Nadadores', s.nad], ['Provas nadadas', s.provas], ['RP', s.rp], ['Melhorias', s.melh], ['RP · 1.º tempo', s.prim], ['% provas com RP', s.taxa == null ? '' : Math.round(s.taxa) + '%'], ['Média face ao RP', s.media == null ? '' : s.media.toFixed(2) + '%'], ['1.º lugares', s.p1], ['2.º lugares', s.p2], ['3.º lugares', s.p3], ['Fonte', c.url], ['Gerado em', hoje()]]);
     pctCol(folha(wb, 'Por escalão', relCab('Escalão'), relLinhas(ls, 'escalao')), 6);
     pctCol(folha(wb, 'Por nadador', relCab('Nadador'), relLinhas(ls, 'nadador')), 6);
+    const cb = combDe(c);
+    if (cb.length) folha(wb, c.combinado.nome || 'Combinada', ['Género', 'Categoria', 'Lugar', 'Classificados', 'Nadador', 'Ano', 'Pontos', 'Lugar Infantis', 'Situação'], [...cb].sort((a, b) => a.genero.localeCompare(b.genero) || porEscalao(a.categoria, b.categoria) || (a.lugar ?? 999) - (b.lugar ?? 999)).map(e => [e.genero === 'F' ? 'Femininos' : 'Masculinos', e.categoria, e.lugar ?? '', e.classificados ?? '', e.nadador, e.ano, e.pontos ?? '', e.lugarAbs ?? '', e.estado === 'OK' ? (e.obs || '') : e.estado === 'WDR' ? 'Não nadou (WDR)' : 'Sem classificação (DSQ numa prova)']));
     folha(wb, 'Classificações', ['Categoria', 'Lugar', 'Nadador', 'Prova', 'Tempo'], [...ls].sort((a, b) => porEscalao(a.categoria, b.categoria) || (a.lugar ?? 999) - (b.lugar ?? 999)).map(l => [l.categoria, l.lugar, l.nadador, l.prova, l.res != null ? fmt(l.res) : l.estado]));
     folha(wb, 'Detalhe', detCab, detLinhas([...ls].sort((a, b) => a.nadador.localeCompare(b.nadador, 'pt') || a.nprova - b.nprova)));
     if (ls.some(l => l.estado === 'DSQ')) folha(wb, 'Desclassificações', ['Nadador', 'Escalão', 'Prova', 'Motivo'], ls.filter(l => l.estado === 'DSQ').map(l => [l.nadador, l.escalao, l.prova, l.motivo || '']));
