@@ -1288,19 +1288,29 @@ function proposta(d, p) {
   }
   return (CN.cache[k] = r);
 }
+/* tabela de classificação com pontos e lugar por sessão */
+function tabClSessoes(d, cl, extra) {
+  const S = [...new Set(d.provas.map(p => p.sessao))].sort((a, b) => a - b);
+  const lugS = {}; for (const sx of S) { const ord = [...cl].map(c => c.ses?.[sx] || 0).sort((a, b) => b - a); cl.forEach(c => { (lugS[c.clube] ||= {})[sx] = ord.indexOf(c.ses?.[sx] || 0) + 1; }); }
+  const r1 = v => Math.round(v * 10) / 10;
+  return `<div class="tab-wrap"><table class="tab-ses"><thead><tr><th class="n">#</th><th>Clube</th>${S.map(sx => `<th class="n">${sx}.ª sessão</th>`).join('')}${extra ? `<th class="n">${extra.t}</th>` : ''}<th class="n">Total</th></tr></thead><tbody>${cl.map((c, i) => `<tr class="${c.clube === NOME_FOCA ? 'nosso' : ''}"><td class="n">${i + 1}.º</td><td>${esc(c.clube)}</td>${S.map(sx => `<td class="n">${r1(c.ses?.[sx] || 0)} <span class="ref-lbl">${lugS[c.clube][sx]}.º</span></td>`).join('')}${extra ? `<td class="n">${extra.f(c)}</td>` : ''}<td class="n"><strong>${r1(c.pts)}</strong></td></tr>`).join('')}</tbody></table></div>
+  <p class="ref-lbl">Em cada sessão: pontos da sessão e lugar nessa sessão.</p>`;
+}
+const focaSessoes = (d, cl) => { const S = [...new Set(d.provas.map(p => p.sessao))].sort((a, b) => a - b); return S.map(sx => { const ord = cl.map(c => c.ses?.[sx] || 0).sort((a, b) => b - a), f = cl.find(c => c.clube === NOME_FOCA); return `${sx}.ª: ${ord.indexOf(f?.ses?.[sx] || 0) + 1}.º`; }).join(' · '); };
 function classificacaoPrevista(d, sol, fator) {
   const tot = {};
   const nomes = new Set(usaEntry(d) ? Object.values(d.entry.adversarios).flat().map(a => a.clube) : d.base.classificacao.map(c => c.clube));
   nomes.forEach(n => { tot[n] = 0; }); tot[NOME_FOCA] = 0;
+  const ses = {}; const addS = (c, sx, v) => { (ses[c] ||= {}); ses[c][sx] = (ses[c][sx] || 0) + v; };
   for (const l of sol.linhas) {
     const ops = adversarios(d, l.prova, fator).map(o => ({ clube: o.clube, t: o.t }));
     const nosso = l.estafeta ? l.est.t : (l.tt ? l.tt.t : null);
     if (nosso != null) ops.push({ clube: NOME_FOCA, t: nosso });
     ops.sort((a, b) => a.t - b.t);
-    ops.forEach((o, i) => { const lugar = ops.findIndex(x => Math.abs(x.t - o.t) < 1e-6) + 1; tot[o.clube] = (tot[o.clube] || 0) + ptsLugar(lugar, d.clubes); });
-    if (nosso == null && !l.estafeta && l.n) tot[NOME_FOCA] += 1;
+    ops.forEach((o, i) => { const lugar = ops.findIndex(x => Math.abs(x.t - o.t) < 1e-6) + 1; tot[o.clube] = (tot[o.clube] || 0) + ptsLugar(lugar, d.clubes); addS(o.clube, l.sessao, ptsLugar(lugar, d.clubes)); });
+    if (nosso == null && !l.estafeta && l.n) { tot[NOME_FOCA] += 1; addS(NOME_FOCA, l.sessao, 1); }
   }
-  return Object.entries(tot).map(([clube, pts]) => ({ clube, pts })).sort((a, b) => b.pts - a.pts);
+  return Object.entries(tot).map(([clube, pts]) => ({ clube, pts, ses: ses[clube] || {} })).sort((a, b) => b.pts - a.pts);
 }
 function cnGuardarRascunho() { try { localStorage.setItem('foca-cn-versao', JSON.stringify(CN.versao)); } catch (e) { /* sem armazenamento */ } }
 function cnVersao(d) {
@@ -1458,14 +1468,14 @@ function vistaAoVivo(d, cab) {
   const sol = proposta(d, pBase), fator = v?.base === 'C' ? 0.99 : 1;
   const feitos = CN.aovivo[d.id] || {}, mapa = mapaClubes(d);
   let real = 0, prevResto = 0, prevFeitas = 0, nFeitas = 0;
-  const reais = {}, prev = {};
+  const reais = {}, prev = {}, sR = {}, sP = {};
   const linhas = sol.linhas.map(l => {
     const pPrev = l.estafeta ? l.est.pts : l.pts, r = feitos[l.prova];
     const quemPrev = l.estafeta ? (l.est.eq ? l.est.eq.map(x => x.n).join(', ') : '—') : (l.n || '—');
     const tPrev = l.estafeta ? l.est.t : l.tt?.t, lugPrev = l.estafeta ? l.est.lugar : l.lugar;
     if (r) {
       nFeitas++; prevFeitas += pPrev;
-      for (const x of r.linhas) { const k = mapa(x.clube); reais[k] = (reais[k] || 0) + ptsRes(x, d); }
+      for (const x of r.linhas) { const k = mapa(x.clube), v = ptsRes(x, d); reais[k] = (reais[k] || 0) + v; ((sR[k] ||= {})[l.sessao] = (sR[k][l.sessao] || 0) + v); }
       const f = r.linhas.find(x => eFoca(x.clube)), pts = f ? ptsRes(f, d) : 0; real += pts;
       const dif = pts - pPrev;
       return `<tr class="${l.estafeta ? 'est ' : ''}feita"><td class="n">${l.sessao}.ª</td><td><strong>${esc(l.prova)}</strong></td><td>${f ? esc(f.nome) : '<span class="vazio">sem resultado do FOCA</span>'}${!l.estafeta && f && l.n && semAc(f.nome).split(/[ ,]+/).filter(w => w.length > 2).every(w => !semAc(l.n).includes(w)) ? `<div class="ref-lbl">previsto: ${esc(l.n)}</div>` : ''}</td>
@@ -1476,13 +1486,14 @@ function vistaAoVivo(d, cab) {
     prevResto += pPrev;
     const ops = adversarios(d, l.prova, fator).map(o => ({ clube: o.clube, t: o.t }));
     if (tPrev != null) ops.push({ clube: NOME_FOCA, t: tPrev });
-    ops.sort((a, b) => a.t - b.t).forEach(o => { const lug = ops.findIndex(x => Math.abs(x.t - o.t) < 1e-6) + 1; prev[o.clube] = (prev[o.clube] || 0) + ptsLugar(lug, d.clubes); });
-    if (tPrev == null && !l.estafeta && l.n) prev[NOME_FOCA] = (prev[NOME_FOCA] || 0) + 1;
+    ops.sort((a, b) => a.t - b.t).forEach(o => { const lug = ops.findIndex(x => Math.abs(x.t - o.t) < 1e-6) + 1; prev[o.clube] = (prev[o.clube] || 0) + ptsLugar(lug, d.clubes); ((sP[o.clube] ||= {})[l.sessao] = (sP[o.clube][l.sessao] || 0) + ptsLugar(lug, d.clubes)); });
+    if (tPrev == null && !l.estafeta && l.n) { prev[NOME_FOCA] = (prev[NOME_FOCA] || 0) + 1; ((sP[NOME_FOCA] ||= {})[l.sessao] = (sP[NOME_FOCA][l.sessao] || 0) + 1); }
     return `<tr class="${l.estafeta ? 'est' : ''}"><td class="n">${l.sessao}.ª</td><td><strong>${esc(l.prova)}</strong></td><td>${esc(quemPrev)}</td><td class="t">${tPrev != null ? fmt(tPrev) : '—'}</td><td class="n">${lugPrev ?? '—'}.º</td><td class="n">${pPrev}</td><td class="n">—</td><td><span class="chip">Por realizar</span></td></tr>`;
   }).join('');
   const clubes = new Set([...Object.keys(reais), ...Object.keys(prev), ...(d.entry ? [] : d.base.classificacao.map(c => c.clube)), NOME_FOCA]);
-  const clAtual = [...clubes].map(c => ({ clube: c, pts: reais[c] || 0 })).sort((a, b) => b.pts - a.pts);
-  const clFinal = [...clubes].map(c => ({ clube: c, real: reais[c] || 0, pts: (reais[c] || 0) + (prev[c] || 0) })).sort((a, b) => b.pts - a.pts);
+  const somaS = (...ms) => { const o = {}; for (const m of ms) for (const [k, v] of Object.entries(m || {})) o[k] = (o[k] || 0) + v; return o; };
+  const clAtual = [...clubes].map(c => ({ clube: c, pts: reais[c] || 0, ses: sR[c] || {} })).sort((a, b) => b.pts - a.pts);
+  const clFinal = [...clubes].map(c => ({ clube: c, real: reais[c] || 0, pts: (reais[c] || 0) + (prev[c] || 0), ses: somaS(sR[c], sP[c]) })).sort((a, b) => b.pts - a.pts);
   const posA = clAtual.findIndex(c => c.clube === NOME_FOCA) + 1, posF = clFinal.findIndex(c => c.clube === NOME_FOCA) + 1;
   const tabCl = (xs, comReal) => `<div class="tab-wrap"><table><thead><tr><th class="n">#</th><th>Clube</th>${comReal ? '<th class="n">Já feitos</th>' : ''}<th class="n">Pontos</th></tr></thead><tbody>${xs.map((c, i) => `<tr class="${c.clube === NOME_FOCA ? 'nosso' : ''}"><td class="n">${i + 1}.º</td><td>${esc(c.clube)}</td>${comReal ? `<td class="n">${c.real}</td>` : ''}<td class="n">${Math.round(c.pts * 10) / 10}</td></tr>`).join('')}</tbody></table></div>`;
   const P = CN.prev;
@@ -1499,7 +1510,7 @@ function vistaAoVivo(d, cab) {
   <div class="kpis">
     <div class="kpi"><div class="v">${Math.round(real * 10) / 10}</div><div class="l">Pontos já feitos</div><div class="d">${nFeitas} de ${d.provas.length} provas · previstos nessas: ${prevFeitas} (${real - prevFeitas >= 0 ? '+' : ''}${Math.round((real - prevFeitas) * 10) / 10})</div></div>
     <div class="kpi"><div class="v">${Math.round((real + prevResto) * 10) / 10}</div><div class="l">Total projetado</div><div class="d">plano inicial: ${sol.total} · faltam ${prevResto} previstos</div></div>
-    <div class="kpi"><div class="v">${nFeitas ? posA + '.º' : '—'}</div><div class="l">Classificação atual</div><div class="d">só provas realizadas</div></div>
+    <div class="kpi"><div class="v">${nFeitas ? posA + '.º' : '—'}</div><div class="l">Classificação atual</div><div class="d">só provas realizadas${nFeitas ? `<br>por sessão: ${focaSessoes(d, clAtual)}` : ''}</div></div>
     <div class="kpi"><div class="v">${posF}.º</div><div class="l">Classificação final prevista</div><div class="d">de ${clFinal.length} clubes</div></div>
   </div>
   <section class="sec nao-imp"><h2>Carregar resultados</h2>
@@ -1515,6 +1526,9 @@ function vistaAoVivo(d, cab) {
   <div class="grelha2">
     <section class="sec"><h2>Classificação atual</h2>${nFeitas ? tabCl(clAtual) : '<p class="vazio">Ainda sem provas realizadas.</p>'}</section>
     <section class="sec"><h2>Classificação final prevista</h2>${tabCl(clFinal, true)}</section>
+  </div>
+  <section class="sec"><h2>Classificação por sessão</h2><p class="ref-lbl">Sessões já nadadas com pontos oficiais; sessões por nadar (ou provas que faltam) com a previsão.</p>${tabClSessoes(d, clFinal, { t: 'Já feitos', f: c => Math.round(c.real * 10) / 10 })}</section>
+  <div>
   </div>
   ${impRod('Resultados oficiais (provas realizadas) + previsão')}`;
 }
@@ -1593,7 +1607,6 @@ function vistaClubes() {
   const cl = classificacaoPrevista(d, sol, fator);
   const pos = cl.findIndex(c => c.clube === NOME_FOCA) + 1;
   const ant = d.base.classificacao.findIndex(c => /FOCA/.test(c.clube)) + 1;
-  const clH = cl.map((c, i) => `<tr class="${c.clube === NOME_FOCA ? 'nosso' : ''}"><td class="n">${i + 1}.º</td><td>${esc(c.clube)}</td><td class="n">${c.pts}</td></tr>`).join('');
   const carga = sol.plantel.map(n => { const ind = sol.linhas.filter(l => l.n === n).map(l => l.prova); const est = sol.linhas.filter(l => l.est?.eq?.some(x => x.n === n)).map(l => l.prova); return `<tr><td>${esc(n)}</td><td class="n">${ind.length}</td><td>${ind.map(esc).join(', ') || '—'}</td><td>${est.map(esc).join(', ') || '—'}</td></tr>`; }).join('');
   const todosG = ESTADO.nadadores.filter(n => generoDe(n) === d.genero && grupoNadador(n) === 'abs');
   const indisp = CN.indisp[d.id] || [];
@@ -1612,7 +1625,7 @@ function vistaClubes() {
   <p class="aviso nao-imp desc-prop"><strong>${esc(CN.prop === 'M' ? PROPS.M.nome : 'Proposta ' + CN.prop + ' · ' + PROPS[CN.prop].nome)}:</strong> ${esc(PROPS[CN.prop].desc)}${CN.prop === 'B' && sol.proib ? ` Fora: ${sol.proib.map(x => x.replace('|', ' — ')).map(esc).join('; ')}.` : ''}${edit ? ` Partiu da proposta ${esc(v?.base || 'A')}.` : ' Ao mudar um nadador numa prova, passas para "A minha versão" com essa escolha fixada.'}</p>
   <div class="kpis">
     <div class="kpi"><div class="v">${sol.total}</div><div class="l">Pontos previstos</div><div class="d">ano passado: ${d.base.classificacao[ant - 1]?.pts ?? '—'}</div></div>
-    <div class="kpi"><div class="v">${pos}.º</div><div class="l">Classificação prevista</div><div class="d">ano passado: ${ant || '—'}.º de ${d.clubes}</div></div>
+    <div class="kpi"><div class="v">${pos}.º</div><div class="l">Classificação prevista</div><div class="d">ano passado: ${ant || '—'}.º de ${d.clubes}<br>por sessão: ${focaSessoes(d, cl)}</div></div>
     <div class="kpi"><div class="v">${sol.plantel.length}</div><div class="l">Nadadores usados</div><div class="d">máximo ${d.maxAtletas}</div></div>
     <div class="kpi"><div class="v">${sol.linhas.filter(l => !l.estafeta && l.lugar <= 3).length + sol.linhas.filter(l => l.estafeta && l.est.lugar && l.est.lugar <= 3).length}</div><div class="l">Pódios previstos</div></div>
   </div>
@@ -1621,10 +1634,8 @@ function vistaClubes() {
   ${!sol.completo ? '<p class="aviso erro">Não há nadadores suficientes para preencher todas as provas individuais com o limite de 3 provas por nadador.</p>' : ''}
   <section class="sec"><h2>Provas</h2><div class="tab-wrap"><table class="tab-cn"><thead><tr><th class="n">Sessão</th><th>Prova</th><th>Nadador(es)</th><th>Tempo</th><th class="n">Lugar</th><th class="n">Pontos</th><th>Margem</th></tr></thead><tbody>${linhas}</tbody></table></div>
     <p class="ref-lbl nota-tac">Pontos: 1.º = ${d.clubes + 1}; 2.º = ${d.clubes - 1}; 3.º = ${d.clubes - 2}; … último = 1. Lugar previsto com os tempos ${CN.modo === 'entry' ? 'de inscrição' : 'da edição anterior'} dos outros clubes${fator !== 1 ? ' (1% mais rápidos)' : ''}. Tempos: RP em ${d.piscina}m; sem marca em ${d.piscina}m usa-se a da outra piscina, com alerta. Estafetas: soma das melhores marcas − LAP × 3 (LAP ${(ver?.lap ?? 0.4).toFixed(2).replace('.', ',')} s). Máx. ${d.maxIndiv} provas individuais por nadador + estafetas; máx. ${d.maxAtletas} nadadores.</p></section>
-  <div class="grelha2">
-    <section class="sec"><h2>Classificação prevista</h2><div class="tab-wrap"><table><thead><tr><th class="n">#</th><th>Clube</th><th class="n">Pontos</th></tr></thead><tbody>${clH}</tbody></table></div></section>
-    <section class="sec"><h2>Plantel e provas</h2><div class="tab-wrap"><table><thead><tr><th>Nadador</th><th class="n">Indiv.</th><th>Provas individuais</th><th>Estafetas</th></tr></thead><tbody>${carga}</tbody></table></div></section>
-  </div>
+  <section class="sec"><h2>Classificação prevista · por sessão</h2>${tabClSessoes(d, cl)}</section>
+  <section class="sec"><h2>Plantel e provas</h2><div class="tab-wrap"><table><thead><tr><th>Nadador</th><th class="n">Indiv.</th><th>Provas individuais</th><th>Estafetas</th></tr></thead><tbody>${carga}</tbody></table></div></section>
   ${fora}
   ${impRod(CN.modo === 'entry' ? 'Entry List' : d.base.fonte)}`;
 }
