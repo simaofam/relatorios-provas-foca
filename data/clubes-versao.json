@@ -1,5 +1,5 @@
 {
- "atualizado": "2026-11-10T14:42:34.260Z",
+ "atualizado": "2026-11-24T14:35:37.977Z",
  "indisponiveis": {
   "1div": [
    "Alice Miranda Cunha",
@@ -91,10 +91,31 @@
    },
    "tempos": {
     "Rodrigo Teixeira Pinto|1500m Livres": "17:00.10",
-    "Eduardo Miguel Lima|100m Livres": "53.42"
+    "Eduardo Miguel Lima|100m Livres": "53.19",
+    "Eduardo Miguel Lima|400m Livres": "4:03.50",
+    "Leonardo Cunha Moura|50m Mariposa": "25.50",
+    "Filipe Assunção Teixeira|100m Costas": "57.25",
+    "José Pedro Sampaio|200m Estilos": "2:09.35",
+    "Eduardo Miguel Lima|200m Livres": "1:54.50",
+    "Filipe Assunção Teixeira|50m Costas": "27.25",
+    "José Pedro Sampaio|100m Mariposa": "57.20",
+    "Guilherme Pereira Novais|400m Estilos": "4:37.36",
+    "Rúben Gonçalo Alonso|50m Bruços": "31.50",
+    "Guilherme Pereira Novais|200m Mariposa": "2:07.09"
    },
-   "estafetas": {},
+   "estafetas": {
+    "4x100m Estilos": {
+     "m": [
+      "",
+      "",
+      "",
+      ""
+     ],
+     "t": "3:54.15"
+    }
+   },
    "lap": 0.4
   }
- }
+ },
+ "aovivo": {}
 }
