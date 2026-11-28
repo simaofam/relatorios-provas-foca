@@ -1,5 +1,5 @@
 {
- "atualizado": "2026-11-24T14:35:37.977Z",
+ "atualizado": "2026-11-28T12:00:00.000Z",
  "indisponiveis": {
   "1div": [
    "Alice Miranda Cunha",
@@ -117,5 +117,982 @@
    "lap": 0.4
   }
  },
- "aovivo": {}
+ "aovivo": {
+  "2div": {
+   "400m Livres": {
+    "linhas": [
+     {
+      "lugar": 1,
+      "nome": "Lucas Pereira, BASTOS",
+      "clube": "Cnac",
+      "tempo": "3:58.28",
+      "pts": 25.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 2,
+      "nome": "Joao Ferreira, MARQUES",
+      "clube": "Aac",
+      "tempo": "4:02.71",
+      "pts": 23.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 3,
+      "nome": "Eduardo Miguel, LIMA",
+      "clube": "FOCA Quinta Da Lixa - Cnf",
+      "tempo": "4:04.10",
+      "pts": 22.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 4,
+      "nome": "Santiago Agostinho, PARREIRA",
+      "clube": "S.I.R. Os Pimpoes",
+      "tempo": "4:04.41",
+      "pts": 21.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 5,
+      "nome": "Eduardo Pires, SILVA",
+      "clube": "Vilacondense",
+      "tempo": "4:04.56",
+      "pts": 20.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 6,
+      "nome": "Andre Bernardes, FERREIRA",
+      "clube": "Fluvial Portuense",
+      "tempo": "4:04.67",
+      "pts": 19.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 7,
+      "nome": "Rodrigo Onofre, MATOS",
+      "clube": "ADRCCI Monte Maior",
+      "tempo": "4:05.53",
+      "pts": 18.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 8,
+      "nome": "Joao Nuno, GASPAR",
+      "clube": "Condeixa Aqua Clube",
+      "tempo": "4:07.92",
+      "pts": 17.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 9,
+      "nome": "Paulo Bernardo, GONCALVES",
+      "clube": "União Piedense",
+      "tempo": "4:08.12",
+      "pts": 16.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 10,
+      "nome": "Filipe Silva, RIBEIRO",
+      "clube": "Leixoes Sport Clube",
+      "tempo": "4:09.05",
+      "pts": 15.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 11,
+      "nome": "Joao Tomas, NUNES",
+      "clube": "Cnol",
+      "tempo": "4:09.60",
+      "pts": 14.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 12,
+      "nome": "Paulo, KOT",
+      "clube": "Nautico Marinha Grande",
+      "tempo": "4:09.70",
+      "pts": 13.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 13,
+      "nome": "Miguel Salomao, TRISTAO",
+      "clube": "Portinado",
+      "tempo": "4:09.75",
+      "pts": 12.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 14,
+      "nome": "Guilherme Romeira, PINTO",
+      "clube": "Sporting de Espinho",
+      "tempo": "4:10.97",
+      "pts": 11.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 15,
+      "nome": "Alexandre Ramos, GONCALVES",
+      "clube": "Clube Desportivo Feirense",
+      "tempo": "4:12.22",
+      "pts": 10.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 16,
+      "nome": "Martim Machado, SILVA",
+      "clube": "Clube Naval Povoense",
+      "tempo": "4:16.14",
+      "pts": 9.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 17,
+      "nome": "Rafael Pires, PARENTE",
+      "clube": "Academico Viseu Futebol Clube",
+      "tempo": "4:17.51",
+      "pts": 8.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 18,
+      "nome": "Martim Jorge, CARDOSO",
+      "clube": "Aquatico Pacense",
+      "tempo": "4:17.78",
+      "pts": 7.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 19,
+      "nome": "Rodrigo Canedo, SANTOS",
+      "clube": "Nacional de Natação",
+      "tempo": "4:18.27",
+      "pts": 6.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 20,
+      "nome": "Rodrigo Cardoso, TOMAS",
+      "clube": "Alcobaca",
+      "tempo": "4:19.20",
+      "pts": 5.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 21,
+      "nome": "Rodrigo Cerquido, PEREIRA",
+      "clube": "Colegio Efanor",
+      "tempo": "4:19.83",
+      "pts": 4.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 22,
+      "nome": "Marco Antonio, CASTRO",
+      "clube": "Clube Desportivo Sao Roque",
+      "tempo": "4:23.25",
+      "pts": 3.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 23,
+      "nome": "Mateus Medeiros, RAPOSO",
+      "clube": "Clube Desportivo Nacional",
+      "tempo": "4:24.07",
+      "pts": 2.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 24,
+      "nome": "Santiago Marques, GOMES",
+      "clube": "Ba Leiria / Sk Coffee",
+      "tempo": "4:25.97",
+      "pts": 1.0,
+      "estado": "OK"
+     }
+    ],
+    "fonte": "PDF · PointScore1.pdf (1.ª sessão)",
+    "em": "2026-11-28T11:49:00.000Z"
+   },
+   "50m Mariposa": {
+    "linhas": [
+     {
+      "lugar": 1,
+      "nome": "Miguel Freitas, OVIEDO",
+      "clube": "Aac",
+      "tempo": "24.40",
+      "pts": 25.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 2,
+      "nome": "Artur Guterres, CARVALHO",
+      "clube": "Vilacondense",
+      "tempo": "25.03",
+      "pts": 23.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 3,
+      "nome": "Miguel Vicente, SILVA",
+      "clube": "Nautico Marinha Grande",
+      "tempo": "25.07",
+      "pts": 22.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 4,
+      "nome": "Joao Duarte, SANTOS",
+      "clube": "Cnol",
+      "tempo": "25.11",
+      "pts": 21.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 5,
+      "nome": "Bruno Rafael, MACHADO",
+      "clube": "Colegio Efanor",
+      "tempo": "25.20",
+      "pts": 20.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 6,
+      "nome": "David Alexandre, ANTUNES",
+      "clube": "Leixoes Sport Clube",
+      "tempo": "25.50",
+      "pts": 19.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 7,
+      "nome": "Porfirio Braga, NUNES",
+      "clube": "Clube Naval Povoense",
+      "tempo": "25.66",
+      "pts": 18.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 8,
+      "nome": "Joao Coelho, CASTRO",
+      "clube": "Sporting de Espinho",
+      "tempo": "25.70",
+      "pts": 17.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 9,
+      "nome": "Rafael Moreira, ASSUNCAO",
+      "clube": "Clube Desportivo Feirense",
+      "tempo": "25.72",
+      "pts": 16.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 10,
+      "nome": "Miguel Freitas, MARQUES",
+      "clube": "Clube Desportivo Sao Roque",
+      "tempo": "25.76",
+      "pts": 15.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 11,
+      "nome": "Dinis Miranda, DIOGO",
+      "clube": "Cnac",
+      "tempo": "25.79",
+      "pts": 14.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 12,
+      "nome": "Fernando Souza, SILVA",
+      "clube": "Nacional de Natação",
+      "tempo": "25.82",
+      "pts": 13.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 13,
+      "nome": "Luis Galvao, GOUVEIA",
+      "clube": "Clube Desportivo Nacional",
+      "tempo": "25.90",
+      "pts": 12.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 14,
+      "nome": "Dario Rafael, OLIVEIRA",
+      "clube": "Portinado",
+      "tempo": "26.07",
+      "pts": 11.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 15,
+      "nome": "Rodrigo Alexandre, TRAVASSOS",
+      "clube": "Condeixa Aqua Clube",
+      "tempo": "26.20",
+      "pts": 10.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 16,
+      "nome": "Leonardo Cunha, MOURA",
+      "clube": "FOCA Quinta Da Lixa - Cnf",
+      "tempo": "26.23",
+      "pts": 9.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 17,
+      "nome": "Vitor Samuel, ROCHA",
+      "clube": "Aquatico Pacense",
+      "tempo": "26.27",
+      "pts": 8.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 18,
+      "nome": "Rodrigo Santos, COUTINHO",
+      "clube": "S.I.R. Os Pimpoes",
+      "tempo": "26.35",
+      "pts": 7.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 19,
+      "nome": "Ricardo Figueiredo, FERNANDES",
+      "clube": "ADRCCI Monte Maior",
+      "tempo": "26.54",
+      "pts": 6.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 20,
+      "nome": "Matias Barros, REIS",
+      "clube": "Fluvial Portuense",
+      "tempo": "26.65",
+      "pts": 5.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 21,
+      "nome": "Joao Santos, ALMEIDA",
+      "clube": "Ba Leiria / Sk Coffee",
+      "tempo": "26.78",
+      "pts": 4.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 22,
+      "nome": "Tiago Santos, POMBO",
+      "clube": "Alcobaca",
+      "tempo": "27.52",
+      "pts": 3.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 23,
+      "nome": "Joao Pedro, LOPES",
+      "clube": "União Piedense",
+      "tempo": "29.48",
+      "pts": 2.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 24,
+      "nome": "Santiago Teixeira, GARCIA",
+      "clube": "Academico Viseu Futebol Clube",
+      "tempo": "33.65",
+      "pts": 1.0,
+      "estado": "OK"
+     }
+    ],
+    "fonte": "PDF · PointScore1.pdf (1.ª sessão)",
+    "em": "2026-11-28T11:49:00.000Z"
+   },
+   "100m Costas": {
+    "linhas": [
+     {
+      "lugar": 1,
+      "nome": "Marin, CEPELEAGA",
+      "clube": "Portinado",
+      "tempo": "55.42",
+      "pts": 25.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 2,
+      "nome": "Rodrigo Vieira, RODRIGUES",
+      "clube": "Sporting de Espinho",
+      "tempo": "56.16",
+      "pts": 23.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 3,
+      "nome": "Tomas Pascoal, FERREIRA",
+      "clube": "Ba Leiria / Sk Coffee",
+      "tempo": "56.80",
+      "pts": 22.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 4,
+      "nome": "Artur Guterres, CARVALHO",
+      "clube": "Vilacondense",
+      "tempo": "57.89",
+      "pts": 21.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 5,
+      "nome": "Francisco Fernandes, PEREIRA",
+      "clube": "Aac",
+      "tempo": "58.21",
+      "pts": 20.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 6,
+      "nome": "Pedro Afonso, PROTETI",
+      "clube": "Fluvial Portuense",
+      "tempo": "58.23",
+      "pts": 19.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 7,
+      "nome": "Joao Baixinho, ROXO",
+      "clube": "União Piedense",
+      "tempo": "58.47",
+      "pts": 18.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 8,
+      "nome": "Filipe Assuncao, TEIXEIRA",
+      "clube": "FOCA Quinta Da Lixa - Cnf",
+      "tempo": "58.48",
+      "pts": 17.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 9,
+      "nome": "Joao Daniel, SANTOS",
+      "clube": "Alcobaca",
+      "tempo": "58.75",
+      "pts": 16.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 10,
+      "nome": "Pedro Souza, SILVA",
+      "clube": "S.I.R. Os Pimpoes",
+      "tempo": "58.98",
+      "pts": 15.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 11,
+      "nome": "David Dourado, GOMES",
+      "clube": "Clube Naval Povoense",
+      "tempo": "59.07",
+      "pts": 14.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 12,
+      "nome": "Pedro Santos, PEREIRA",
+      "clube": "Leixoes Sport Clube",
+      "tempo": "59.23",
+      "pts": 13.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 13,
+      "nome": "Rui Afonso, FERNANDES",
+      "clube": "Clube Desportivo Sao Roque",
+      "tempo": "59.56",
+      "pts": 12.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 14,
+      "nome": "Martim Chambel, PINTO",
+      "clube": "ADRCCI Monte Maior",
+      "tempo": "59.88",
+      "pts": 11.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 15,
+      "nome": "Bernardo Miguel, OLIVEIRA",
+      "clube": "Nacional de Natação",
+      "tempo": "59.94",
+      "pts": 10.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 16,
+      "nome": "Hugo Miguel, VIEGAS",
+      "clube": "Cnol",
+      "tempo": "1:00.88",
+      "pts": 9.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 17,
+      "nome": "Pedro Pereira, OLIVEIRA",
+      "clube": "Nautico Marinha Grande",
+      "tempo": "1:00.99",
+      "pts": 8.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 18,
+      "nome": "Francisco Martins, SIMOES",
+      "clube": "Cnac",
+      "tempo": "1:01.11",
+      "pts": 7.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 19,
+      "nome": "Manuel Alves, GONCALVES",
+      "clube": "Aquatico Pacense",
+      "tempo": "1:01.30",
+      "pts": 6.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 20,
+      "nome": "Rodrigo Manuel, COELHO",
+      "clube": "Clube Desportivo Feirense",
+      "tempo": "1:02.13",
+      "pts": 5.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 21,
+      "nome": "Pedro Correia, PESTANA",
+      "clube": "Clube Desportivo Nacional",
+      "tempo": "1:02.86",
+      "pts": 4.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 22,
+      "nome": "Manuel Gomes, ALMEIDA",
+      "clube": "Colegio Efanor",
+      "tempo": "1:02.98",
+      "pts": 3.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 23,
+      "nome": "Goncalo Nunes, MARQUES",
+      "clube": "Condeixa Aqua Clube",
+      "tempo": "1:10.16",
+      "pts": 2.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 24,
+      "nome": "Manuel Maria, FONSECA",
+      "clube": "Academico Viseu Futebol Clube",
+      "tempo": "1:13.32",
+      "pts": 1.0,
+      "estado": "OK"
+     }
+    ],
+    "fonte": "PDF · PointScore1.pdf (1.ª sessão)",
+    "em": "2026-11-28T11:49:00.000Z"
+   },
+   "200m Estilos": {
+    "linhas": [
+     {
+      "lugar": 1,
+      "nome": "Leonardo Jose, CRUZ",
+      "clube": "Alcobaca",
+      "tempo": "2:03.46",
+      "pts": 25.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 2,
+      "nome": "Gil Afonso, RODRIGUES",
+      "clube": "Fluvial Portuense",
+      "tempo": "2:06.51",
+      "pts": 23.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 3,
+      "nome": "David Ferreira, RELVAS",
+      "clube": "Nautico Marinha Grande",
+      "tempo": "2:06.53",
+      "pts": 22.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 4,
+      "nome": "Guilherme Costa, SOARES",
+      "clube": "Vilacondense",
+      "tempo": "2:07.66",
+      "pts": 21.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 5,
+      "nome": "Rui Silva, PEREIRA",
+      "clube": "ADRCCI Monte Maior",
+      "tempo": "2:08.70",
+      "pts": 20.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 6,
+      "nome": "Miguel Salomao, TRISTAO",
+      "clube": "Portinado",
+      "tempo": "2:09.46",
+      "pts": 19.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 7,
+      "nome": "Tomas Rocha, DORES",
+      "clube": "Colegio Efanor",
+      "tempo": "2:09.61",
+      "pts": 18.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 8,
+      "nome": "David Xavier, ALMEIDA",
+      "clube": "Ba Leiria / Sk Coffee",
+      "tempo": "2:10.30",
+      "pts": 17.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 9,
+      "nome": "Jose Pedro, SAMPAIO",
+      "clube": "FOCA Quinta Da Lixa - Cnf",
+      "tempo": "2:11.91",
+      "pts": 16.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 10,
+      "nome": "Guilherme Costa, REBELO",
+      "clube": "S.I.R. Os Pimpoes",
+      "tempo": "2:11.97",
+      "pts": 15.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 11,
+      "nome": "Joaquim Agra, MERUJE",
+      "clube": "Aac",
+      "tempo": "2:12.05",
+      "pts": 14.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 12,
+      "nome": "Sergio Daniel, ARAUJO",
+      "clube": "Clube Naval Povoense",
+      "tempo": "2:12.33",
+      "pts": 13.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 13,
+      "nome": "Jose Miguel, MARQUES",
+      "clube": "Condeixa Aqua Clube",
+      "tempo": "2:12.46",
+      "pts": 12.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 14,
+      "nome": "Miguel Tomas, GOMES",
+      "clube": "Cnac",
+      "tempo": "2:14.52",
+      "pts": 11.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 15,
+      "nome": "Paulo Rodrigues, ALVES",
+      "clube": "Clube Desportivo Sao Roque",
+      "tempo": "2:14.63",
+      "pts": 10.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 16,
+      "nome": "Matias Matos, DUARTE",
+      "clube": "Leixoes Sport Clube",
+      "tempo": "2:14.98",
+      "pts": 9.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 17,
+      "nome": "Jose Pedro, SALVADINHO",
+      "clube": "Nacional de Natação",
+      "tempo": "2:15.22",
+      "pts": 8.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 18,
+      "nome": "Tiago Daniel, GONCALVES",
+      "clube": "Aquatico Pacense",
+      "tempo": "2:18.10",
+      "pts": 7.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 19,
+      "nome": "Ivan Vazquez, MACIAS",
+      "clube": "Cnol",
+      "tempo": "2:18.28",
+      "pts": 6.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 20,
+      "nome": "Tomes Pargana, MENDES",
+      "clube": "União Piedense",
+      "tempo": "2:23.39",
+      "pts": 5.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 21,
+      "nome": "Ricardo Lourenco, FERREIRA",
+      "clube": "Sporting de Espinho",
+      "tempo": "2:23.67",
+      "pts": 4.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 22,
+      "nome": "Tiago Filipe, SAPATA",
+      "clube": "Academico Viseu Futebol Clube",
+      "tempo": "2:30.09",
+      "pts": 3.0,
+      "estado": "OK"
+     }
+    ],
+    "fonte": "PDF · PointScore1.pdf (1.ª sessão)",
+    "em": "2026-11-28T11:49:00.000Z"
+   },
+   "4x100m Livres": {
+    "linhas": [
+     {
+      "lugar": 1,
+      "nome": "S.I.R. Os Pimpoes 1",
+      "clube": "S.I.R. Os Pimpoes",
+      "tempo": "3:28.37",
+      "pts": 25.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 2,
+      "nome": "Aac 1",
+      "clube": "Aac",
+      "tempo": "3:30.64",
+      "pts": 23.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 3,
+      "nome": "Cnac 2",
+      "clube": "Cnac",
+      "tempo": "3:30.78",
+      "pts": 22.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 4,
+      "nome": "Clube Desportivo Sao Roque",
+      "clube": "Clube Desportivo Sao Roque",
+      "tempo": "3:31.17",
+      "pts": 21.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 5,
+      "nome": "Cnol 1",
+      "clube": "Cnol",
+      "tempo": "3:31.19",
+      "pts": 20.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 6,
+      "nome": "Vilacondense 1",
+      "clube": "Vilacondense",
+      "tempo": "3:31.32",
+      "pts": 19.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 7,
+      "nome": "Nautico Marinha Grande 1",
+      "clube": "Nautico Marinha Grande",
+      "tempo": "3:31.35",
+      "pts": 18.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 8,
+      "nome": "Leixoes Sport Clube 1",
+      "clube": "Leixoes Sport Clube",
+      "tempo": "3:31.61",
+      "pts": 17.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 9,
+      "nome": "Fluvial Portuense 1",
+      "clube": "Fluvial Portuense",
+      "tempo": "3:31.62",
+      "pts": 16.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 10,
+      "nome": "Condeixa Aqua Clube 1",
+      "clube": "Condeixa Aqua Clube",
+      "tempo": "3:32.20",
+      "pts": 15.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 11,
+      "nome": "Portinado 1",
+      "clube": "Portinado",
+      "tempo": "3:32.24",
+      "pts": 14.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 12,
+      "nome": "ADRCCI Monte Maior 1",
+      "clube": "ADRCCI Monte Maior",
+      "tempo": "3:32.71",
+      "pts": 13.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 13,
+      "nome": "Ba Leiria / Sk Coffee 1",
+      "clube": "Ba Leiria / Sk Coffee",
+      "tempo": "3:33.00",
+      "pts": 12.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 14,
+      "nome": "Sporting de Espinho 1",
+      "clube": "Sporting de Espinho",
+      "tempo": "3:33.03",
+      "pts": 11.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 15,
+      "nome": "Colegio Efanor 1",
+      "clube": "Colegio Efanor",
+      "tempo": "3:33.17",
+      "pts": 10.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 16,
+      "nome": "Clube Naval Povoense 1",
+      "clube": "Clube Naval Povoense",
+      "tempo": "3:33.35",
+      "pts": 9.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 17,
+      "nome": "Alcobaca 1",
+      "clube": "Alcobaca",
+      "tempo": "3:35.32",
+      "pts": 8.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 18,
+      "nome": "Aquatico Pacense 1",
+      "clube": "Aquatico Pacense",
+      "tempo": "3:35.56",
+      "pts": 7.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 19,
+      "nome": "FOCA Quinta Da Lixa - Cnf 1",
+      "clube": "FOCA Quinta Da Lixa - Cnf",
+      "tempo": "3:35.57",
+      "pts": 6.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 20,
+      "nome": "União Piedense 1",
+      "clube": "União Piedense",
+      "tempo": "3:36.16",
+      "pts": 5.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 21,
+      "nome": "Nacional de Natação 1",
+      "clube": "Nacional de Natação",
+      "tempo": "3:36.66",
+      "pts": 4.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 22,
+      "nome": "Clube Desportivo Feirense 1",
+      "clube": "Clube Desportivo Feirense",
+      "tempo": "3:37.56",
+      "pts": 3.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 23,
+      "nome": "Clube Desportivo Nacional 1",
+      "clube": "Clube Desportivo Nacional",
+      "tempo": "3:38.34",
+      "pts": 2.0,
+      "estado": "OK"
+     },
+     {
+      "lugar": 24,
+      "nome": "Academico Viseu Futebol Clube",
+      "clube": "Academico Viseu Futebol Clube",
+      "tempo": "3:45.21",
+      "pts": 1.0,
+      "estado": "OK"
+     }
+    ],
+    "fonte": "PDF · PointScore1.pdf (1.ª sessão)",
+    "em": "2026-11-28T11:49:00.000Z"
+   }
+  }
+ }
 }
